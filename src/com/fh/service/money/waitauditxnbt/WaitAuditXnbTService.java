@@ -66,5 +66,13 @@ public class WaitAuditXnbTService {
 		dao.delete("WaitAuditXnbTMapper.deleteAll", ArrayDATA_IDS);
 	}
 	
+	/*
+	* 更改状态
+	*/
+	public void editStatus(PageData pd)throws Exception{
+		dao.update("WaitAuditXnbTMapper.editStatus", pd);
+	}
+	
+	
 }
 

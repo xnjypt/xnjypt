@@ -52,22 +52,15 @@
 			XNBMANUAL_ID = #{XNBMANUAL_ID}
 	</delete>
 	
-	
 	<!-- 修改 -->
 	<update id="edit" parameterType="pd">
 		update  XNHB_MONEY_XNBMANUAL
 			set 
-				KEYWORD = #{KEYWORD},
-				DESCRIPTION = #{DESCRIPTION},
-				SEQ = #{SEQ},
-				LOGINNAME = #{LOGINNAME},
-				XNBTYPE = #{XNBTYPE},
 				STATUS = #{STATUS},
-				NUM = #{NUM},
-				SENDMESSAGE = #{SENDMESSAGE},
-			XNBMANUAL_ID = XNBMANUAL_ID
+				AUDITPEOPLE = #{AUDITPEOPLE},
+				UPDATEDATETIME = #{UPDATEDATETIME}
 			where 
-				XNBMANUAL_ID = #{XNBMANUAL_ID}
+				XNBMANUAL_ID = #{XNBMANUAL_ID};
 	</update>
 	
 	
@@ -117,9 +110,18 @@
 				a.AUDITDATETIME,	
 				a.AUDITPEOPLE,	
 				a.SENDMESSAGE,	
-				a.XNBMANUAL_ID
+				a.XNBMANUAL_ID,
+				b.JTTYPENAME
 		from 
-				XNHB_MONEY_XNBMANUAL a
+				XNHB_MONEY_XNBMANUAL a,
+				XNHB_VM_VMTYPE b
+		where   a.XNBTYPE = b.VMTYPE_ID	
+		<if test="pd.LOGINNAME != null and pd.LOGINNAME != ''">
+             and a.LOGINNAME LIKE CONCAT(CONCAT('%', #{pd.LOGINNAME}),'%')
+        </if>
+        <if test="pd.CREATEDATETIME != null and pd.CREATEDATETIME != ''">
+             and a.CREATEDATETIME LIKE CONCAT(CONCAT('%', #{pd.CREATEDATETIME}),'%')
+        </if> 		
 	</select>
 	
 	<!-- 列表(全部) -->

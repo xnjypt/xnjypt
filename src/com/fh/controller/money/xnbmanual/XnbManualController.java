@@ -14,7 +14,6 @@ import javax.annotation.Resource;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.session.Session;
 import org.apache.shiro.subject.Subject;
-
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.WebDataBinder;
@@ -25,13 +24,14 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.fh.controller.base.BaseController;
 import com.fh.entity.Page;
+import com.fh.service.money.userxnb.UserxnbService;
+import com.fh.service.money.xnbmanual.XnbManualService;
 import com.fh.util.AppUtil;
-import com.fh.util.ObjectExcelView;
 import com.fh.util.Const;
+import com.fh.util.Jurisdiction;
+import com.fh.util.ObjectExcelView;
 import com.fh.util.PageData;
 import com.fh.util.Tools;
-import com.fh.util.Jurisdiction;
-import com.fh.service.money.xnbmanual.XnbManualService;
 
 /** 
  * 类名称：XnbManualController
@@ -45,6 +45,8 @@ public class XnbManualController extends BaseController {
 	String menuUrl = "xnbmanual/list.do"; //菜单地址(权限用)
 	@Resource(name="xnbmanualService")
 	private XnbManualService xnbmanualService;
+	@Resource(name="userxnbService")
+	private UserxnbService userxnbService;
 	
 	/**
 	 * 新增
@@ -56,14 +58,15 @@ public class XnbManualController extends BaseController {
 		ModelAndView mv = this.getModelAndView();
 		PageData pd = new PageData();
 		pd = this.getPageData();
+		PageData pageData = userxnbService.findByLoginNameXnbType(pd);
 		pd.put("XNBMANUAL_ID", this.get32UUID());	//主键
 		pd.put("CREATEDATETIME", Tools.date2Str(new Date()));	//创建时间
 		pd.put("UPDATEDATETIME", Tools.date2Str(new Date()));	//更新时间
 		pd.put("CREATEUSER", "");	//创建人
 		pd.put("UPDATEUSER", "");	//更新人
-		pd.put("USERNICKNAME", "");	//会员昵称
-		pd.put("USERREALNAME", "");	//会员真实姓名
-		pd.put("AUDITDATETIME", Tools.date2Str(new Date()));	//审核时间
+		pd.put("USERNICKNAME", pageData.get("USERNICKNAME"));	//会员昵称
+		pd.put("USERREALNAME", pageData.get("USERREALNAME"));	//会员真实姓名
+		pd.put("AUDITDATETIME", "");	//审核时间
 		pd.put("AUDITPEOPLE", "");	//审核人
 		xnbmanualService.save(pd);
 		mv.addObject("msg","success");
@@ -91,19 +94,58 @@ public class XnbManualController extends BaseController {
 	}
 	
 	/**
-	 * 修改
+	 * 审核
 	 */
-	@RequestMapping(value="/edit")
-	public ModelAndView edit() throws Exception{
-		logBefore(logger, "修改XnbManual");
-		if(!Jurisdiction.buttonJurisdiction(menuUrl, "edit")){return null;} //校验权限
-		ModelAndView mv = this.getModelAndView();
+	@RequestMapping(value="/audit")
+	public void audit(PrintWriter out){
+		logBefore(logger, "审核XnbManual");
+		if(!Jurisdiction.buttonJurisdiction(menuUrl, "edit")){return;} //校验权限
 		PageData pd = new PageData();
-		pd = this.getPageData();
-		xnbmanualService.edit(pd);
-		mv.addObject("msg","success");
-		mv.setViewName("save_result");
-		return mv;
+		try{
+			pd = this.getPageData();
+			pd.put("UPDATEDATETIME", Tools.date2Str(new Date()));
+			Subject currentUser = SecurityUtils.getSubject();  
+			Session session = currentUser.getSession();
+			String USERNAME = session.getAttribute(Const.SESSION_USERNAME).toString();	//获取当前登录者loginname
+			pd.put("AUDITPEOPLE", USERNAME);
+			pd.put("STATUS", "冻结");	//状态
+			xnbmanualService.audit(pd);
+			PageData pageData = xnbmanualService.findById(pd);
+			pageData.put("UPDATEUSER", USERNAME);
+			userxnbService.editFreezeNum(pageData);
+			out.write("success");
+			out.close();
+		} catch(Exception e){
+			logger.error(e.toString(), e);
+		}
+	}
+	
+	/**
+	 * 发放冻结
+	 */
+	@RequestMapping(value="/unFreeze")
+	public void unFreeze(PrintWriter out){
+		logBefore(logger, "发放冻结XnbManual");
+		if(!Jurisdiction.buttonJurisdiction(menuUrl, "edit")){return;} //校验权限
+		PageData pd = new PageData();
+		try{
+			pd = this.getPageData();
+			pd.put("UPDATEDATETIME", Tools.date2Str(new Date()));
+			Subject currentUser = SecurityUtils.getSubject();  
+			Session session = currentUser.getSession();
+			String USERNAME = session.getAttribute(Const.SESSION_USERNAME).toString();	//获取当前登录者loginname
+			pd.put("AUDITPEOPLE", USERNAME);
+			pd.put("STATUS", "已审核");	//状态
+			xnbmanualService.audit(pd);
+			PageData pageData = xnbmanualService.findById(pd);
+			pageData.put("UPDATEUSER", USERNAME);
+			userxnbService.edit(pageData);
+			
+			out.write("success");
+			out.close();
+		} catch(Exception e){
+			logger.error(e.toString(), e);
+		}
 	}
 	
 	/**
@@ -117,6 +159,14 @@ public class XnbManualController extends BaseController {
 		PageData pd = new PageData();
 		try{
 			pd = this.getPageData();
+//			String LOGINNAME = pd.getString("LOGINNAME");
+//			String CREATEDATETIME = pd.getString("CREATEDATETIME");
+//			if(null != LOGINNAME && !"".equals(LOGINNAME)){
+//				pd.put("LOGINNAME", LOGINNAME.trim());
+//			}
+//			if(null != CREATEDATETIME && !"".equals(CREATEDATETIME)){
+//				pd.put("CREATEDATETIME", CREATEDATETIME.trim());
+//			}
 			page.setPd(pd);
 			List<PageData>	varList = xnbmanualService.list(page);	//列出XnbManual列表
 			mv.setViewName("money/xnbmanual/xnbmanual_list");

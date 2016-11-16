@@ -121,6 +121,14 @@ public class XnbtopupController extends BaseController {
 		PageData pd = new PageData();
 		try{
 			pd = this.getPageData();
+//			String KEYWORD = pd.getString("KEYWORD");
+//			String XNBTYPE = pd.getString("XNBTYPE");
+//			if(null != KEYWORD && !"".equals(KEYWORD)){
+//				pd.put("KEYWORD", KEYWORD.trim());
+//			}
+//			if(null != XNBTYPE && !"".equals(XNBTYPE)){
+//				pd.put("XNBTYPE", XNBTYPE.trim());
+//			}
 			page.setPd(pd);
 			List<PageData>	varList = xnbtopupService.list(page);	//列出Xnbtopup列表
 			mv.setViewName("money/xnbtopup/xnbtopup_list");

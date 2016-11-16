@@ -30,11 +30,46 @@
 <script type="text/javascript">
 	
 	
+	
 	//保存
 	function save(){
-			$("#Form").submit();
-		$("#zhongxin").hide();
-		$("#zhongxin2").show();
+		if($("#PURSEPASSWORD").val()==""){
+			$("#PURSEPASSWORD").tips({
+				side:3,
+	            msg:'请输入钱包密码',
+	            bg:'#AE81FF',
+	            time:2
+	        });
+			$("#PURSEPASSWORD").focus();
+			return false;
+		}
+		
+		var status = $("#STATUS").val();
+		if(status == "正在处理"){
+			$.ajax({
+				type: "POST",
+				url: '<%=basePath%>waitauditxnbt/audit.do?tm='+new Date().getTime(),
+		    	data: $("#Form").serialize(),
+				dataType:'json',
+				cache: false,
+				success: function(data){
+					if(data.list[0].msg == "no" ){
+						alert(data.list[0].result);
+					}else {
+						alert("审核成功");
+						$("#zhongxin").hide();
+						top.Dialog.close();
+						//$("#zhongxin2").show();
+					}
+				}
+			});
+		}else {
+			alert("审核失败,只有状态为:‘正在处理’的提现记录才允许审核!");
+		}
+		
+		//$("#Form").submit();
+		
+		
 	}
 	
 </script>
@@ -42,8 +77,35 @@
 <body>
 	<form action="waitauditxnbt/${msg }.do" name="Form" id="Form" method="post">
 		<input type="hidden" name="WAITAUDITXNBT_ID" id="WAITAUDITXNBT_ID" value="${pd.WAITAUDITXNBT_ID}"/>
+		<input type="hidden" name="STATUS" id="STATUS" value="${pd.STATUS}"/>
 		<div id="zhongxin">
 		<table id="table_report" class="table table-striped table-bordered table-hover">
+			<tr>
+				<td style="width:70px;text-align: right;padding-top: 13px;">钱包密码:</td>
+				<td><input type="password" name="PURSEPASSWORD" id="PURSEPASSWORD" value="${pd.PURSEPASSWORD}" maxlength="32" placeholder="这里输入钱包密码" title="钱包密码"/></td>
+			</tr>
+			<tr>
+				<td style="width:70px;text-align: right;padding-top: 13px;">登录名:</td>
+				<td><input disabled="true" type="text" name="LOGINNAME" id="LOGINNAME" value="${pd.LOGINNAME}" maxlength="32" placeholder="这里输入登录名" title="登录名"/></td>
+			</tr>
+			<tr>
+				<td style="width:70px;text-align: right;padding-top: 13px;">虚拟币类型:</td>
+				<td><input disabled="true" type="text" name="XNBTYPE" id="XNBTYPE" value="${pd.XNBTYPE}" maxlength="32" placeholder="这里输入虚拟币类型" title="虚拟币类型"/></td>
+			</tr>
+			<tr>
+				<td style="width:70px;text-align: right;padding-top: 13px;">提现数量:</td>
+				<td><input disabled="true" type="text" name="NUM" id="NUM" value="${pd.NUM}" maxlength="32" placeholder="这里输入提现数量" title="提现数量"/></td>
+			</tr>
+			<tr>
+				<td style="width:70px;text-align: right;padding-top: 13px;">提现手续费:</td>
+				<td><input disabled="true" type="text" name="POUNDAGE" id="POUNDAGE" value="${pd.POUNDAGE}" maxlength="32" placeholder="这里输入提现手续费" title="提现手续费"/></td>
+			</tr>
+			<tr>
+				<td style="width:70px;text-align: right;padding-top: 13px;">提现地址:</td>
+				<td><input disabled="true" type="text" name="WITHDRAWALADDRESS" id="WITHDRAWALADDRESS" value="${pd.WITHDRAWALADDRESS}" maxlength="32" placeholder="这里输入提现地址" title="提现地址"/></td>
+			</tr>
+		
+		
 			<tr>
 				<td style="text-align: center;" colspan="10">
 					<a class="btn btn-mini btn-primary" onclick="save();">保存</a>

@@ -28,24 +28,12 @@
 				<tr>
 					<td>
 						<span class="input-icon">
-							<input autocomplete="off" id="nav-search-input" type="text" name="field1" value="" placeholder="这里输入关键词" />
+							<input autocomplete="off" id="nav-search-input" style="width:300px" type="text" name="LOGINNAME" value="" placeholder="会员信息" />
 							<i id="nav-search-icon" class="icon-search"></i>
 						</span>
 					</td>
-					<td><input class="span10 date-picker" name="lastLoginStart" id="lastLoginStart" value="${pd.lastLoginStart}" type="text" data-date-format="yyyy-mm-dd" readonly="readonly" style="width:88px;" placeholder="开始日期"/></td>
-					<td><input class="span10 date-picker" name="lastLoginEnd" id="lastLoginEnd" value="${pd.lastLoginEnd}" type="text" data-date-format="yyyy-mm-dd" readonly="readonly" style="width:88px;" placeholder="结束日期"/></td>
-					<td style="vertical-align:top;"> 
-					 	<select class="chzn-select" name="field2" id="field2" data-placeholder="请选择" style="vertical-align:top;width: 120px;">
-							<option value=""></option>
-							<option value="">全部</option>
-							<option value="">1</option>
-							<option value="">2</option>
-					  	</select>
-					</td>
+					<td><input class="span10 date-picker" name="CREATEDATETIME" id="lastLoginStart" value="${pd.lastLoginStart}" type="text" data-date-format="yyyy-mm-dd" readonly="readonly" style="width:88px;" placeholder="日期"/></td>
 					<td style="vertical-align:top;"><button class="btn btn-mini btn-light" onclick="search();"  title="检索"><i id="nav-search-icon" class="icon-search"></i></button></td>
-					<c:if test="${QX.cha == 1 }">
-					<td style="vertical-align:top;"><a class="btn btn-mini btn-light" onclick="toExcel();" title="导出到EXCEL"><i id="nav-search-icon" class="icon-download-alt"></i></a></td>
-					</c:if>
 				</tr>
 			</table>
 			<!-- 检索  -->
@@ -59,13 +47,6 @@
 						<label><input type="checkbox" id="zcheckbox" /><span class="lbl"></span></label>
 						</th>
 						<th class="center">序号</th>
-						<th class="center">创建时间</th>
-						<th class="center">更新时间</th>
-						<th class="center">创建人</th>
-						<th class="center">更新人</th>
-						<th class="center">关键字</th>
-						<th class="center">描述</th>
-						<th class="center">排序</th>
 						<th class="center">登录名</th>
 						<th class="center">会员昵称</th>
 						<th class="center">会员真实姓名</th>
@@ -91,17 +72,10 @@
 									<label><input type='checkbox' name='ids' value="${var.XNBMANUAL_ID}" /><span class="lbl"></span></label>
 								</td>
 								<td class='center' style="width: 30px;">${vs.index+1}</td>
-										<td>${var.CREATEDATETIME}</td>
-										<td>${var.UPDATEDATETIME}</td>
-										<td>${var.CREATEUSER}</td>
-										<td>${var.UPDATEUSER}</td>
-										<td>${var.KEYWORD}</td>
-										<td>${var.DESCRIPTION}</td>
-										<td>${var.SEQ}</td>
 										<td>${var.LOGINNAME}</td>
 										<td>${var.USERNICKNAME}</td>
 										<td>${var.USERREALNAME}</td>
-										<td>${var.XNBTYPE}</td>
+										<td>${var.JTTYPENAME}</td>
 										<td>${var.STATUS}</td>
 										<td>${var.NUM}</td>
 										<td>${var.AUDITDATETIME}</td>
@@ -117,10 +91,11 @@
 										<button class="btn btn-mini btn-info" data-toggle="dropdown"><i class="icon-cog icon-only"></i></button>
 										<ul class="dropdown-menu dropdown-icon-only dropdown-light pull-right dropdown-caret dropdown-close">
 											<c:if test="${QX.edit == 1 }">
-											<li><a style="cursor:pointer;" title="编辑" onclick="edit('${var.XNBMANUAL_ID}');" class="tooltip-success" data-rel="tooltip" title="" data-placement="left"><span class="green"><i class="icon-edit"></i></span></a></li>
+											<li><a style="cursor:pointer;" title="审核" onclick="audit('${var.XNBMANUAL_ID}', '${var.STATUS}');" class="tooltip-success" data-rel="tooltip" title="" data-placement="left"><span class="green"><i class="icon-edit"></i></span></a></li>
+											<li><a style="cursor:pointer;" title="发放冻结" onclick="unFreeze('${var.XNBMANUAL_ID}', '${var.STATUS}');" class="tooltip-success" data-rel="tooltip" title="" data-placement="left"><span class="green"><i class="icon-edit"></i></span></a></li>
 											</c:if>
 											<c:if test="${QX.del == 1 }">
-											<li><a style="cursor:pointer;" title="删除" onclick="del('${var.XNBMANUAL_ID}');" class="tooltip-error" data-rel="tooltip" title="" data-placement="left"><span class="red"><i class="icon-trash"></i></span> </a></li>
+											<li><a style="cursor:pointer;" title="删除" onclick="del('${var.XNBMANUAL_ID}', '${var.STATUS}');" class="tooltip-error" data-rel="tooltip" title="" data-placement="left"><span class="red"><i class="icon-trash"></i></span> </a></li>
 											</c:if>
 										</ul>
 										</div>
@@ -154,9 +129,9 @@
 					<c:if test="${QX.add == 1 }">
 					<a class="btn btn-small btn-success" onclick="add();">新增</a>
 					</c:if>
-					<c:if test="${QX.del == 1 }">
-					<a class="btn btn-small btn-danger" onclick="makeAll('确定要删除选中的数据吗?');" title="批量删除" ><i class='icon-trash'></i></a>
-					</c:if>
+					<%-- <c:if test="${QX.edit == 1 }">
+					<a class="btn btn-small btn-success" onclick="unfreeze();">发放冻结</a>
+					</c:if> --%>
 				</td>
 				<td style="vertical-align:top;"><div class="pagination" style="float: right;padding-top: 0px;margin-top: 0px;">${page.pageStr}</div></td>
 			</tr>
@@ -224,11 +199,49 @@
 		}
 		
 		//删除
-		function del(Id){
+		function del(Id, status){
+			if(status != '暂存'){
+				bootbox.alert('删除失败，记录已审核！');
+				return;
+			}
 			bootbox.confirm("确定要删除吗?", function(result) {
 				if(result) {
 					top.jzts();
 					var url = "<%=basePath%>xnbmanual/delete.do?XNBMANUAL_ID="+Id+"&tm="+new Date().getTime();
+					$.get(url,function(data){
+						nextPage(${page.currentPage});
+					});
+				}
+			});
+		}
+		
+		//审核
+		function audit(Id, status){
+			if(status != '暂存'){
+				bootbox.alert('已审核，不允许重复审核');
+				return;
+			}
+			bootbox.confirm("确定要审核吗?", function(result) {
+				if(result) {
+					top.jzts();
+					var url = "<%=basePath%>xnbmanual/audit.do?XNBMANUAL_ID="+Id+"&tm="+new Date().getTime();
+					$.get(url,function(data){
+						nextPage(${page.currentPage});
+					});
+				}
+			});
+		}
+		
+		//发放冻结
+		function unFreeze(Id, status){
+			if(status != '冻结'){
+				bootbox.alert('只会状态为冻结，才允许发放！');
+				return;
+			}
+			bootbox.confirm("确定要发放冻结吗?", function(result) {
+				if(result) {
+					top.jzts();
+					var url = "<%=basePath%>xnbmanual/unFreeze.do?XNBMANUAL_ID="+Id+"&tm="+new Date().getTime();
 					$.get(url,function(data){
 						nextPage(${page.currentPage});
 					});

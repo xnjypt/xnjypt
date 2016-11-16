@@ -47,13 +47,27 @@
 	</delete>
 	
 	
+	<!-- 修改冻结数量 -->
+	<update id="editFreezeNum" parameterType="pd">
+		update  XNHB_MONEY_USERXNB
+			set 
+			USERFREEZENUM = USERFREEZENUM + #{NUM}, 
+			UPDATEUSER =  #{UPDATEUSER}, 
+			UPDATEDATETIME = #{UPDATEDATETIME} 
+			where 
+				LOGINNAME = #{LOGINNAME} and XNBTYPE = #{XNBTYPE}
+	</update>
+	
 	<!-- 修改 -->
 	<update id="edit" parameterType="pd">
 		update  XNHB_MONEY_USERXNB
 			set 
-			USERXNB_ID = USERXNB_ID
+			USERALLNUM = USERALLNUM + #{NUM}, 
+			USERFREEZENUM = USERFREEZENUM - #{NUM}, 
+			UPDATEUSER =  #{UPDATEUSER}, 
+			UPDATEDATETIME = #{UPDATEDATETIME} 
 			where 
-				USERXNB_ID = #{USERXNB_ID}
+				LOGINNAME = #{LOGINNAME} and XNBTYPE = #{XNBTYPE}
 	</update>
 	
 	
@@ -80,6 +94,30 @@
 			USERXNB_ID = #{USERXNB_ID}
 	</select>
 	
+	<!-- 通过LoginName,XnbType获取数据 -->
+	<select id="findByLoginNameXnbType" parameterType="pd" resultType="pd">
+		select 
+			CREATEDATETIME,	
+			UPDATEDATETIME,	
+			CREATEUSER,	
+			UPDATEUSER,	
+			KEYWORD,	
+			DESCRIPTION,	
+			SEQ,	
+			LOGINNAME,	
+			USERNICKNAME,	
+			USERREALNAME,	
+			USERALLNUM,	
+			USERFREEZENUM,	
+			XNBTYPE,	
+			USERXNB_ID
+		from 
+			XNHB_MONEY_USERXNB
+		where 
+			LOGINNAME = #{LOGINNAME} 
+			and XNBTYPE = #{XNBTYPE}
+	</select>
+	
 	
 	<!-- 列表 -->
 	<select id="datalistPage" parameterType="page" resultType="pd">
@@ -97,9 +135,18 @@
 				a.USERALLNUM,	
 				a.USERFREEZENUM,	
 				a.XNBTYPE,	
-				a.USERXNB_ID
+				a.USERXNB_ID,
+				b.JTTYPENAME
 		from 
-				XNHB_MONEY_USERXNB a
+				XNHB_MONEY_USERXNB a,
+				XNHB_VM_VMTYPE b
+		where   a.XNBTYPE = b.VMTYPE_ID	
+		<if test="pd.LOGINNAME != null and pd.LOGINNAME != ''">
+             and a.LOGINNAME LIKE CONCAT(CONCAT('%', #{pd.LOGINNAME}),'%')
+        </if>		
+		<if test="pd.XNBTYPE != null and pd.XNBTYPE != ''">
+             and a.XNBTYPE = #{pd.XNBTYPE}
+        </if> 		
 	</select>
 	
 	<!-- 列表(全部) -->
@@ -133,4 +180,14 @@
 		</foreach>
 	</delete>
 	
+	<!-- 虚拟币提现 -->
+	<update id="plugNum" parameterType="pd">
+		update  XNHB_MONEY_USERXNB
+			set 
+			USERALLNUM = USERALLNUM - #{NUM}, 
+			UPDATEUSER =  #{UPDATEUSER}, 
+			UPDATEDATETIME = #{UPDATEDATETIME} 
+			where 
+				LOGINNAME = #{LOGINNAME} and XNBTYPE = #{XNBTYPE}
+	</update>
 </mapper>

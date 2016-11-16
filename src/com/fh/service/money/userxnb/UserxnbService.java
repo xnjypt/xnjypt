@@ -32,8 +32,14 @@ public class UserxnbService {
 	}
 	
 	/*
-	* 修改
+	* 修改冻结数量
 	*/
+	public void editFreezeNum(PageData pd)throws Exception{
+		dao.update("UserxnbMapper.editFreezeNum", pd);
+	}
+	/*
+	 * 修改
+	 */
 	public void edit(PageData pd)throws Exception{
 		dao.update("UserxnbMapper.edit", pd);
 	}
@@ -58,6 +64,12 @@ public class UserxnbService {
 	public PageData findById(PageData pd)throws Exception{
 		return (PageData)dao.findForObject("UserxnbMapper.findById", pd);
 	}
+	/*
+	 * 通过loginName, xnbType获取数据
+	 */
+	public PageData findByLoginNameXnbType(PageData pd)throws Exception{
+		return (PageData)dao.findForObject("UserxnbMapper.findByLoginNameXnbType", pd);
+	}
 	
 	/*
 	* 批量删除
@@ -66,5 +78,11 @@ public class UserxnbService {
 		dao.delete("UserxnbMapper.deleteAll", ArrayDATA_IDS);
 	}
 	
+	/*
+	 * 修改
+	 */
+	public void plugNum(PageData pd)throws Exception{
+		dao.update("UserxnbMapper.plugNum", pd);
+	}
 }
 

@@ -27,18 +27,17 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.fh.controller.base.BaseController;
 import com.fh.entity.Page;
+import com.fh.service.information.pictures.PicturesService;
 import com.fh.util.AppUtil;
+import com.fh.util.Const;
 import com.fh.util.DateUtil;
 import com.fh.util.DelAllFile;
 import com.fh.util.FileUpload;
 import com.fh.util.Jurisdiction;
 import com.fh.util.ObjectExcelView;
-import com.fh.util.Const;
 import com.fh.util.PageData;
 import com.fh.util.PathUtil;
 import com.fh.util.Tools;
-import com.fh.util.Watermark;
-import com.fh.service.information.pictures.PicturesService;
 
 /** 
  * 类名称：PicturesController
@@ -81,7 +80,7 @@ public class PicturesController extends BaseController {
 			pd.put("MASTER_ID", "1");							//附属与
 			pd.put("BZ", "图片管理处上传");						//备注
 			//加水印
-			Watermark.setWatemark(PathUtil.getClasspath() + Const.FILEPATHIMG + ffile + "/" + fileName);
+//			Watermark.setWatemark(PathUtil.getClasspath() + Const.FILEPATHIMG + ffile + "/" + fileName);
 			picturesService.save(pd);
 		}
 		map.put("result", "ok");
@@ -142,7 +141,7 @@ public class PicturesController extends BaseController {
 			}else{
 				pd.put("PATH", tpz);
 			}
-			Watermark.setWatemark(PathUtil.getClasspath() + Const.FILEPATHIMG + ffile + "/" + fileName);//加水印
+//			Watermark.setWatemark(PathUtil.getClasspath() + Const.FILEPATHIMG + ffile + "/" + fileName);//加水印
 			picturesService.edit(pd);				//执行修改数据库
 		}
 		mv.addObject("msg","success");

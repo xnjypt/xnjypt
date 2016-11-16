@@ -63,7 +63,7 @@ public class MemberMomeyController extends BaseController {
 		pd.put("UPDATEUSER", "");	//修改人
 		pd.put("KEYWORD", "");	//关键字
 		pd.put("DESCRIPTION", "");	//描述
-		pd.put("SEQ", "");	//排序
+		pd.put("SEQ", "0");	//排序
 		pd.put("LOGINNAME", "");	//登录名
 		pd.put("USERNICKNAME", "");	//会员昵称
 		pd.put("USERREALNAME", "");	//会员真实姓名
@@ -121,6 +121,10 @@ public class MemberMomeyController extends BaseController {
 		PageData pd = new PageData();
 		try{
 			pd = this.getPageData();
+			/*String LOGINNAME = pd.getString("LOGINNAME");
+			if(null != LOGINNAME && !"".equals(LOGINNAME)){
+				pd.put("LOGINNAME", LOGINNAME.trim());
+			}*/
 			page.setPd(pd);
 			List<PageData>	varList = membermomeyService.list(page);	//列出MemberMomey列表
 			mv.setViewName("money/membermomey/membermomey_list");

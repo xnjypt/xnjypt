@@ -114,6 +114,13 @@
 				a.WAITAUDITRMBW_ID
 		from 
 				XNHB_MONEY_WAITAUDITRMBW a
+		where   1=1		
+		<if test="pd.KEYWORD != null and pd.KEYWORD != ''">
+             and a.KEYWORD LIKE CONCAT(CONCAT('%', #{pd.KEYWORD}),'%')
+        </if>
+        <if test="pd.CREATEDATETIME != null and pd.CREATEDATETIME != ''">
+             and a.CREATEDATETIME LIKE CONCAT(CONCAT('%', #{pd.CREATEDATETIME}),'%')
+        </if>		
 	</select>
 	
 	<!-- 列表(全部) -->
@@ -149,5 +156,16 @@
                  #{item}
 		</foreach>
 	</delete>
+	
+	<!-- 锁定,取消锁定,取消提现 -->
+	<update id="editStatus" parameterType="pd">
+		update  XNHB_MONEY_WAITAUDITRMBW
+			set 
+			STATUS = #{STATUS},
+			UPDATEDATETIME =  #{UPDATEDATETIME},
+			UPDATEUSER = #{UPDATEUSER}
+			where 
+				WAITAUDITRMBW_ID = #{WAITAUDITRMBW_ID}
+	</update>
 	
 </mapper>

@@ -125,6 +125,29 @@ public class VmTypeController extends BaseController {
 	}
 	
 	/**
+	 * 列表
+	 */
+	@RequestMapping(value="/listAll")
+	public ModelAndView listAll(Page page){
+		logBefore(logger, "列表VmType");
+		//if(!Jurisdiction.buttonJurisdiction(menuUrl, "cha")){return null;} //校验权限
+		ModelAndView mv = this.getModelAndView();
+		PageData pd = new PageData();
+		try{
+			pd = this.getPageData();
+			List<PageData>	varList = vmtypeService.listAll(pd);	//列出VmType列表
+			System.out.println(varList);
+			mv.setViewName("virtualmoney/vmtype/vmtype_list");
+			mv.addObject("varList", varList);
+			mv.addObject("pd", pd);
+			mv.addObject(Const.SESSION_QX,this.getHC());	//按钮权限
+		} catch(Exception e){
+			logger.error(e.toString(), e);
+		}
+		return mv;
+	}
+	
+	/**
 	 * 去新增页面
 	 */
 	@RequestMapping(value="/goAdd")
@@ -292,5 +315,26 @@ public class VmTypeController extends BaseController {
 	public void initBinder(WebDataBinder binder){
 		DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
 		binder.registerCustomEditor(Date.class, new CustomDateEditor(format,true));
+	}
+	
+	
+	/**
+	 * 列表
+	 */
+	@RequestMapping(value="/typeList")
+	@ResponseBody
+	public Object typeList() throws Exception{
+		PageData pd = new PageData();		
+		Map<String,Object> map = new HashMap<String,Object>();
+		try {
+			pd = this.getPageData();
+			List<PageData>	varList = vmtypeService.listAll(pd);	//列出VmType列表
+			map.put("list", varList);
+		} catch (Exception e) {
+			logger.error(e.toString(), e);
+		} finally {
+			logAfter(logger);
+		}
+		return AppUtil.returnObject(pd, map);
 	}
 }

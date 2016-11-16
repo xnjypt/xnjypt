@@ -93,9 +93,18 @@
 				a.STATUS,	
 				a.TRADINGTYPE,	
 				a.NUM,	
-				a.XNBTOPUP_ID
+				a.XNBTOPUP_ID,
+				b.JTTYPENAME
 		from 
-				XNHB_MONEY_XNBTOPUP a
+				XNHB_MONEY_XNBTOPUP a,
+				XNHB_VM_VMTYPE b
+		where   a.XNBTYPE = b.VMTYPE_ID	
+		<if test="pd.KEYWORD != null and pd.KEYWORD != ''">
+             and a.KEYWORD LIKE CONCAT(CONCAT('%', #{pd.KEYWORD}),'%')
+        </if>
+        <if test="pd.XNBTYPE != null and pd.XNBTYPE != ''">
+             and a.XNBTYPE = #{pd.XNBTYPE}
+        </if> 		
 	</select>
 	
 	<!-- 列表(全部) -->

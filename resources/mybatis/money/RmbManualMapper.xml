@@ -49,17 +49,16 @@
 	</delete>
 	
 	
-	<!-- 修改 -->
-	<update id="edit" parameterType="pd">
+	<!-- 审核 -->
+	<update id="audit" parameterType="pd">
 		update  XNHB_MONEY_RMBMANUAL
 			set 
-				DESCRIPTION = #{DESCRIPTION},
-				LOGINNAME = #{LOGINNAME},
-				REMITTANCETYPE = #{REMITTANCETYPE},
-				MONEY = #{MONEY},
-			RMBMANUAL_ID = RMBMANUAL_ID
+				STATUS = #{STATUS},
+				AUDITPEOPLE = #{AUDITPEOPLE},
+				KEYWORD = CONCAT(KEYWORD, ',', #{AUDITPEOPLE}) ,
+				UPDATEDATETIME = #{UPDATEDATETIME}
 			where 
-				RMBMANUAL_ID = #{RMBMANUAL_ID}
+				RMBMANUAL_ID = #{RMBMANUAL_ID};
 	</update>
 	
 	
@@ -108,6 +107,13 @@
 				a.RMBMANUAL_ID
 		from 
 				XNHB_MONEY_RMBMANUAL a
+		where   1=1		
+		<if test="pd.KEYWORD != null and pd.KEYWORD != ''">
+             and a.KEYWORD LIKE CONCAT(CONCAT('%', #{pd.KEYWORD}),'%')
+        </if>
+        <if test="pd.CREATEDATETIME != null and pd.CREATEDATETIME != ''">
+             and a.CREATEDATETIME LIKE CONCAT(CONCAT('%', #{pd.CREATEDATETIME}),'%')
+        </if> 		
 	</select>
 	
 	<!-- 列表(全部) -->

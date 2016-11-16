@@ -24,7 +24,6 @@ import com.fh.util.Const;
 import com.fh.util.PageData;
 import com.fh.util.SmsUtil;
 import com.fh.util.Tools;
-import com.fh.util.Watermark;
 import com.fh.util.mail.SimpleMailSender;
 
 /** 
@@ -418,7 +417,7 @@ public class HeadController extends BaseController {
 		pd = this.getPageData();
 		Tools.writeFile(Const.FWATERM,pd.getString("isCheck1")+",fh,"+pd.getString("fcontent")+",fh,"+pd.getString("fontSize")+",fh,"+pd.getString("fontX")+",fh,"+pd.getString("fontY"));	//文字水印配置
 		Tools.writeFile(Const.IWATERM,pd.getString("isCheck2")+",fh,"+pd.getString("imgUrl")+",fh,"+pd.getString("imgX")+",fh,"+pd.getString("imgY"));	//图片水印配置
-		Watermark.fushValue();
+//		Watermark.fushValue();
 		mv.addObject("msg","OK");
 		mv.setViewName("save_result");
 		return mv;

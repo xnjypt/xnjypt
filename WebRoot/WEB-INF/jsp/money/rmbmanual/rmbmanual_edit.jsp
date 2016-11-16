@@ -32,16 +32,7 @@
 	
 	//保存
 	function save(){
-			if($("#DESCRIPTION").val()==""){
-			$("#DESCRIPTION").tips({
-				side:3,
-	            msg:'请输入描述',
-	            bg:'#AE81FF',
-	            time:2
-	        });
-			$("#DESCRIPTION").focus();
-			return false;
-		}
+		
 		if($("#LOGINNAME").val()==""){
 			$("#LOGINNAME").tips({
 				side:3,
@@ -62,7 +53,8 @@
 			$("#REMITTANCETYPE").focus();
 			return false;
 		}
-		if($("#MONEY").val()==""){
+		var money = $("#MONEY").val();
+		if(money==""){
 			$("#MONEY").tips({
 				side:3,
 	            msg:'请输入金额',
@@ -71,10 +63,29 @@
 	        });
 			$("#MONEY").focus();
 			return false;
+		}else if(isNaN(money) || money<=0){
+			$("#MONEY").tips({
+				side:3,
+	            msg:'请输入大于0的金额',
+	            bg:'#AE81FF',
+	            time:2
+	        });
+			$("#MONEY").focus();
+			return false;
+		}
+		if($("#DESCRIPTION").val()==""){
+			$("#DESCRIPTION").tips({
+				side:3,
+	            msg:'请输入描述',
+	            bg:'#AE81FF',
+	            time:2
+	        });
+			$("#DESCRIPTION").focus();
+			return false;
 		}
 		$("#Form").submit();
-		$("#zhongxin").hide();
-		$("#zhongxin2").show();
+		/* $("#zhongxin").hide();
+		$("#zhongxin2").show(); */
 	}
 	
 </script>
@@ -85,20 +96,26 @@
 		<div id="zhongxin">
 		<table id="table_report" class="table table-striped table-bordered table-hover">
 			<tr>
-				<td style="width:70px;text-align: right;padding-top: 13px;">描述:</td>
-				<td><input type="text" name="DESCRIPTION" id="DESCRIPTION" value="${pd.DESCRIPTION}" maxlength="32" placeholder="这里输入描述" title="描述"/></td>
-			</tr>
-			<tr>
 				<td style="width:70px;text-align: right;padding-top: 13px;">登录名:</td>
 				<td><input type="text" name="LOGINNAME" id="LOGINNAME" value="${pd.LOGINNAME}" maxlength="32" placeholder="这里输入登录名" title="登录名"/></td>
 			</tr>
 			<tr>
 				<td style="width:70px;text-align: right;padding-top: 13px;">汇款方式:</td>
-				<td><input type="text" name="REMITTANCETYPE" id="REMITTANCETYPE" value="${pd.REMITTANCETYPE}" maxlength="32" placeholder="这里输入汇款方式" title="汇款方式"/></td>
+				<td > 
+				 	<select name="REMITTANCETYPE" id="REMITTANCETYPE" data-placeholder="汇款方式" >
+						<option value="柜台转款">柜台转款</option>
+						<option value="ATM机">ATM机</option>
+						<option value="网上银行">网上银行</option>
+				  	</select>	
+				</td>
 			</tr>
 			<tr>
 				<td style="width:70px;text-align: right;padding-top: 13px;">金额:</td>
 				<td><input type="number" name="MONEY" id="MONEY" value="${pd.MONEY}" maxlength="32" placeholder="这里输入金额" title="金额"/></td>
+			</tr>
+			<tr>
+				<td style="width:70px;text-align: right;padding-top: 13px;">备注:</td>
+				<td><input type="text" name="DESCRIPTION" id="DESCRIPTION" value="${pd.DESCRIPTION}" maxlength="32" placeholder="这里输入备注" title="描述"/></td>
 			</tr>
 			<tr>
 				<td style="text-align: center;" colspan="10">

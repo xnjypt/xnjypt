@@ -32,36 +32,6 @@
 	
 	//保存
 	function save(){
-			if($("#KEYWORD").val()==""){
-			$("#KEYWORD").tips({
-				side:3,
-	            msg:'请输入关键字',
-	            bg:'#AE81FF',
-	            time:2
-	        });
-			$("#KEYWORD").focus();
-			return false;
-		}
-		if($("#DESCRIPTION").val()==""){
-			$("#DESCRIPTION").tips({
-				side:3,
-	            msg:'请输入描述',
-	            bg:'#AE81FF',
-	            time:2
-	        });
-			$("#DESCRIPTION").focus();
-			return false;
-		}
-		if($("#SEQ").val()==""){
-			$("#SEQ").tips({
-				side:3,
-	            msg:'请输入排序',
-	            bg:'#AE81FF',
-	            time:2
-	        });
-			$("#SEQ").focus();
-			return false;
-		}
 		if($("#LOGINNAME").val()==""){
 			$("#LOGINNAME").tips({
 				side:3,
@@ -82,20 +52,20 @@
 			$("#XNBTYPE").focus();
 			return false;
 		}
-		if($("#STATUS").val()==""){
-			$("#STATUS").tips({
-				side:3,
-	            msg:'请输入状态',
-	            bg:'#AE81FF',
-	            time:2
-	        });
-			$("#STATUS").focus();
-			return false;
-		}
-		if($("#NUM").val()==""){
+		var NUM = $("#NUM").val();
+		if(NUM==""){
 			$("#NUM").tips({
 				side:3,
 	            msg:'请输入数量',
+	            bg:'#AE81FF',
+	            time:2
+	        });
+			$("#NUM").focus();
+			return false;
+		}else if(isNaN(NUM) || NUM<=0){
+			$("#NUM").tips({
+				side:3,
+	            msg:'请输入大于0的数量',
 	            bg:'#AE81FF',
 	            time:2
 	        });
@@ -125,28 +95,15 @@
 		<div id="zhongxin">
 		<table id="table_report" class="table table-striped table-bordered table-hover">
 			<tr>
-				<td style="width:70px;text-align: right;padding-top: 13px;">关键字:</td>
-				<td><input type="text" name="KEYWORD" id="KEYWORD" value="${pd.KEYWORD}" maxlength="32" placeholder="这里输入关键字" title="关键字"/></td>
-			</tr>
-			<tr>
-				<td style="width:70px;text-align: right;padding-top: 13px;">描述:</td>
-				<td><input type="text" name="DESCRIPTION" id="DESCRIPTION" value="${pd.DESCRIPTION}" maxlength="32" placeholder="这里输入描述" title="描述"/></td>
-			</tr>
-			<tr>
-				<td style="width:70px;text-align: right;padding-top: 13px;">排序:</td>
-				<td><input type="number" name="SEQ" id="SEQ" value="${pd.SEQ}" maxlength="32" placeholder="这里输入排序" title="排序"/></td>
-			</tr>
-			<tr>
 				<td style="width:70px;text-align: right;padding-top: 13px;">登录名:</td>
 				<td><input type="text" name="LOGINNAME" id="LOGINNAME" value="${pd.LOGINNAME}" maxlength="32" placeholder="这里输入登录名" title="登录名"/></td>
 			</tr>
 			<tr>
 				<td style="width:70px;text-align: right;padding-top: 13px;">虚拟币类型:</td>
-				<td><input type="text" name="XNBTYPE" id="XNBTYPE" value="${pd.XNBTYPE}" maxlength="32" placeholder="这里输入虚拟币类型" title="虚拟币类型"/></td>
-			</tr>
-			<tr>
-				<td style="width:70px;text-align: right;padding-top: 13px;">状态:</td>
-				<td><input type="text" name="STATUS" id="STATUS" value="${pd.STATUS}" maxlength="32" placeholder="这里输入状态" title="状态"/></td>
+				<td > 
+				 	<select name="XNBTYPE" id="XNBTYPE" data-placeholder="虚拟币类型" >
+				  	</select>	
+				</td>
 			</tr>
 			<tr>
 				<td style="width:70px;text-align: right;padding-top: 13px;">数量:</td>
@@ -187,6 +144,19 @@
 			
 			//日期框
 			$('.date-picker').datepicker();
+			
+			$.ajax({
+				type: "POST",
+				url: '<%=basePath%>vmtype/typeList.do',
+				dataType:'json',
+				cache: false,
+				success: function(data){
+					console.info(data.list);
+					$.each(data.list, function (i, item) { 
+						$("#XNBTYPE").append("<option value='"+ item.VMTYPE_ID+"'>"+ item.JTTYPENAME+"</option>"); 
+					}); 
+				}
+			});
 			
 		});
 		

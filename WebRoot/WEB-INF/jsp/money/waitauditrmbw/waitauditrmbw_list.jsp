@@ -28,20 +28,17 @@
 				<tr>
 					<td>
 						<span class="input-icon">
-							<input autocomplete="off" id="nav-search-input" type="text" name="field1" value="" placeholder="这里输入关键词" />
+							<input autocomplete="off" id="nav-search-input" style="width:300px" type="text" name="KEYWORD" value="" placeholder="会员名称、手机、银行帐户、金额、收款人" />
 							<i id="nav-search-icon" class="icon-search"></i>
 						</span>
 					</td>
-					<td><input class="span10 date-picker" name="lastLoginStart" id="lastLoginStart" value="${pd.lastLoginStart}" type="text" data-date-format="yyyy-mm-dd" readonly="readonly" style="width:88px;" placeholder="开始日期"/></td>
-					<td><input class="span10 date-picker" name="lastLoginEnd" id="lastLoginEnd" value="${pd.lastLoginEnd}" type="text" data-date-format="yyyy-mm-dd" readonly="readonly" style="width:88px;" placeholder="结束日期"/></td>
-					<td style="vertical-align:top;"> 
-					 	<select class="chzn-select" name="field2" id="field2" data-placeholder="请选择" style="vertical-align:top;width: 120px;">
-							<option value=""></option>
-							<option value="">全部</option>
-							<option value="">1</option>
-							<option value="">2</option>
-					  	</select>
+					<td>
+						<span class="input-icon">
+							<input autocomplete="off" id="nav-search-input" type="text" name="TOPUPID" value="" placeholder="充值ID" />
+							<i id="nav-search-icon" class="icon-search"></i>
+						</span>
 					</td>
+					<td><input class="span10 date-picker" name="CREATEDATETIME" id="lastLoginStart" value="${pd.lastLoginStart}" type="text" data-date-format="yyyy-mm-dd" readonly="readonly" style="width:88px;" placeholder="日期"/></td>
 					<td style="vertical-align:top;"><button class="btn btn-mini btn-light" onclick="search();"  title="检索"><i id="nav-search-icon" class="icon-search"></i></button></td>
 					<c:if test="${QX.cha == 1 }">
 					<td style="vertical-align:top;"><a class="btn btn-mini btn-light" onclick="toExcel();" title="导出到EXCEL"><i id="nav-search-icon" class="icon-download-alt"></i></a></td>
@@ -58,12 +55,6 @@
 						<th class="center">
 						<label><input type="checkbox" id="zcheckbox" /><span class="lbl"></span></label>
 						</th>
-						<th class="center">序号</th>
-						<th class="center">创建时间</th>
-						<th class="center">修改时间</th>
-						<th class="center">创建人</th>
-						<th class="center">修改人</th>
-						<th class="center">关键字</th>
 						<th class="center">登录名</th>
 						<th class="center">会员昵称</th>
 						<th class="center">会员真实姓名</th>
@@ -73,9 +64,8 @@
 						<th class="center">手续费</th>
 						<th class="center">银行</th>
 						<th class="center">收款账户</th>
+						<th class="center">备注</th>
 						<th class="center">开户行地址</th>
-						<th class="center">描述</th>
-						<th class="center">操作</th>
 					</tr>
 				</thead>
 										
@@ -90,12 +80,6 @@
 								<td class='center' style="width: 30px;">
 									<label><input type='checkbox' name='ids' value="${var.WAITAUDITRMBW_ID}" /><span class="lbl"></span></label>
 								</td>
-								<td class='center' style="width: 30px;">${vs.index+1}</td>
-										<td>${var.CREATEDATETIME}</td>
-										<td>${var.UPDATEDATETIME}</td>
-										<td>${var.CREATEUSER}</td>
-										<td>${var.UPDATEUSER}</td>
-										<td>${var.KEYWORD}</td>
 										<td>${var.LOGINNAME}</td>
 										<td>${var.USERNICKNAME}</td>
 										<td>${var.USERREALNAME}</td>
@@ -105,27 +89,8 @@
 										<td>${var.POUNDAGE}</td>
 										<td>${var.BANK}</td>
 										<td>${var.PAYMENTACCOUNT}</td>
-										<td>${var.BANKADDRESS}</td>
 										<td>${var.DESCRIPTION}</td>
-								<td style="width: 30px;" class="center">
-									<div class='hidden-phone visible-desktop btn-group'>
-									
-										<c:if test="${QX.edit != 1 && QX.del != 1 }">
-										<span class="label label-large label-grey arrowed-in-right arrowed-in"><i class="icon-lock" title="无权限"></i></span>
-										</c:if>
-										<div class="inline position-relative">
-										<button class="btn btn-mini btn-info" data-toggle="dropdown"><i class="icon-cog icon-only"></i></button>
-										<ul class="dropdown-menu dropdown-icon-only dropdown-light pull-right dropdown-caret dropdown-close">
-											<c:if test="${QX.edit == 1 }">
-											<li><a style="cursor:pointer;" title="编辑" onclick="edit('${var.WAITAUDITRMBW_ID}');" class="tooltip-success" data-rel="tooltip" title="" data-placement="left"><span class="green"><i class="icon-edit"></i></span></a></li>
-											</c:if>
-											<c:if test="${QX.del == 1 }">
-											<li><a style="cursor:pointer;" title="删除" onclick="del('${var.WAITAUDITRMBW_ID}');" class="tooltip-error" data-rel="tooltip" title="" data-placement="left"><span class="red"><i class="icon-trash"></i></span> </a></li>
-											</c:if>
-										</ul>
-										</div>
-									</div>
-								</td>
+										<td>${var.BANKADDRESS}</td>
 							</tr>
 						
 						</c:forEach>
@@ -151,11 +116,14 @@
 		<table style="width:100%;">
 			<tr>
 				<td style="vertical-align:top;">
-					<c:if test="${QX.add == 1 }">
-					<a class="btn btn-small btn-success" onclick="add();">新增</a>
-					</c:if>
-					<c:if test="${QX.del == 1 }">
-					<a class="btn btn-small btn-danger" onclick="makeAll('确定要删除选中的数据吗?');" title="批量删除" ><i class='icon-trash'></i></a>
+					<c:if test="${QX.edit == 1 }">
+					<a class="btn btn-small btn-success" onclick="edit('确定要审核吗?');">审核</a>
+					<a class="btn btn-small btn-success" onclick="edit('确定要锁定吗?');">锁定</a>
+					<a class="btn btn-small btn-success" onclick="edit('确定要取消锁定吗?');">取消锁定</a>
+					<a class="btn btn-small btn-success" onclick="edit('确定要取消提现吗?');">取消提现</a>
+					<a class="btn btn-small btn-success" onclick="edit('确定要全部锁定吗?');">全部锁定</a>
+					<a class="btn btn-small btn-success" onclick="edit('查看会员资金情况');">查看会员资金情况</a>
+					<a class="btn btn-small btn-success" onclick="edit('查看会员信息');">查看会员信息</a>
 					</c:if>
 				</td>
 				<td style="vertical-align:top;"><div class="pagination" style="float: right;padding-top: 0px;margin-top: 0px;">${page.pageStr}</div></td>
@@ -200,58 +168,172 @@
 			$("#Form").submit();
 		}
 		
-		//新增
-		function add(){
-			 top.jzts();
-			 var diag = new top.Dialog();
-			 diag.Drag=true;
-			 diag.Title ="新增";
-			 diag.URL = '<%=basePath%>waitauditrmbw/goAdd.do';
-			 diag.Width = 450;
-			 diag.Height = 355;
-			 diag.CancelEvent = function(){ //关闭事件
-				 if(diag.innerFrame.contentWindow.document.getElementById('zhongxin').style.display == 'none'){
-					 if('${page.currentPage}' == '0'){
-						 top.jzts();
-						 setTimeout("self.location=self.location",100);
-					 }else{
-						 nextPage(${page.currentPage});
-					 }
-				}
-				diag.close();
-			 };
-			 diag.show();
-		}
-		
-		//删除
-		function del(Id){
-			bootbox.confirm("确定要删除吗?", function(result) {
-				if(result) {
-					top.jzts();
-					var url = "<%=basePath%>waitauditrmbw/delete.do?WAITAUDITRMBW_ID="+Id+"&tm="+new Date().getTime();
-					$.get(url,function(data){
-						nextPage(${page.currentPage});
-					});
-				}
-			});
-		}
-		
 		//修改
-		function edit(Id){
-			 top.jzts();
-			 var diag = new top.Dialog();
-			 diag.Drag=true;
-			 diag.Title ="编辑";
-			 diag.URL = '<%=basePath%>waitauditrmbw/goEdit.do?WAITAUDITRMBW_ID='+Id;
-			 diag.Width = 450;
-			 diag.Height = 355;
-			 diag.CancelEvent = function(){ //关闭事件
-				 if(diag.innerFrame.contentWindow.document.getElementById('zhongxin').style.display == 'none'){
-					 nextPage(${page.currentPage});
+		function edit(msg){
+			<%-- if(msg == '确定要全部锁定吗?'){
+				top.jzts();
+				$.ajax({
+					type: "POST",
+					url: '<%=basePath%>waitauditrmbw/cancel.do?tm='+new Date().getTime(),
+			    	//data: {WAITAUDITRMBW_ID:str},
+					dataType:'json',
+					cache: false,
+					success: function(data){
+						$.each(data.list, function(i, list){
+							nextPage(${page.currentPage});
+					 	});
+						if(data.list[0].msg == "no" ){
+							alert(data.list[0].result);
+						}else {
+							alert("全部锁定成功");
+						}
+					}
+				});
+			} --%>
+			
+			var str = '';
+			for(var i=0;i < document.getElementsByName('ids').length;i++)
+			{
+				  if(document.getElementsByName('ids')[i].checked){
+				  	if(str=='') str += document.getElementsByName('ids')[i].value;
+				  	else{
+				  		bootbox.dialog("请选择一条记录进行操作!", 
+								[
+								  {
+									"label" : "关闭",
+									"class" : "btn-small btn-success",
+									"callback": function() {
+										
+										}
+									}
+								 ]
+							);
+				  		return;
+				  	}
+				  }
+			}
+			if(str==''){
+				bootbox.dialog("您没有选择任何内容!", 
+					[
+					  {
+						"label" : "关闭",
+						"class" : "btn-small btn-success",
+						"callback": function() {
+							//Example.show("great success");
+							}
+						}
+					 ]
+				);
+				
+				return;
+			}else{
+			
+				if(msg == '确定要锁定吗?'){
+					top.jzts();
+					$.ajax({
+						type: "POST",
+						url: '<%=basePath%>waitauditrmbw/lock.do?tm='+new Date().getTime(),
+				    	data: {WAITAUDITRMBW_ID:str},
+						dataType:'json',
+						//beforeSend: validateData,
+						cache: false,
+						success: function(data){
+							$.each(data.list, function(i, list){
+								nextPage(${page.currentPage});
+						 	});
+							if(data.list[0].msg == "no" ){
+								alert(data.list[0].result);
+							}else {
+								alert("锁定成功");
+							}
+						}
+					});
+				}else if(msg == '确定要取消锁定吗?'){
+					
+					top.jzts();
+					$.ajax({
+						type: "POST",
+						url: '<%=basePath%>waitauditrmbw/unlock.do?tm='+new Date().getTime(),
+				    	data: {WAITAUDITRMBW_ID:str},
+						dataType:'json',
+						cache: false,
+						success: function(data){
+							$.each(data.list, function(i, list){
+								nextPage(${page.currentPage});
+						 	});
+							if(data.list[0].msg == "no" ){
+								alert(data.list[0].result);
+							}else {
+								alert("取消锁定成功");
+							}
+						}
+					});
+				}else if(msg == '确定要取消提现吗?'){
+					top.jzts();
+					$.ajax({
+						type: "POST",
+						url: '<%=basePath%>waitauditrmbw/cancel.do?tm='+new Date().getTime(),
+				    	data: {WAITAUDITRMBW_ID:str},
+						dataType:'json',
+						cache: false,
+						success: function(data){
+							$.each(data.list, function(i, list){
+								nextPage(${page.currentPage});
+						 	});
+							if(data.list[0].msg == "no" ){
+								alert(data.list[0].result);
+							}else {
+								alert("取消提现成功");
+							}
+						}
+					});
+				}else if(msg == '确定要审核吗?'){
+					top.jzts();
+					 var diag = new top.Dialog();
+					 diag.Drag=true;
+					 diag.Title ="审核人民币提现<font style='color:red'>(此过程不可逆,请谨慎操作)</font>";
+					 diag.URL = '<%=basePath%>waitauditrmbw/goEdit.do?WAITAUDITRMBW_ID='+str;
+					 diag.Width = 450;
+					 diag.Height = 355;
+					 diag.CancelEvent = function(){ //关闭事件
+						 if(diag.innerFrame.contentWindow.document.getElementById('zhongxin').style.display == 'none'){
+							 nextPage(${page.currentPage});
+						}
+						diag.close();
+					 };
+					 diag.show();
+				}else if(msg == '查看会员资金情况'){
+					top.jzts();
+					 var diag = new top.Dialog();
+					 diag.Drag=true;
+					 diag.Title ="查看会员资金情况";
+					 diag.URL = '<%=basePath%>waitauditrmbw/goEdit.do?WAITAUDITRMBW_ID='+str;
+					 diag.Width = 450;
+					 diag.Height = 355;
+					 diag.CancelEvent = function(){ //关闭事件
+						 if(diag.innerFrame.contentWindow.document.getElementById('zhongxin').style.display == 'none'){
+							 nextPage(${page.currentPage});
+						}
+						diag.close();
+					 };
+					 diag.show();
+				}else if(msg == '查看会员信息'){
+					top.jzts();
+					 var diag = new top.Dialog();
+					 diag.Drag=true;
+					 diag.Title ="查看会员信息";
+					 diag.URL = '<%=basePath%>waitauditrmbw/goEdit.do?WAITAUDITRMBW_ID='+str;
+					 diag.Width = 450;
+					 diag.Height = 355;
+					 diag.CancelEvent = function(){ //关闭事件
+						 if(diag.innerFrame.contentWindow.document.getElementById('zhongxin').style.display == 'none'){
+							 nextPage(${page.currentPage});
+						}
+						diag.close();
+					 };
+					 diag.show();
 				}
-				diag.close();
-			 };
-			 diag.show();
+			}
 		}
 		</script>
 		

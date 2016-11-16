@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.session.Session;
@@ -31,6 +32,7 @@ import com.fh.util.Const;
 import com.fh.util.PageData;
 import com.fh.util.Tools;
 import com.fh.util.Jurisdiction;
+import com.fh.service.money.membermomey.MemberMomeyService;
 import com.fh.service.money.rmbmanual.RmbManualService;
 
 /** 
@@ -45,6 +47,8 @@ public class RmbManualController extends BaseController {
 	String menuUrl = "rmbmanual/list.do"; //菜单地址(权限用)
 	@Resource(name="rmbmanualService")
 	private RmbManualService rmbmanualService;
+	@Resource(name="membermomeyService")
+	private MemberMomeyService membermomeyService;
 	
 	/**
 	 * 新增
@@ -53,19 +57,21 @@ public class RmbManualController extends BaseController {
 	public ModelAndView save() throws Exception{
 		logBefore(logger, "新增RmbManual");
 		if(!Jurisdiction.buttonJurisdiction(menuUrl, "add")){return null;} //校验权限
+		
 		ModelAndView mv = this.getModelAndView();
 		PageData pd = new PageData();
 		pd = this.getPageData();
+		PageData pageData = membermomeyService.findByLoginName(pd);
 		pd.put("RMBMANUAL_ID", this.get32UUID());	//主键
 		pd.put("CREATEDATETIME", Tools.date2Str(new Date()));	//创建时间
 		pd.put("UPDATEDATETIME", Tools.date2Str(new Date()));	//修改时间
 		pd.put("CREATEUSER", "");	//创建人
 		pd.put("UPDATEUSER", "");	//修改人
-		pd.put("KEYWORD", "");	//关键字
-		pd.put("SEQ", "");	//排序
-		pd.put("USERNICKNAME", "");	//会员昵称
-		pd.put("USERREALNAME", "");	//会员真实姓名
-		pd.put("STATUS", "");	//状态
+		pd.put("KEYWORD", pd.getString("LOGINNAME"));	//关键字
+		pd.put("SEQ", "0");	//排序
+		pd.put("USERNICKNAME", pageData.get("USERNICKNAME"));	//会员昵称
+		pd.put("USERREALNAME", pageData.get("USERREALNAME"));	//会员真实姓名
+		pd.put("STATUS", "暂存");	//状态
 		pd.put("AUDITPEOPLE", "");	//审核人
 		rmbmanualService.save(pd);
 		mv.addObject("msg","success");
@@ -89,23 +95,34 @@ public class RmbManualController extends BaseController {
 		} catch(Exception e){
 			logger.error(e.toString(), e);
 		}
-		
 	}
 	
 	/**
-	 * 修改
+	 * 审核
 	 */
-	@RequestMapping(value="/edit")
-	public ModelAndView edit() throws Exception{
-		logBefore(logger, "修改RmbManual");
-		if(!Jurisdiction.buttonJurisdiction(menuUrl, "edit")){return null;} //校验权限
-		ModelAndView mv = this.getModelAndView();
+	@RequestMapping(value="/audit")
+	public void audit(PrintWriter out){
+		logBefore(logger, "审核RmbManual");
+		if(!Jurisdiction.buttonJurisdiction(menuUrl, "edit")){return;} //校验权限
 		PageData pd = new PageData();
-		pd = this.getPageData();
-		rmbmanualService.edit(pd);
-		mv.addObject("msg","success");
-		mv.setViewName("save_result");
-		return mv;
+		try{
+			pd = this.getPageData();
+			pd.put("UPDATEDATETIME", Tools.date2Str(new Date()));
+			Subject currentUser = SecurityUtils.getSubject();  
+			Session session = currentUser.getSession();
+			String USERNAME = session.getAttribute(Const.SESSION_USERNAME).toString();	//获取当前登录者loginname
+			pd.put("AUDITPEOPLE", USERNAME);
+			pd.put("STATUS", "已审核");	//状态
+			rmbmanualService.audit(pd);
+			PageData pageData = rmbmanualService.findById(pd);
+			pageData.put("UPDATEUSER", USERNAME);
+			membermomeyService.edit(pageData);
+			
+			out.write("success");
+			out.close();
+		} catch(Exception e){
+			logger.error(e.toString(), e);
+		}
 	}
 	
 	/**
@@ -119,6 +136,14 @@ public class RmbManualController extends BaseController {
 		PageData pd = new PageData();
 		try{
 			pd = this.getPageData();
+//			String KEYWORD = pd.getString("KEYWORD");
+//			String CREATEDATETIME = pd.getString("CREATEDATETIME");
+//			if(null != KEYWORD && !"".equals(KEYWORD)){
+//				pd.put("KEYWORD", KEYWORD.trim());
+//			}
+//			if(null != CREATEDATETIME && !"".equals(CREATEDATETIME)){
+//				pd.put("CREATEDATETIME", CREATEDATETIME.trim());
+//			}
 			page.setPd(pd);
 			List<PageData>	varList = rmbmanualService.list(page);	//列出RmbManual列表
 			mv.setViewName("money/rmbmanual/rmbmanual_list");

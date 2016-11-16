@@ -31,6 +31,8 @@ import com.fh.util.Const;
 import com.fh.util.PageData;
 import com.fh.util.Tools;
 import com.fh.util.Jurisdiction;
+import com.fh.service.money.membermomey.MemberMomeyService;
+import com.fh.service.money.rmboperationrecord.RmboperationrecordService;
 import com.fh.service.money.waitauditrmbt.WaitAuditRmbTService;
 
 /** 
@@ -45,6 +47,10 @@ public class WaitAuditRmbTController extends BaseController {
 	String menuUrl = "waitauditrmbt/list.do"; //菜单地址(权限用)
 	@Resource(name="waitauditrmbtService")
 	private WaitAuditRmbTService waitauditrmbtService;
+	@Resource(name="membermomeyService")
+	private MemberMomeyService membermomeyService;
+	@Resource(name="rmboperationrecordService")
+	private RmboperationrecordService rmboperationrecordService;
 	
 	/**
 	 * 新增
@@ -100,10 +106,71 @@ public class WaitAuditRmbTController extends BaseController {
 	}
 	
 	/**
-	 * 修改
+	 * 审核
 	 */
-	@RequestMapping(value="/edit")
-	public ModelAndView edit() throws Exception{
+	@RequestMapping(value="/audit")
+	public void audit(PrintWriter out){
+		logBefore(logger, "审核WaitAuditRmbT");
+		if(!Jurisdiction.buttonJurisdiction(menuUrl, "edit")){return;} //校验权限
+		PageData pd = new PageData();
+		try{
+			pd = this.getPageData();
+			pd.put("UPDATEDATETIME", Tools.date2Str(new Date()));
+			Subject currentUser = SecurityUtils.getSubject();  
+			Session session = currentUser.getSession();
+			String USERNAME = session.getAttribute(Const.SESSION_USERNAME).toString();	//获取当前登录者loginname
+			pd.put("UPDATEUSER", USERNAME);
+			pd.put("STATUS", "已经到账");	//状态
+			waitauditrmbtService.audit(pd);
+			PageData pageData = waitauditrmbtService.findById(pd);
+			pageData.put("UPDATEUSER", USERNAME);
+			pageData.put("RMBOPERATIONRECORD_ID", pageData.getString("WAITAUDITRMBT_ID"));
+			rmboperationrecordService.edit(pageData);
+			
+			pageData.put("UPDATEUSER", USERNAME);
+			membermomeyService.edit(pageData);
+			
+			out.write("success");
+			out.close();
+		} catch(Exception e){
+			logger.error(e.toString(), e);
+		}
+	}
+	
+	/**
+	 * 取消充值
+	 */
+	@RequestMapping(value="/cancel")
+	public void cancel(PrintWriter out){
+		logBefore(logger, "取消充值WaitAuditRmbT");
+		if(!Jurisdiction.buttonJurisdiction(menuUrl, "edit")){return;} //校验权限
+		PageData pd = new PageData();
+		try{
+			pd = this.getPageData();
+			pd.put("UPDATEDATETIME", Tools.date2Str(new Date()));
+			Subject currentUser = SecurityUtils.getSubject();  
+			Session session = currentUser.getSession();
+			String USERNAME = session.getAttribute(Const.SESSION_USERNAME).toString();	//获取当前登录者loginname
+			pd.put("UPDATEUSER", USERNAME);
+			pd.put("STATUS", "取消充值");	//状态
+			waitauditrmbtService.audit(pd);
+			PageData pageData = waitauditrmbtService.findById(pd);
+			pageData.put("UPDATEUSER", USERNAME);
+			pageData.put("RMBOPERATIONRECORD_ID", pageData.getString("WAITAUDITRMBT_ID"));
+			rmboperationrecordService.edit(pageData);
+			
+			out.write("success");
+			out.close();
+		} catch(Exception e){
+			logger.error(e.toString(), e);
+		}
+	}
+	
+	/**
+	 * 修改充值金额
+	 */
+	@RequestMapping(value="/changeMoney")
+	public ModelAndView changeMoney() throws Exception{
 		logBefore(logger, "修改WaitAuditRmbT");
 		if(!Jurisdiction.buttonJurisdiction(menuUrl, "edit")){return null;} //校验权限
 		ModelAndView mv = this.getModelAndView();
@@ -126,6 +193,18 @@ public class WaitAuditRmbTController extends BaseController {
 		PageData pd = new PageData();
 		try{
 			pd = this.getPageData();
+//			String KEYWORD = pd.getString("KEYWORD");
+//			String TOPUPID = pd.getString("TOPUPID");
+//			String CREATEDATETIME = pd.getString("CREATEDATETIME");
+//			if(null != KEYWORD && !"".equals(KEYWORD)){
+//				pd.put("KEYWORD", KEYWORD.trim());
+//			}
+//			if(null != TOPUPID && !"".equals(TOPUPID)){
+//				pd.put("TOPUPID", TOPUPID.trim());
+//			}
+//			if(null != CREATEDATETIME && !"".equals(CREATEDATETIME)){
+//				pd.put("CREATEDATETIME", CREATEDATETIME.trim());
+//			}
 			page.setPd(pd);
 			List<PageData>	varList = waitauditrmbtService.list(page);	//列出WaitAuditRmbT列表
 			mv.setViewName("money/waitauditrmbt/waitauditrmbt_list");

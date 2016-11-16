@@ -28,24 +28,16 @@
 				<tr>
 					<td>
 						<span class="input-icon">
-							<input autocomplete="off" id="nav-search-input" type="text" name="field1" value="" placeholder="这里输入关键词" />
+							<input autocomplete="off" id="nav-search-input" style="width:300px" type="text" name="KEYWORD" value="" placeholder="会员信息、提现地址" />
 							<i id="nav-search-icon" class="icon-search"></i>
 						</span>
 					</td>
-					<td><input class="span10 date-picker" name="lastLoginStart" id="lastLoginStart" value="${pd.lastLoginStart}" type="text" data-date-format="yyyy-mm-dd" readonly="readonly" style="width:88px;" placeholder="开始日期"/></td>
-					<td><input class="span10 date-picker" name="lastLoginEnd" id="lastLoginEnd" value="${pd.lastLoginEnd}" type="text" data-date-format="yyyy-mm-dd" readonly="readonly" style="width:88px;" placeholder="结束日期"/></td>
 					<td style="vertical-align:top;"> 
-					 	<select class="chzn-select" name="field2" id="field2" data-placeholder="请选择" style="vertical-align:top;width: 120px;">
-							<option value=""></option>
-							<option value="">全部</option>
-							<option value="">1</option>
-							<option value="">2</option>
-					  	</select>
+					 	<select  name="XNBTYPE" id="XNBTYPE" data-placeholder="虚拟币类型" style="vertical-align:top;width: 150px;">
+					  		<option value="">全部</option>
+					  	</select>	
 					</td>
 					<td style="vertical-align:top;"><button class="btn btn-mini btn-light" onclick="search();"  title="检索"><i id="nav-search-icon" class="icon-search"></i></button></td>
-					<c:if test="${QX.cha == 1 }">
-					<td style="vertical-align:top;"><a class="btn btn-mini btn-light" onclick="toExcel();" title="导出到EXCEL"><i id="nav-search-icon" class="icon-download-alt"></i></a></td>
-					</c:if>
 				</tr>
 			</table>
 			<!-- 检索  -->
@@ -59,11 +51,6 @@
 						<label><input type="checkbox" id="zcheckbox" /><span class="lbl"></span></label>
 						</th>
 						<th class="center">序号</th>
-						<th class="center">创建时间</th>
-						<th class="center">修改时间</th>
-						<th class="center">创建人</th>
-						<th class="center">修改人</th>
-						<th class="center">关键字</th>
 						<th class="center">登录名</th>
 						<th class="center">会员昵称</th>
 						<th class="center">会员真实姓名</th>
@@ -73,7 +60,9 @@
 						<th class="center">数量</th>
 						<th class="center">手续费</th>
 						<th class="center">提现地址</th>
-						<th class="center">操作</th>
+						<th class="center">创建时间</th>
+						<th class="center">修改时间</th>
+						<!-- <th class="center">操作</th> -->
 					</tr>
 				</thead>
 										
@@ -89,21 +78,18 @@
 									<label><input type='checkbox' name='ids' value="${var.WAITAUDITXNBT_ID}" /><span class="lbl"></span></label>
 								</td>
 								<td class='center' style="width: 30px;">${vs.index+1}</td>
-										<td>${var.CREATEDATETIME}</td>
-										<td>${var.UPDATEDATETIME}</td>
-										<td>${var.CREATEUSER}</td>
-										<td>${var.UPDATEUSER}</td>
-										<td>${var.KEYWORD}</td>
 										<td>${var.LOGINNAME}</td>
 										<td>${var.USERNICKNAME}</td>
 										<td>${var.USERREALNAME}</td>
-										<td>${var.XNBTYPE}</td>
+										<td>${var.JTTYPENAME}</td>
 										<td>${var.STATUS}</td>
 										<td>${var.TRADINGTYPE}</td>
 										<td>${var.NUM}</td>
 										<td>${var.POUNDAGE}</td>
 										<td>${var.WITHDRAWALADDRESS}</td>
-								<td style="width: 30px;" class="center">
+										<td>${var.CREATEDATETIME}</td>
+										<td>${var.UPDATEDATETIME}</td>
+								<%-- <td style="width: 30px;" class="center">
 									<div class='hidden-phone visible-desktop btn-group'>
 									
 										<c:if test="${QX.edit != 1 && QX.del != 1 }">
@@ -113,15 +99,12 @@
 										<button class="btn btn-mini btn-info" data-toggle="dropdown"><i class="icon-cog icon-only"></i></button>
 										<ul class="dropdown-menu dropdown-icon-only dropdown-light pull-right dropdown-caret dropdown-close">
 											<c:if test="${QX.edit == 1 }">
-											<li><a style="cursor:pointer;" title="编辑" onclick="edit('${var.WAITAUDITXNBT_ID}');" class="tooltip-success" data-rel="tooltip" title="" data-placement="left"><span class="green"><i class="icon-edit"></i></span></a></li>
-											</c:if>
-											<c:if test="${QX.del == 1 }">
-											<li><a style="cursor:pointer;" title="删除" onclick="del('${var.WAITAUDITXNBT_ID}');" class="tooltip-error" data-rel="tooltip" title="" data-placement="left"><span class="red"><i class="icon-trash"></i></span> </a></li>
+											<li><a style="cursor:pointer;" title="审核" onclick="audit('${var.WAITAUDITXNBT_ID}');" class="tooltip-success" data-rel="tooltip" title="" data-placement="left"><span class="green"><i class="icon-edit"></i></span></a></li>
 											</c:if>
 										</ul>
 										</div>
 									</div>
-								</td>
+								</td>	 --%>	
 							</tr>
 						
 						</c:forEach>
@@ -147,11 +130,12 @@
 		<table style="width:100%;">
 			<tr>
 				<td style="vertical-align:top;">
-					<c:if test="${QX.add == 1 }">
-					<a class="btn btn-small btn-success" onclick="add();">新增</a>
-					</c:if>
-					<c:if test="${QX.del == 1 }">
-					<a class="btn btn-small btn-danger" onclick="makeAll('确定要删除选中的数据吗?');" title="批量删除" ><i class='icon-trash'></i></a>
+				
+					<c:if test="${QX.edit == 1 }">
+					<a class="btn btn-small btn-success" onclick="edit('确定要审核吗?');">审核</a>
+					<a class="btn btn-small btn-success" onclick="edit('确定要锁定吗?');">锁定</a>
+					<a class="btn btn-small btn-success" onclick="edit('确定要取消锁定吗?');">取消锁定</a>
+					<a class="btn btn-small btn-success" onclick="edit('确定要取消提现吗?');">取消提现</a>
 					</c:if>
 				</td>
 				<td style="vertical-align:top;"><div class="pagination" style="float: right;padding-top: 0px;margin-top: 0px;">${page.pageStr}</div></td>
@@ -196,48 +180,13 @@
 			$("#Form").submit();
 		}
 		
-		//新增
-		function add(){
+		
+		//审核
+		function audit(Id){
 			 top.jzts();
 			 var diag = new top.Dialog();
 			 diag.Drag=true;
-			 diag.Title ="新增";
-			 diag.URL = '<%=basePath%>waitauditxnbt/goAdd.do';
-			 diag.Width = 450;
-			 diag.Height = 355;
-			 diag.CancelEvent = function(){ //关闭事件
-				 if(diag.innerFrame.contentWindow.document.getElementById('zhongxin').style.display == 'none'){
-					 if('${page.currentPage}' == '0'){
-						 top.jzts();
-						 setTimeout("self.location=self.location",100);
-					 }else{
-						 nextPage(${page.currentPage});
-					 }
-				}
-				diag.close();
-			 };
-			 diag.show();
-		}
-		
-		//删除
-		function del(Id){
-			bootbox.confirm("确定要删除吗?", function(result) {
-				if(result) {
-					top.jzts();
-					var url = "<%=basePath%>waitauditxnbt/delete.do?WAITAUDITXNBT_ID="+Id+"&tm="+new Date().getTime();
-					$.get(url,function(data){
-						nextPage(${page.currentPage});
-					});
-				}
-			});
-		}
-		
-		//修改
-		function edit(Id){
-			 top.jzts();
-			 var diag = new top.Dialog();
-			 diag.Drag=true;
-			 diag.Title ="编辑";
+			 diag.Title ="审核虚拟币提现<font style='color:red'>(此过程不可逆,请谨慎操作)</font>";
 			 diag.URL = '<%=basePath%>waitauditxnbt/goEdit.do?WAITAUDITXNBT_ID='+Id;
 			 diag.Width = 450;
 			 diag.Height = 355;
@@ -248,6 +197,123 @@
 				diag.close();
 			 };
 			 diag.show();
+		}
+		
+		//修改
+		function edit(msg){
+			var str = '';
+			for(var i=0;i < document.getElementsByName('ids').length;i++)
+			{
+				  if(document.getElementsByName('ids')[i].checked){
+				  	if(str=='') str += document.getElementsByName('ids')[i].value;
+				  	else{
+				  		bootbox.dialog("请选择一条记录进行操作!", 
+								[
+								  {
+									"label" : "关闭",
+									"class" : "btn-small btn-success",
+									"callback": function() {
+										
+										}
+									}
+								 ]
+							);
+				  		return;
+				  	}
+				  }
+			}
+			if(str==''){
+				bootbox.dialog("您没有选择任何内容!", 
+					[
+					  {
+						"label" : "关闭",
+						"class" : "btn-small btn-success",
+						"callback": function() {
+							//Example.show("great success");
+							}
+						}
+					 ]
+				);
+				
+				return;
+			}else{
+				
+				if(msg == '确定要锁定吗?'){
+					top.jzts();
+					$.ajax({
+						type: "POST",
+						url: '<%=basePath%>waitauditxnbt/lock.do?tm='+new Date().getTime(),
+				    	data: {WAITAUDITXNBT_ID:str},
+						dataType:'json',
+						//beforeSend: validateData,
+						cache: false,
+						success: function(data){
+							$.each(data.list, function(i, list){
+								nextPage(${page.currentPage});
+						 	});
+							if(data.list[0].msg == "no" ){
+								alert(data.list[0].result);
+							}else {
+								alert("锁定成功");
+							}
+						}
+					});
+				}else if(msg == '确定要取消锁定吗?'){
+					
+					top.jzts();
+					$.ajax({
+						type: "POST",
+						url: '<%=basePath%>waitauditxnbt/unlock.do?tm='+new Date().getTime(),
+				    	data: {WAITAUDITXNBT_ID:str},
+						dataType:'json',
+						cache: false,
+						success: function(data){
+							$.each(data.list, function(i, list){
+								nextPage(${page.currentPage});
+						 	});
+							if(data.list[0].msg == "no" ){
+								alert(data.list[0].result);
+							}else {
+								alert("取消锁定成功");
+							}
+						}
+					});
+				}else if(msg == '确定要取消提现吗?'){
+					top.jzts();
+					$.ajax({
+						type: "POST",
+						url: '<%=basePath%>waitauditxnbt/cancel.do?tm='+new Date().getTime(),
+				    	data: {WAITAUDITXNBT_ID:str},
+						dataType:'json',
+						cache: false,
+						success: function(data){
+							$.each(data.list, function(i, list){
+								nextPage(${page.currentPage});
+						 	});
+							if(data.list[0].msg == "no" ){
+								alert(data.list[0].result);
+							}else {
+								alert("取消提现成功");
+							}
+						}
+					});
+				}else if(msg == '确定要审核吗?'){
+					top.jzts();
+					 var diag = new top.Dialog();
+					 diag.Drag=true;
+					 diag.Title ="审核虚拟币提现<font style='color:red'>(此过程不可逆,请谨慎操作)</font>";
+					 diag.URL = '<%=basePath%>waitauditxnbt/goEdit.do?WAITAUDITXNBT_ID='+str;
+					 diag.Width = 450;
+					 diag.Height = 355;
+					 diag.CancelEvent = function(){ //关闭事件
+						 if(diag.innerFrame.contentWindow.document.getElementById('zhongxin').style.display == 'none'){
+							 nextPage(${page.currentPage});
+						}
+						diag.close();
+					 };
+					 diag.show();
+				}
+			}
 		}
 		</script>
 		
@@ -273,63 +339,20 @@
 					
 			});
 			
+			$.ajax({
+				type: "POST",
+				url: '<%=basePath%>vmtype/typeList.do',
+				dataType:'json',
+				cache: false,
+				success: function(data){
+					$.each(data.list, function (i, item) { 
+						$("#XNBTYPE").append("<option value='"+ item.VMTYPE_ID+"'>"+ item.JTTYPENAME+"</option>"); 
+					}); 
+				}
+			});
 		});
 		
 		
-		//批量操作
-		function makeAll(msg){
-			bootbox.confirm(msg, function(result) {
-				if(result) {
-					var str = '';
-					for(var i=0;i < document.getElementsByName('ids').length;i++)
-					{
-						  if(document.getElementsByName('ids')[i].checked){
-						  	if(str=='') str += document.getElementsByName('ids')[i].value;
-						  	else str += ',' + document.getElementsByName('ids')[i].value;
-						  }
-					}
-					if(str==''){
-						bootbox.dialog("您没有选择任何内容!", 
-							[
-							  {
-								"label" : "关闭",
-								"class" : "btn-small btn-success",
-								"callback": function() {
-									//Example.show("great success");
-									}
-								}
-							 ]
-						);
-						
-						$("#zcheckbox").tips({
-							side:3,
-				            msg:'点这里全选',
-				            bg:'#AE81FF',
-				            time:8
-				        });
-						
-						return;
-					}else{
-						if(msg == '确定要删除选中的数据吗?'){
-							top.jzts();
-							$.ajax({
-								type: "POST",
-								url: '<%=basePath%>waitauditxnbt/deleteAll.do?tm='+new Date().getTime(),
-						    	data: {DATA_IDS:str},
-								dataType:'json',
-								//beforeSend: validateData,
-								cache: false,
-								success: function(data){
-									 $.each(data.list, function(i, list){
-											nextPage(${page.currentPage});
-									 });
-								}
-							});
-						}
-					}
-				}
-			});
-		}
 		
 		//导出excel
 		function toExcel(){

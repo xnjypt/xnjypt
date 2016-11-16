@@ -117,9 +117,30 @@
 				a.ALLMONEY,	
 				a.ALLDEALMONEY,	
 				a.DEALTYPE,	
-				a.ENTRUSTTRADING_ID
+				a.ENTRUSTTRADING_ID,
+				b.JTTYPENAME
 		from 
-				XNHB_MONEY_ENTRUSTTRADING a
+				XNHB_MONEY_ENTRUSTTRADING a,
+				XNHB_VM_VMTYPE b
+		where   a.XNBTYPE = b.VMTYPE_ID		
+		<if test="pd.LOGINNAME != null and pd.LOGINNAME != ''">
+             and a.LOGINNAME LIKE CONCAT(CONCAT('%', #{pd.LOGINNAME}),'%')
+        </if>		
+		<if test="pd.XNBTYPE != null and pd.XNBTYPE != ''">
+             and a.XNBTYPE = #{pd.XNBTYPE}
+        </if>		
+		<if test="pd.CREATEDATETIME != null and pd.CREATEDATETIME != ''">
+             and a.CREATEDATETIME LIKE CONCAT(CONCAT('%', #{pd.CREATEDATETIME}),'%')
+        </if>		
+		<if test="pd.PRICE != null and pd.PRICE != ''">
+             and a.PRICE LIKE CONCAT(CONCAT('%', #{pd.PRICE}),'%')
+        </if>		
+		<if test="pd.STATUS != null and pd.STATUS != ''">
+             and a.STATUS = #{pd.STATUS}
+        </if>		
+		<if test="pd.DEALTYPE != null and pd.DEALTYPE != ''">
+             and a.DEALTYPE = #{pd.DEALTYPE}
+        </if>		
 	</select>
 	
 	<!-- 列表(全部) -->
@@ -146,6 +167,7 @@
 				a.ENTRUSTTRADING_ID
 		from 
 				XNHB_MONEY_ENTRUSTTRADING a
+	   
 	</select>
 	
 	<!-- 批量删除 -->

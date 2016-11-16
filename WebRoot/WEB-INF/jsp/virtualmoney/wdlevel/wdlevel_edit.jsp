@@ -32,46 +32,6 @@
 	
 	//保存
 	function save(){
-			if($("#UPDATEUSER").val()==""){
-			$("#UPDATEUSER").tips({
-				side:3,
-	            msg:'请输入修改人',
-	            bg:'#AE81FF',
-	            time:2
-	        });
-			$("#UPDATEUSER").focus();
-			return false;
-		}
-		if($("#UPDATEDATETIME").val()==""){
-			$("#UPDATEDATETIME").tips({
-				side:3,
-	            msg:'请输入修改时间',
-	            bg:'#AE81FF',
-	            time:2
-	        });
-			$("#UPDATEDATETIME").focus();
-			return false;
-		}
-		if($("#SEQ").val()==""){
-			$("#SEQ").tips({
-				side:3,
-	            msg:'请输入排序',
-	            bg:'#AE81FF',
-	            time:2
-	        });
-			$("#SEQ").focus();
-			return false;
-		}
-		if($("#DESCRIPTION").val()==""){
-			$("#DESCRIPTION").tips({
-				side:3,
-	            msg:'请输入描述',
-	            bg:'#AE81FF',
-	            time:2
-	        });
-			$("#DESCRIPTION").focus();
-			return false;
-		}
 		if($("#WDLEVEL").val()==""){
 			$("#WDLEVEL").tips({
 				side:3,
@@ -104,22 +64,6 @@
 		<input type="hidden" name="ID" id="ID" value="${pd.ID}"/>
 		<div id="zhongxin">
 		<table id="table_report" class="table table-striped table-bordered table-hover">
-			<tr>
-				<td style="width:70px;text-align: right;padding-top: 13px;">修改人:</td>
-				<td><input type="text" name="UPDATEUSER" id="UPDATEUSER" value="${pd.UPDATEUSER}" maxlength="32" placeholder="这里输入修改人" title="修改人"/></td>
-			</tr>
-			<tr>
-				<td style="width:70px;text-align: right;padding-top: 13px;">修改时间:</td>
-				<td><input class="span10 date-picker" name="UPDATEDATETIME" id="UPDATEDATETIME" value="${pd.UPDATEDATETIME}" type="text" data-date-format="yyyy-mm-dd" readonly="readonly" placeholder="修改时间" title="修改时间"/></td>
-			</tr>
-			<tr>
-				<td style="width:70px;text-align: right;padding-top: 13px;">排序:</td>
-				<td><input type="number" name="SEQ" id="SEQ" value="${pd.SEQ}" maxlength="32" placeholder="这里输入排序" title="排序"/></td>
-			</tr>
-			<tr>
-				<td style="width:70px;text-align: right;padding-top: 13px;">描述:</td>
-				<td><input type="text" name="DESCRIPTION" id="DESCRIPTION" value="${pd.DESCRIPTION}" maxlength="32" placeholder="这里输入描述" title="描述"/></td>
-			</tr>
 			<tr>
 				<td style="width:70px;text-align: right;padding-top: 13px;">提现等级:</td>
 				<td><input type="text" name="WDLEVEL" id="WDLEVEL" value="${pd.WDLEVEL}" maxlength="32" placeholder="这里输入提现等级" title="提现等级"/></td>

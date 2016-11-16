@@ -66,5 +66,11 @@ public class XnboperationrecordService {
 		dao.delete("XnboperationrecordMapper.deleteAll", ArrayDATA_IDS);
 	}
 	
+	/*
+	* 修改
+	*/
+	public void editStatus(PageData pd)throws Exception{
+		dao.update("XnboperationrecordMapper.editStatus", pd);
+	}
 }
 

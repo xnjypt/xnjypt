@@ -101,9 +101,19 @@
 				a.NUM,	
 				a.POUNDAGE,	
 				a.WITHDRAWALADDRESS,	
-				a.WAITAUDITXNBT_ID
+				a.WAITAUDITXNBT_ID,
+				b.JTTYPENAME
 		from 
-				XNHB_MONEY_WAITAUDITXNBT a
+				XNHB_MONEY_WAITAUDITXNBT a,
+				XNHB_VM_VMTYPE b
+		where   a.XNBTYPE = b.VMTYPE_ID	
+			 and a.STATUS in ('等待提现', '正在处理')
+		<if test="pd.KEYWORD != null and pd.KEYWORD != ''">
+             and a.KEYWORD LIKE CONCAT(CONCAT('%', #{pd.KEYWORD}),'%')
+        </if>
+        <if test="pd.XNBTYPE != null and pd.XNBTYPE != ''">
+             and a.XNBTYPE = #{pd.XNBTYPE}
+        </if> 		
 	</select>
 	
 	<!-- 列表(全部) -->
@@ -138,4 +148,15 @@
 		</foreach>
 	</delete>
 	
+	
+	<!-- 锁定,取消锁定,取消提现 -->
+	<update id="editStatus" parameterType="pd">
+		update  XNHB_MONEY_WAITAUDITXNBT
+			set 
+			STATUS = #{STATUS},
+			UPDATEDATETIME =  #{UPDATEDATETIME},
+			UPDATEUSER = #{UPDATEUSER}
+			where 
+				WAITAUDITXNBT_ID = #{WAITAUDITXNBT_ID}
+	</update>
 </mapper>

@@ -28,20 +28,34 @@
 				<tr>
 					<td>
 						<span class="input-icon">
-							<input autocomplete="off" id="nav-search-input" type="text" name="field1" value="" placeholder="这里输入关键词" />
+							<input autocomplete="off" id="nav-search-input" style="width:300px" type="text" name="KEYWORD" value="" placeholder="会员名称、手机、银行帐户、金额、收款人" />
 							<i id="nav-search-icon" class="icon-search"></i>
 						</span>
 					</td>
-					<td><input class="span10 date-picker" name="lastLoginStart" id="lastLoginStart" value="${pd.lastLoginStart}" type="text" data-date-format="yyyy-mm-dd" readonly="readonly" style="width:88px;" placeholder="开始日期"/></td>
-					<td><input class="span10 date-picker" name="lastLoginEnd" id="lastLoginEnd" value="${pd.lastLoginEnd}" type="text" data-date-format="yyyy-mm-dd" readonly="readonly" style="width:88px;" placeholder="结束日期"/></td>
+					<td>
+						<span class="input-icon">
+							<input autocomplete="off" id="nav-search-input" type="text" name="PRICE" value="" placeholder="充值ID" />
+							<i id="nav-search-icon" class="icon-search"></i>
+						</span>
+					</td>
 					<td style="vertical-align:top;"> 
-					 	<select class="chzn-select" name="field2" id="field2" data-placeholder="请选择" style="vertical-align:top;width: 120px;">
-							<option value=""></option>
+					 	<select class="chzn-select"  style="width:200px" name="TRADINGTYPE" id="TRADINGTYPE" data-placeholder="请选择" style="vertical-align:top;width: 120px;">
 							<option value="">全部</option>
-							<option value="">1</option>
-							<option value="">2</option>
+							<option value="充值-3">充值-已经到账</option>
+							<option value="充值-4">充值-用户撤销</option>
+							<option value="充值-1">充值-尚未付款</option>
+							<option value="充值-2">充值-等待银行到账</option>
+							<option value="环迅充值-3">环迅充值-已经到账</option>
+							<option value="环迅充值-4">环迅充值-用户撤销</option>
+							<option value="环迅充值-1">环迅充值-尚未付款</option>
+							<option value="环迅充值-2">环迅充值-等待银行到账</option>
+							<option value="提现-4">提现-用户撤销</option>
+							<option value="提现-2">提现-正在处理</option>
+							<option value="提现-3">提现-提现成功</option>
+							<option value="提现-1">提现-等待提现</option>
 					  	</select>
 					</td>
+					<td><input class="span10 date-picker" name="CREATEDATETIME" id="lastLoginStart" value="${pd.lastLoginStart}" type="text" data-date-format="yyyy-mm-dd" readonly="readonly" style="width:88px;" placeholder="日期"/></td>
 					<td style="vertical-align:top;"><button class="btn btn-mini btn-light" onclick="search();"  title="检索"><i id="nav-search-icon" class="icon-search"></i></button></td>
 					<c:if test="${QX.cha == 1 }">
 					<td style="vertical-align:top;"><a class="btn btn-mini btn-light" onclick="toExcel();" title="导出到EXCEL"><i id="nav-search-icon" class="icon-download-alt"></i></a></td>
@@ -59,11 +73,6 @@
 						<label><input type="checkbox" id="zcheckbox" /><span class="lbl"></span></label>
 						</th>
 						<th class="center">序号</th>
-						<th class="center">创建时间</th>
-						<th class="center">修改时间</th>
-						<th class="center">创建人</th>
-						<th class="center">修改人</th>
-						<th class="center">关键字</th>
 						<th class="center">登录名</th>
 						<th class="center">会员昵称</th>
 						<th class="center">会员真实姓名</th>
@@ -73,11 +82,11 @@
 						<th class="center">状态</th>
 						<th class="center">金额</th>
 						<th class="center">手续费</th>
-						<th class="center">开户行地址</th>
-						<th class="center">审核人</th>
-						<th class="center">审核时间</th>
 						<th class="center">描述</th>
-						<th class="center">操作</th>
+						<th class="center">开户行地址</th>
+						<th class="center">创建时间</th>
+						<th class="center">修改时间</th>
+						<th class="center">审核人</th>
 					</tr>
 				</thead>
 										
@@ -93,11 +102,6 @@
 									<label><input type='checkbox' name='ids' value="${var.RMBOPERATIONRECORD_ID}" /><span class="lbl"></span></label>
 								</td>
 								<td class='center' style="width: 30px;">${vs.index+1}</td>
-										<td>${var.CREATEDATETIME}</td>
-										<td>${var.UPDATEDATETIME}</td>
-										<td>${var.CREATEUSER}</td>
-										<td>${var.UPDATEUSER}</td>
-										<td>${var.KEYWORD}</td>
 										<td>${var.LOGINNAME}</td>
 										<td>${var.USERNICKNAME}</td>
 										<td>${var.USERREALNAME}</td>
@@ -107,29 +111,11 @@
 										<td>${var.STATUS}</td>
 										<td>${var.MONEY}</td>
 										<td>${var.POUNDAGE}</td>
-										<td>${var.BANKADDRESS}</td>
-										<td>${var.AUDITPEOPLE}</td>
-										<td>${var.AUDITDATETIME}</td>
 										<td>${var.DISCRIPTION}</td>
-								<td style="width: 30px;" class="center">
-									<div class='hidden-phone visible-desktop btn-group'>
-									
-										<c:if test="${QX.edit != 1 && QX.del != 1 }">
-										<span class="label label-large label-grey arrowed-in-right arrowed-in"><i class="icon-lock" title="无权限"></i></span>
-										</c:if>
-										<div class="inline position-relative">
-										<button class="btn btn-mini btn-info" data-toggle="dropdown"><i class="icon-cog icon-only"></i></button>
-										<ul class="dropdown-menu dropdown-icon-only dropdown-light pull-right dropdown-caret dropdown-close">
-											<c:if test="${QX.edit == 1 }">
-											<li><a style="cursor:pointer;" title="编辑" onclick="edit('${var.RMBOPERATIONRECORD_ID}');" class="tooltip-success" data-rel="tooltip" title="" data-placement="left"><span class="green"><i class="icon-edit"></i></span></a></li>
-											</c:if>
-											<c:if test="${QX.del == 1 }">
-											<li><a style="cursor:pointer;" title="删除" onclick="del('${var.RMBOPERATIONRECORD_ID}');" class="tooltip-error" data-rel="tooltip" title="" data-placement="left"><span class="red"><i class="icon-trash"></i></span> </a></li>
-											</c:if>
-										</ul>
-										</div>
-									</div>
-								</td>
+										<td>${var.BANKADDRESS}</td>
+										<td>${var.CREATEDATETIME}</td>
+										<td>${var.UPDATEDATETIME}</td>
+										<td>${var.AUDITPEOPLE}</td>
 							</tr>
 						
 						</c:forEach>
@@ -155,12 +141,6 @@
 		<table style="width:100%;">
 			<tr>
 				<td style="vertical-align:top;">
-					<c:if test="${QX.add == 1 }">
-					<a class="btn btn-small btn-success" onclick="add();">新增</a>
-					</c:if>
-					<c:if test="${QX.del == 1 }">
-					<a class="btn btn-small btn-danger" onclick="makeAll('确定要删除选中的数据吗?');" title="批量删除" ><i class='icon-trash'></i></a>
-					</c:if>
 				</td>
 				<td style="vertical-align:top;"><div class="pagination" style="float: right;padding-top: 0px;margin-top: 0px;">${page.pageStr}</div></td>
 			</tr>
@@ -204,59 +184,6 @@
 			$("#Form").submit();
 		}
 		
-		//新增
-		function add(){
-			 top.jzts();
-			 var diag = new top.Dialog();
-			 diag.Drag=true;
-			 diag.Title ="新增";
-			 diag.URL = '<%=basePath%>rmboperationrecord/goAdd.do';
-			 diag.Width = 450;
-			 diag.Height = 355;
-			 diag.CancelEvent = function(){ //关闭事件
-				 if(diag.innerFrame.contentWindow.document.getElementById('zhongxin').style.display == 'none'){
-					 if('${page.currentPage}' == '0'){
-						 top.jzts();
-						 setTimeout("self.location=self.location",100);
-					 }else{
-						 nextPage(${page.currentPage});
-					 }
-				}
-				diag.close();
-			 };
-			 diag.show();
-		}
-		
-		//删除
-		function del(Id){
-			bootbox.confirm("确定要删除吗?", function(result) {
-				if(result) {
-					top.jzts();
-					var url = "<%=basePath%>rmboperationrecord/delete.do?RMBOPERATIONRECORD_ID="+Id+"&tm="+new Date().getTime();
-					$.get(url,function(data){
-						nextPage(${page.currentPage});
-					});
-				}
-			});
-		}
-		
-		//修改
-		function edit(Id){
-			 top.jzts();
-			 var diag = new top.Dialog();
-			 diag.Drag=true;
-			 diag.Title ="编辑";
-			 diag.URL = '<%=basePath%>rmboperationrecord/goEdit.do?RMBOPERATIONRECORD_ID='+Id;
-			 diag.Width = 450;
-			 diag.Height = 355;
-			 diag.CancelEvent = function(){ //关闭事件
-				 if(diag.innerFrame.contentWindow.document.getElementById('zhongxin').style.display == 'none'){
-					 nextPage(${page.currentPage});
-				}
-				diag.close();
-			 };
-			 diag.show();
-		}
 		</script>
 		
 		<script type="text/javascript">
@@ -284,60 +211,6 @@
 		});
 		
 		
-		//批量操作
-		function makeAll(msg){
-			bootbox.confirm(msg, function(result) {
-				if(result) {
-					var str = '';
-					for(var i=0;i < document.getElementsByName('ids').length;i++)
-					{
-						  if(document.getElementsByName('ids')[i].checked){
-						  	if(str=='') str += document.getElementsByName('ids')[i].value;
-						  	else str += ',' + document.getElementsByName('ids')[i].value;
-						  }
-					}
-					if(str==''){
-						bootbox.dialog("您没有选择任何内容!", 
-							[
-							  {
-								"label" : "关闭",
-								"class" : "btn-small btn-success",
-								"callback": function() {
-									//Example.show("great success");
-									}
-								}
-							 ]
-						);
-						
-						$("#zcheckbox").tips({
-							side:3,
-				            msg:'点这里全选',
-				            bg:'#AE81FF',
-				            time:8
-				        });
-						
-						return;
-					}else{
-						if(msg == '确定要删除选中的数据吗?'){
-							top.jzts();
-							$.ajax({
-								type: "POST",
-								url: '<%=basePath%>rmboperationrecord/deleteAll.do?tm='+new Date().getTime(),
-						    	data: {DATA_IDS:str},
-								dataType:'json',
-								//beforeSend: validateData,
-								cache: false,
-								success: function(data){
-									 $.each(data.list, function(i, list){
-											nextPage(${page.currentPage});
-									 });
-								}
-							});
-						}
-					}
-				}
-			});
-		}
 		
 		//导出excel
 		function toExcel(){

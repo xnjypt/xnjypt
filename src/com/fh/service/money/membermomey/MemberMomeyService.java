@@ -60,11 +60,24 @@ public class MemberMomeyService {
 	}
 	
 	/*
+	 * 通过id获取数据
+	 */
+	public PageData findByLoginName(PageData pd)throws Exception{
+		return (PageData)dao.findForObject("MemberMomeyMapper.findByLoginName", pd);
+	}
+	
+	/*
 	* 批量删除
 	*/
 	public void deleteAll(String[] ArrayDATA_IDS)throws Exception{
 		dao.delete("MemberMomeyMapper.deleteAll", ArrayDATA_IDS);
 	}
 	
+	/*
+	* 提现
+	*/
+	public void plugMoney(PageData pd)throws Exception{
+		dao.update("MemberMomeyMapper.plugMoney", pd);
+	}
 }
 

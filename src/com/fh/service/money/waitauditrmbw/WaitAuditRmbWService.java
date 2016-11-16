@@ -66,5 +66,11 @@ public class WaitAuditRmbWService {
 		dao.delete("WaitAuditRmbWMapper.deleteAll", ArrayDATA_IDS);
 	}
 	
+	/*
+	* 更改状态
+	*/
+	public void editStatus(PageData pd)throws Exception{
+		dao.update("WaitAuditRmbWMapper.editStatus", pd);
+	}
 }
 

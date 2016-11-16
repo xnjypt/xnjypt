@@ -32,10 +32,10 @@ public class RmbManualService {
 	}
 	
 	/*
-	* 修改
+	* 审核
 	*/
-	public void edit(PageData pd)throws Exception{
-		dao.update("RmbManualMapper.edit", pd);
+	public void audit(PageData pd)throws Exception{
+		dao.update("RmbManualMapper.audit", pd);
 	}
 	
 	/*

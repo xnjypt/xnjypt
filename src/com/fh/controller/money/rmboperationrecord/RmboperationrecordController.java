@@ -127,6 +127,14 @@ public class RmboperationrecordController extends BaseController {
 		PageData pd = new PageData();
 		try{
 			pd = this.getPageData();
+//			String KEYWORD = pd.getString("KEYWORD");
+//			String XNBTYPE = pd.getString("XNBTYPE");
+//			if(null != KEYWORD && !"".equals(KEYWORD)){
+//				pd.put("KEYWORD", KEYWORD.trim());
+//			}
+//			if(null != XNBTYPE && !"".equals(XNBTYPE)){
+//				pd.put("XNBTYPE", XNBTYPE.trim());
+//			}
 			page.setPd(pd);
 			List<PageData>	varList = rmboperationrecordService.list(page);	//列出Rmboperationrecord列表
 			mv.setViewName("money/rmboperationrecord/rmboperationrecord_list");

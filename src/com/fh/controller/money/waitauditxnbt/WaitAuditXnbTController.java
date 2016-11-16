@@ -31,7 +31,9 @@ import com.fh.util.Const;
 import com.fh.util.PageData;
 import com.fh.util.Tools;
 import com.fh.util.Jurisdiction;
+import com.fh.service.money.userxnb.UserxnbService;
 import com.fh.service.money.waitauditxnbt.WaitAuditXnbTService;
+import com.fh.service.money.xnboperationrecord.XnboperationrecordService;
 
 /** 
  * 类名称：WaitAuditXnbTController
@@ -45,6 +47,10 @@ public class WaitAuditXnbTController extends BaseController {
 	String menuUrl = "waitauditxnbt/list.do"; //菜单地址(权限用)
 	@Resource(name="waitauditxnbtService")
 	private WaitAuditXnbTService waitauditxnbtService;
+	@Resource(name="xnboperationrecordService")
+	private XnboperationrecordService xnboperationrecordService;
+	@Resource(name="userxnbService")
+	private UserxnbService userxnbService;
 	
 	/**
 	 * 新增
@@ -111,6 +117,169 @@ public class WaitAuditXnbTController extends BaseController {
 		mv.setViewName("save_result");
 		return mv;
 	}
+	
+	/**
+	 * 审核
+	 */
+	@RequestMapping(value="/audit")
+	@ResponseBody
+	public Object audit() {
+		logBefore(logger, "审核WaitAuditXnbT");
+		if(!Jurisdiction.buttonJurisdiction(menuUrl, "edit")){return null;} //校验权限
+		PageData pd = new PageData();		
+		Map<String,Object> map = new HashMap<String,Object>();
+		try {
+			pd = this.getPageData();
+			List<PageData> pdList = new ArrayList<PageData>();
+			PageData pageData = waitauditxnbtService.findById(pd);
+			
+			//验证钱包密码是否正确。。。。
+			
+			if("正在处理".equals(pageData.getString("STATUS"))){
+				pd.put("UPDATEDATETIME", Tools.date2Str(new Date()));	//修改时间
+				Subject currentUser = SecurityUtils.getSubject(); 
+				Session session = currentUser.getSession();
+				String USERNAME = session.getAttribute(Const.SESSION_USERNAME).toString();	//获取当前登录者loginname
+				pd.put("UPDATEUSER", USERNAME);	//修改人
+				pd.put("STATUS", "提现成功");	//状态
+				waitauditxnbtService.editStatus(pd);
+				//更新虚拟币操作列表
+				pd.put("XNBOPERATIONRECORD_ID", pd.getString("WAITAUDITXNBT_ID"));	//修改人
+				xnboperationrecordService.editStatus(pd);
+				//更新用户虚拟币列表
+				userxnbService.plugNum(pageData);
+				pd.put("msg", "ok");
+			}else{
+				pd.put("msg", "no");
+				pd.put("result", "审核失败,只有状态为:‘正在处理’的提现记录才允许审核!");
+			}
+			pdList.add(pd);
+			map.put("list", pdList);
+		} catch (Exception e) {
+			logger.error(e.toString(), e);
+		} finally {
+			logAfter(logger);
+		}
+		return AppUtil.returnObject(pd, map);
+	}
+	
+	/**
+	 * 锁定
+	 */
+	@RequestMapping(value="/lock")
+	@ResponseBody
+	public Object lock() {
+		logBefore(logger, "锁定WaitAuditXnbT");
+		if(!Jurisdiction.buttonJurisdiction(menuUrl, "edit")){return null;} //校验权限
+		PageData pd = new PageData();		
+		Map<String,Object> map = new HashMap<String,Object>();
+		try {
+			pd = this.getPageData();
+			List<PageData> pdList = new ArrayList<PageData>();
+			PageData pageData = waitauditxnbtService.findById(pd);
+			
+			if("等待提现".equals(pageData.getString("STATUS"))){
+				pd.put("UPDATEDATETIME", Tools.date2Str(new Date()));	//修改时间
+				Subject currentUser = SecurityUtils.getSubject(); 
+				Session session = currentUser.getSession();
+				String USERNAME = session.getAttribute(Const.SESSION_USERNAME).toString();	//获取当前登录者loginname
+				pd.put("UPDATEUSER", USERNAME);	//修改人
+				pd.put("STATUS", "正在处理");	//状态
+				waitauditxnbtService.editStatus(pd);
+				//更新虚拟币操作列表
+				pd.put("XNBOPERATIONRECORD_ID", pd.getString("WAITAUDITXNBT_ID"));	//修改人
+				xnboperationrecordService.editStatus(pd);
+				pd.put("msg", "ok");
+			}else{
+				pd.put("msg", "no");
+				pd.put("result", "锁定失败,只有状态为:‘等待提现’的充值记录才允许锁定!");
+			}
+			pdList.add(pd);
+			map.put("list", pdList);
+		} catch (Exception e) {
+			logger.error(e.toString(), e);
+		} finally {
+			logAfter(logger);
+		}
+		return AppUtil.returnObject(pd, map);
+	}
+	
+	/**
+	 * 取消锁定
+	 */
+	@RequestMapping(value="/unlock")
+	@ResponseBody
+	public Object unlock() {
+		logBefore(logger, "取消锁定WaitAuditXnbT");
+		if(!Jurisdiction.buttonJurisdiction(menuUrl, "edit")){return null;} //校验权限
+		PageData pd = new PageData();		
+		Map<String,Object> map = new HashMap<String,Object>();
+		try {
+			pd = this.getPageData();
+			List<PageData> pdList = new ArrayList<PageData>();
+			PageData pageData = waitauditxnbtService.findById(pd);
+			
+			if("正在处理".equals(pageData.getString("STATUS"))){
+				pd.put("UPDATEDATETIME", Tools.date2Str(new Date()));	//修改时间
+				Subject currentUser = SecurityUtils.getSubject(); 
+				Session session = currentUser.getSession();
+				String USERNAME = session.getAttribute(Const.SESSION_USERNAME).toString();	//获取当前登录者loginname
+				pd.put("UPDATEUSER", USERNAME);	//修改人
+				pd.put("STATUS", "等待提现");	//状态
+				waitauditxnbtService.editStatus(pd);
+				//更新虚拟币操作列表
+				pd.put("XNBOPERATIONRECORD_ID", pd.getString("WAITAUDITXNBT_ID"));	//修改人
+				xnboperationrecordService.editStatus(pd);
+				pd.put("msg", "ok");
+			}else{
+				pd.put("msg", "no");
+				pd.put("result", "取消锁定失败,只有状态为:‘正在处理’的充值记录才允许取消锁定!");
+			}
+			pdList.add(pd);
+			map.put("list", pdList);
+		} catch (Exception e) {
+			logger.error(e.toString(), e);
+		} finally {
+			logAfter(logger);
+		}
+		return AppUtil.returnObject(pd, map);
+	}
+	
+	/**
+	 * 取消提现
+	 */
+	@RequestMapping(value="/cancel")
+	@ResponseBody
+	public Object cancel() {
+		logBefore(logger, "取消提现WaitAuditXnbT");
+		if(!Jurisdiction.buttonJurisdiction(menuUrl, "edit")){return null;} //校验权限
+		PageData pd = new PageData();		
+		Map<String,Object> map = new HashMap<String,Object>();
+		try {
+			pd = this.getPageData();
+			List<PageData> pdList = new ArrayList<PageData>();
+			
+			pd.put("UPDATEDATETIME", Tools.date2Str(new Date()));	//修改时间
+			Subject currentUser = SecurityUtils.getSubject(); 
+			Session session = currentUser.getSession();
+			String USERNAME = session.getAttribute(Const.SESSION_USERNAME).toString();	//获取当前登录者loginname
+			pd.put("UPDATEUSER", USERNAME);	//修改人
+			pd.put("STATUS", "取消提现");	//状态
+			waitauditxnbtService.editStatus(pd);
+			//更新虚拟币操作列表
+			pd.put("XNBOPERATIONRECORD_ID", pd.getString("WAITAUDITXNBT_ID"));	//修改人
+			xnboperationrecordService.editStatus(pd);
+			pd.put("msg", "ok");
+			pdList.add(pd);
+			map.put("list", pdList);
+		} catch (Exception e) {
+			logger.error(e.toString(), e);
+		} finally {
+			logAfter(logger);
+		}
+		return AppUtil.returnObject(pd, map);
+	}
+	
 	
 	/**
 	 * 列表

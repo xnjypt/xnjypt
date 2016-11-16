@@ -32,7 +32,28 @@
 	
 	//保存
 	function save(){
-			$("#Form").submit();
+		var money = $("#MONEY").val();
+		if(money==""){
+			$("#MONEY").tips({
+				side:3,
+	            msg:'请输入金额',
+	            bg:'#AE81FF',
+	            time:2
+	        });
+			$("#MONEY").focus();
+			return false;
+		}else if(isNaN(money) || money<=0){
+			$("#MONEY").tips({
+				side:3,
+	            msg:'请输入大于0的金额',
+	            bg:'#AE81FF',
+	            time:2
+	        });
+			$("#MONEY").focus();
+			return false;
+		}
+		
+		$("#Form").submit();
 		$("#zhongxin").hide();
 		$("#zhongxin2").show();
 	}
@@ -44,6 +65,10 @@
 		<input type="hidden" name="WAITAUDITRMBT_ID" id="WAITAUDITRMBT_ID" value="${pd.WAITAUDITRMBT_ID}"/>
 		<div id="zhongxin">
 		<table id="table_report" class="table table-striped table-bordered table-hover">
+			<tr>
+				<td style="width:70px;text-align: right;padding-top: 13px;">金额:</td>
+				<td><input type="number" name="MONEY" id="MONEY" value="${pd.MONEY}" maxlength="32" placeholder="这里输入金额" title="金额"/></td>
+			</tr>
 			<tr>
 				<td style="text-align: center;" colspan="10">
 					<a class="btn btn-mini btn-primary" onclick="save();">保存</a>

@@ -39,6 +39,13 @@ public class WaitAuditRmbTService {
 	}
 	
 	/*
+	 * 审核、取消充值 
+	 */
+	public void audit(PageData pd)throws Exception{
+		dao.update("WaitAuditRmbTMapper.audit", pd);
+	}
+	
+	/*
 	*列表
 	*/
 	public List<PageData> list(Page page)throws Exception{

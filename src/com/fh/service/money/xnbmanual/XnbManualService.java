@@ -32,9 +32,9 @@ public class XnbManualService {
 	}
 	
 	/*
-	* 修改
+	* 审核
 	*/
-	public void edit(PageData pd)throws Exception{
+	public void audit(PageData pd)throws Exception{
 		dao.update("XnbManualMapper.edit", pd);
 	}
 	

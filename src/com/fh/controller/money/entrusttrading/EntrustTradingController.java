@@ -127,6 +127,31 @@ public class EntrustTradingController extends BaseController {
 		PageData pd = new PageData();
 		try{
 			pd = this.getPageData();
+			String LOGINNAME = pd.getString("LOGINNAME");
+			System.out.println(LOGINNAME);
+			/*String XNBTYPE = pd.getString("XNBTYPE");
+			String CREATEDATETIME = pd.getString("CREATEDATETIME");
+			String PRICE = pd.getString("PRICE");
+			String STATUS = pd.getString("STATUS");
+			String DEALTYPE = pd.getString("DEALTYPE");
+			if(null != LOGINNAME && !"".equals(LOGINNAME)){
+				pd.put("LOGINNAME", LOGINNAME.trim());
+			}
+			if(null != XNBTYPE && !"".equals(XNBTYPE)){
+				pd.put("XNBTYPE", XNBTYPE.trim());
+			}
+			if(null != CREATEDATETIME && !"".equals(CREATEDATETIME)){
+				pd.put("CREATEDATETIME", CREATEDATETIME.trim());
+			}
+			if(null != PRICE && !"".equals(PRICE)){
+				pd.put("PRICE", PRICE.trim());
+			}
+			if(null != STATUS && !"".equals(STATUS)){
+				pd.put("STATUS", STATUS.trim());
+			}
+			if(null != DEALTYPE && !"".equals(DEALTYPE)){
+				pd.put("DEALTYPE", DEALTYPE.trim());
+			}*/
 			page.setPd(pd);
 			List<PageData>	varList = entrusttradingService.list(page);	//列出EntrustTrading列表
 			mv.setViewName("money/entrusttrading/entrusttrading_list");

@@ -110,9 +110,18 @@
 				a.WITHDRAWALADDRESS,	
 				a.TOPUPADDRESS,	
 				a.TRADINGID,	
-				a.XNBOPERATIONRECORD_ID
+				a.XNBOPERATIONRECORD_ID,
+				b.JTTYPENAME
 		from 
-				XNHB_MONEY_XNBOPERATIONRECORD a
+				XNHB_MONEY_XNBOPERATIONRECORD a,
+				XNHB_VM_VMTYPE b
+		where   a.XNBTYPE = b.VMTYPE_ID	
+		<if test="pd.KEYWORD != null and pd.KEYWORD != ''">
+             and a.KEYWORD LIKE CONCAT(CONCAT('%', #{pd.KEYWORD}),'%')
+        </if>
+        <if test="pd.XNBTYPE != null and pd.XNBTYPE != ''">
+             and a.XNBTYPE = #{pd.XNBTYPE}
+        </if>		
 	</select>
 	
 	<!-- 列表(全部) -->
@@ -149,4 +158,14 @@
 		</foreach>
 	</delete>
 	
+	<!-- 修改 -->
+	<update id="editStatus" parameterType="pd">
+		update  XNHB_MONEY_XNBOPERATIONRECORD
+			set 
+				STATUS = #{STATUS},
+				UPDATEUSER = #{UPDATEUSER},
+				UPDATEDATETIME = #{UPDATEDATETIME}
+			where 
+				XNBOPERATIONRECORD_ID = #{XNBOPERATIONRECORD_ID}
+	</update>
 </mapper>

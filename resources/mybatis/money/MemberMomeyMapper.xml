@@ -48,10 +48,12 @@
 	<!-- 修改 -->
 	<update id="edit" parameterType="pd">
 		update  XNHB_MONEY_MEMBERMOMEY
-			set 
-			MEMBERMOMEY_ID = MEMBERMOMEY_ID
+			set
+			USERALLMONEY = USERALLMONEY + #{MONEY}, 
+			UPDATEUSER =  #{UPDATEUSER}, 
+			UPDATEDATETIME = #{UPDATEDATETIME} 
 			where 
-				MEMBERMOMEY_ID = #{MEMBERMOMEY_ID}
+				LOGINNAME = #{LOGINNAME}
 	</update>
 	
 	
@@ -77,6 +79,28 @@
 			MEMBERMOMEY_ID = #{MEMBERMOMEY_ID}
 	</select>
 	
+	<!-- 通过LOGINNAME获取数据 -->
+	<select id="findByLoginName" parameterType="pd" resultType="pd">
+		select 
+			CREATEDATETIME,	
+			UPDATEDATETIME,	
+			CREATEUSER,	
+			UPDATEUSER,	
+			KEYWORD,	
+			DESCRIPTION,	
+			SEQ,	
+			LOGINNAME,	
+			USERNICKNAME,	
+			USERREALNAME,	
+			USERALLMONEY,	
+			USERFREEZEMONEY,	
+			MEMBERMOMEY_ID
+		from 
+			XNHB_MONEY_MEMBERMOMEY
+		where 
+			LOGINNAME = #{LOGINNAME}
+	</select>
+	
 	
 	<!-- 列表 -->
 	<select id="datalistPage" parameterType="page" resultType="pd">
@@ -96,6 +120,10 @@
 				a.MEMBERMOMEY_ID
 		from 
 				XNHB_MONEY_MEMBERMOMEY a
+		where 1=1
+		<if test="pd.LOGINNAME != null and pd.LOGINNAME != ''">
+             and a.LOGINNAME LIKE CONCAT(CONCAT('%', #{pd.LOGINNAME}),'%')
+        </if> 		
 	</select>
 	
 	<!-- 列表(全部) -->
@@ -128,4 +156,14 @@
 		</foreach>
 	</delete>
 	
+	<!-- 修改 -->
+	<update id="plugMoney" parameterType="pd">
+		update  XNHB_MONEY_MEMBERMOMEY
+			set
+			USERALLMONEY = USERALLMONEY - #{MONEY}, 
+			UPDATEUSER =  #{UPDATEUSER}, 
+			UPDATEDATETIME = #{UPDATEDATETIME} 
+			where 
+				LOGINNAME = #{LOGINNAME}
+	</update>
 </mapper>

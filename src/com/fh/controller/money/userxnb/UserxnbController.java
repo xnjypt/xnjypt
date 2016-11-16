@@ -63,7 +63,7 @@ public class UserxnbController extends BaseController {
 		pd.put("UPDATEUSER", "");	//修改人
 		pd.put("KEYWORD", "");	//关键字
 		pd.put("DESCRIPTION", "");	//描述
-		pd.put("SEQ", "");	//排序
+		pd.put("SEQ", "0");	//排序
 		pd.put("LOGINNAME", "");	//登录名
 		pd.put("USERNICKNAME", "");	//会员昵称
 		pd.put("USERREALNAME", "");	//会员真实姓名
@@ -122,6 +122,14 @@ public class UserxnbController extends BaseController {
 		PageData pd = new PageData();
 		try{
 			pd = this.getPageData();
+//			String LOGINNAME = pd.getString("LOGINNAME");
+//			String XNBTYPE = pd.getString("XNBTYPE");
+//			if(null != LOGINNAME && !"".equals(LOGINNAME)){
+//				pd.put("LOGINNAME", LOGINNAME.trim());
+//			}
+//			if(null != XNBTYPE && !"".equals(XNBTYPE)){
+//				pd.put("XNBTYPE", XNBTYPE.trim());
+//			}
 			page.setPd(pd);
 			List<PageData>	varList = userxnbService.list(page);	//列出Userxnb列表
 			mv.setViewName("money/userxnb/userxnb_list");

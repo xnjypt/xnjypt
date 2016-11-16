@@ -28,24 +28,12 @@
 				<tr>
 					<td>
 						<span class="input-icon">
-							<input autocomplete="off" id="nav-search-input" type="text" name="field1" value="" placeholder="这里输入关键词" />
+							<input autocomplete="off" id="nav-search-input" style="width:300px" type="text" name="KEYWORD" value="" placeholder="会员信息、审核人" />
 							<i id="nav-search-icon" class="icon-search"></i>
 						</span>
 					</td>
-					<td><input class="span10 date-picker" name="lastLoginStart" id="lastLoginStart" value="${pd.lastLoginStart}" type="text" data-date-format="yyyy-mm-dd" readonly="readonly" style="width:88px;" placeholder="开始日期"/></td>
-					<td><input class="span10 date-picker" name="lastLoginEnd" id="lastLoginEnd" value="${pd.lastLoginEnd}" type="text" data-date-format="yyyy-mm-dd" readonly="readonly" style="width:88px;" placeholder="结束日期"/></td>
-					<td style="vertical-align:top;"> 
-					 	<select class="chzn-select" name="field2" id="field2" data-placeholder="请选择" style="vertical-align:top;width: 120px;">
-							<option value=""></option>
-							<option value="">全部</option>
-							<option value="">1</option>
-							<option value="">2</option>
-					  	</select>
-					</td>
+					<td><input class="span10 date-picker" name="CREATEDATETIME" id="lastLoginStart" value="${pd.lastLoginStart}" type="text" data-date-format="yyyy-mm-dd" readonly="readonly" style="width:88px;" placeholder="日期"/></td>
 					<td style="vertical-align:top;"><button class="btn btn-mini btn-light" onclick="search();"  title="检索"><i id="nav-search-icon" class="icon-search"></i></button></td>
-					<c:if test="${QX.cha == 1 }">
-					<td style="vertical-align:top;"><a class="btn btn-mini btn-light" onclick="toExcel();" title="导出到EXCEL"><i id="nav-search-icon" class="icon-download-alt"></i></a></td>
-					</c:if>
 				</tr>
 			</table>
 			<!-- 检索  -->
@@ -59,19 +47,15 @@
 						<label><input type="checkbox" id="zcheckbox" /><span class="lbl"></span></label>
 						</th>
 						<th class="center">序号</th>
-						<th class="center">创建时间</th>
-						<th class="center">修改时间</th>
-						<th class="center">创建人</th>
-						<th class="center">修改人</th>
-						<th class="center">关键字</th>
-						<th class="center">描述</th>
-						<th class="center">排序</th>
 						<th class="center">登录名</th>
 						<th class="center">会员昵称</th>
 						<th class="center">会员真实姓名</th>
 						<th class="center">汇款方式</th>
 						<th class="center">状态</th>
 						<th class="center">金额</th>
+						<th class="center">描述</th>
+						<th class="center">创建时间</th>
+						<th class="center">修改时间</th>
 						<th class="center">审核人</th>
 						<th class="center">操作</th>
 					</tr>
@@ -89,19 +73,15 @@
 									<label><input type='checkbox' name='ids' value="${var.RMBMANUAL_ID}" /><span class="lbl"></span></label>
 								</td>
 								<td class='center' style="width: 30px;">${vs.index+1}</td>
-										<td>${var.CREATEDATETIME}</td>
-										<td>${var.UPDATEDATETIME}</td>
-										<td>${var.CREATEUSER}</td>
-										<td>${var.UPDATEUSER}</td>
-										<td>${var.KEYWORD}</td>
-										<td>${var.DESCRIPTION}</td>
-										<td>${var.SEQ}</td>
 										<td>${var.LOGINNAME}</td>
 										<td>${var.USERNICKNAME}</td>
 										<td>${var.USERREALNAME}</td>
 										<td>${var.REMITTANCETYPE}</td>
 										<td>${var.STATUS}</td>
 										<td>${var.MONEY}</td>
+										<td>${var.DESCRIPTION}</td>
+										<td>${var.CREATEDATETIME}</td>
+										<td>${var.UPDATEDATETIME}</td>
 										<td>${var.AUDITPEOPLE}</td>
 								<td style="width: 30px;" class="center">
 									<div class='hidden-phone visible-desktop btn-group'>
@@ -113,10 +93,10 @@
 										<button class="btn btn-mini btn-info" data-toggle="dropdown"><i class="icon-cog icon-only"></i></button>
 										<ul class="dropdown-menu dropdown-icon-only dropdown-light pull-right dropdown-caret dropdown-close">
 											<c:if test="${QX.edit == 1 }">
-											<li><a style="cursor:pointer;" title="编辑" onclick="edit('${var.RMBMANUAL_ID}');" class="tooltip-success" data-rel="tooltip" title="" data-placement="left"><span class="green"><i class="icon-edit"></i></span></a></li>
+											<li><a style="cursor:pointer;" title="审核" onclick="audit('${var.RMBMANUAL_ID}', '${var.STATUS}');" class="tooltip-success" data-rel="tooltip" title="" data-placement="left"><span class="green"><i class="icon-edit"></i></span></a></li>
 											</c:if>
 											<c:if test="${QX.del == 1 }">
-											<li><a style="cursor:pointer;" title="删除" onclick="del('${var.RMBMANUAL_ID}');" class="tooltip-error" data-rel="tooltip" title="" data-placement="left"><span class="red"><i class="icon-trash"></i></span> </a></li>
+											<li><a style="cursor:pointer;" title="删除" onclick="del('${var.RMBMANUAL_ID}', '${var.STATUS}');" class="tooltip-error" data-rel="tooltip" title="" data-placement="left"><span class="red"><i class="icon-trash"></i></span> </a></li>
 											</c:if>
 										</ul>
 										</div>
@@ -149,9 +129,6 @@
 				<td style="vertical-align:top;">
 					<c:if test="${QX.add == 1 }">
 					<a class="btn btn-small btn-success" onclick="add();">新增</a>
-					</c:if>
-					<c:if test="${QX.del == 1 }">
-					<a class="btn btn-small btn-danger" onclick="makeAll('确定要删除选中的数据吗?');" title="批量删除" ><i class='icon-trash'></i></a>
 					</c:if>
 				</td>
 				<td style="vertical-align:top;"><div class="pagination" style="float: right;padding-top: 0px;margin-top: 0px;">${page.pageStr}</div></td>
@@ -220,7 +197,11 @@
 		}
 		
 		//删除
-		function del(Id){
+		function del(Id, status){
+			if(status == '已审核'){
+				bootbox.alert('已审核的数据不能删除！');
+				return;
+			}
 			bootbox.confirm("确定要删除吗?", function(result) {
 				if(result) {
 					top.jzts();
@@ -232,22 +213,21 @@
 			});
 		}
 		
-		//修改
-		function edit(Id){
-			 top.jzts();
-			 var diag = new top.Dialog();
-			 diag.Drag=true;
-			 diag.Title ="编辑";
-			 diag.URL = '<%=basePath%>rmbmanual/goEdit.do?RMBMANUAL_ID='+Id;
-			 diag.Width = 450;
-			 diag.Height = 355;
-			 diag.CancelEvent = function(){ //关闭事件
-				 if(diag.innerFrame.contentWindow.document.getElementById('zhongxin').style.display == 'none'){
-					 nextPage(${page.currentPage});
+		//审核
+		function audit(Id, status){
+			if(status == '已审核'){
+				bootbox.alert(status);
+				return;
+			}
+			bootbox.confirm("确定要审核吗?", function(result) {
+				if(result) {
+					top.jzts();
+					var url = "<%=basePath%>rmbmanual/audit.do?RMBMANUAL_ID="+Id+"&tm="+new Date().getTime();
+					$.get(url,function(data){
+						nextPage(${page.currentPage});
+					});
 				}
-				diag.close();
-			 };
-			 diag.show();
+			});
 		}
 		</script>
 		
