@@ -67,6 +67,13 @@ public class WaitAuditRmbWService {
 	}
 	
 	/*
+	 * 批量锁定
+	 */
+	public void lockAll(PageData pd)throws Exception{
+		dao.update("WaitAuditRmbWMapper.lockAll", pd);
+	}
+	
+	/*
 	* 更改状态
 	*/
 	public void editStatus(PageData pd)throws Exception{

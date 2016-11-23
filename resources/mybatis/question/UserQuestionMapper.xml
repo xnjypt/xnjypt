@@ -51,13 +51,11 @@
 	<update id="edit" parameterType="pd">
 		update  XNHB_QUESTION_USERQUESTION
 			set 
-				SEQ = #{SEQ},
-				QUESTIONUSER = #{QUESTIONUSER},
-				STATUS = #{STATUS},
-				QUESTIONTYPE = #{QUESTIONTYPE},
 				REPLYCENTENT = #{REPLYCENTENT},
-				QUESTIONCENTENT = #{QUESTIONCENTENT},
-			USERQUESTION_ID = USERQUESTION_ID
+				UPDATEDATETIME = #{UPDATEDATETIME},
+				REPLYDATETIME = #{REPLYDATETIME}, 
+				REPLYPEOPLE = #{REPLYPEOPLE},	
+				STATUS = #{STATUS}	
 			where 
 				USERQUESTION_ID = #{USERQUESTION_ID}
 	</update>
@@ -106,6 +104,10 @@
 				a.USERQUESTION_ID
 		from 
 				XNHB_QUESTION_USERQUESTION a
+		where   1=1		
+		<if test="pd.QUESTIONUSER != null and pd.QUESTIONUSER != ''">
+             and a.QUESTIONUSER LIKE CONCAT(CONCAT('%', #{pd.QUESTIONUSER}),'%')
+        </if>		
 	</select>
 	
 	<!-- 列表(全部) -->

@@ -65,21 +65,11 @@
 		if($("#KEYWORD").val()==""){
 			$("#KEYWORD").tips({
 				side:3,
-	            msg:'请输入关键字',
+	            msg:'请输入关键词',
 	            bg:'#AE81FF',
 	            time:2
 	        });
 			$("#KEYWORD").focus();
-			return false;
-		}
-		if($("#SEQ").val()==""){
-			$("#SEQ").tips({
-				side:3,
-	            msg:'请输入排序',
-	            bg:'#AE81FF',
-	            time:2
-	        });
-			$("#SEQ").focus();
 			return false;
 		}
 		if($("#DESCRIPTION").val()==""){
@@ -92,9 +82,6 @@
 			$("#DESCRIPTION").focus();
 			return false;
 		}
-
-
-
 
 		$("#Form").submit();
 		$("#zhongxin").hide();
@@ -110,27 +97,27 @@
 		<table id="table_report" class="table table-striped table-bordered table-hover">
 						<tr>
 				<td style="width:70px;text-align: right;padding-top: 13px;">类型名称:</td>
-				<td><input type="text" name="TYPENAME" id="TYPENAME" value="${pd.TYPENAME}" maxlength="32" placeholder="这里输入类型名称" title="类型名称"/></td>
+				<td><input style="width:300px;" type="text" name="TYPENAME" id="TYPENAME" value="${pd.TYPENAME}" maxlength="32" placeholder="这里输入类型名称" title="类型名称"/></td>
 			</tr>
 						<tr>
 				<td style="width:70px;text-align: right;padding-top: 13px;">类型编码:</td>
-				<td><input type="text" name="TYPENUMBER" id="TYPENUMBER" value="${pd.TYPENUMBER}" maxlength="32" placeholder="这里输入类型编码" title="类型编码"/></td>
+				<td><input style="width:300px;" type="text" name="TYPENUMBER" id="TYPENUMBER" value="${pd.TYPENUMBER}" maxlength="32" placeholder="这里输入类型编码" title="类型编码"/></td>
 			</tr>
 			<tr>
-				<td style="width:70px;text-align: right;padding-top: 13px;">排序:</td>
-				<td><input type="number" name="SEQ" id="SEQ" value="${pd.SEQ}" maxlength="32" placeholder="这里输入排序" title="排序"/></td>
-			</tr>
-						<tr>
 				<td style="width:70px;text-align: right;padding-top: 13px;">语言:</td>
-				<td><input type="text" name="LANGUAGE" id="LANGUAGE" value="${pd.LANGUAGE}" maxlength="32" placeholder="这里输入语言" title="语言"/></td>
+				<td><select name="LANGUAGE" id="LANGUAGE" style="vertical-align:top;width: 300px;" title="语言">
+					<option value="简体中文">简体中文</option>
+					<option value="English">English</option>
+			  	</select></td>
+				<%-- <td><input style="width:300px;" type="text" name="LANGUAGE" id="LANGUAGE" value="${pd.LANGUAGE}" maxlength="32" placeholder="这里输入语言" title="语言"/></td> --%>
 			</tr>
 			<tr>
-				<td style="width:70px;text-align: right;padding-top: 13px;">关键字:</td>
-				<td><input type="text" name="KEYWORD" id="KEYWORD" value="${pd.KEYWORD}" maxlength="32" placeholder="这里输入关键字" title="关键字"/></td>
+				<td style="width:70px;text-align: right;padding-top: 13px;">关键词:</td>
+				<td><input style="width:300px;" type="text" name="KEYWORD" id="KEYWORD" value="${pd.KEYWORD}" maxlength="32" placeholder="这里输入关键字" title="关键字"/></td>
 			</tr>
 			<tr>
 				<td style="width:70px;text-align: right;padding-top: 13px;">描述:</td>
-				<td><input type="text" name="DESCRIPTION" id="DESCRIPTION" value="${pd.DESCRIPTION}" maxlength="32" placeholder="这里输入描述" title="描述"/></td>
+				<td><input style="width:300px;" type="text" name="DESCRIPTION" id="DESCRIPTION" value="${pd.DESCRIPTION}" maxlength="32" placeholder="这里输入描述" title="描述"/></td>
 			</tr>
 
 

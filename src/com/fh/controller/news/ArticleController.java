@@ -61,9 +61,9 @@ public class ArticleController extends BaseController {
 		pd.put("ARTICLE_ID", this.get32UUID());	//主键
 		pd.put("CREATEDATETIME", Tools.date2Str(new Date()));	//创建时间
 		pd.put("CREATEUSER", this.getUserName());	//创建人
-		System.out.println(pd.get("CONTENT"));
+		pd.put("SEQ", 0);
+		pd.put("CLICK", 0);
 		pd.put("CONTENT", ClobUtil.stringToClob(pd.get("CONTENT").toString()));
-		
 		pd.put("ARTICLETYPE_ID",pd.get("TYPEID"));
 		pd.put("TYPENAME", articletypeService.findById(pd).get("TYPENAME"));	
 		articleService.save(pd);
@@ -105,7 +105,8 @@ public class ArticleController extends BaseController {
 		pd.put("UPDATEUSER", this.getUserName());	//修改人
 		pd.put("CONTENT", ClobUtil.stringToClob(pd.getString("CONTENT")));
 		pd.put("ARTICLETYPE_ID",pd.get("TYPEID"));
-		pd.put("TYPENAME", articletypeService.findById(pd).get("TYPENAME"));	
+		pd.put("TYPENAME", articletypeService.findById(pd).get("TYPENAME"));
+		pd.put("SEQ", 0);
 		articleService.edit(pd);
 		mv.addObject("msg","success");
 		mv.setViewName("save_result");

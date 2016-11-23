@@ -58,6 +58,7 @@ public class ArticleTypeController extends BaseController {
 		pd.put("ARTICLETYPE_ID", this.get32UUID());	//主键
 		pd.put("CREATEDATETIME", Tools.date2Str(new Date()));	//创建时间
 		pd.put("CREATEUSER", this.getUserName());	//创建人
+		pd.put("SEQ", 0);	
 		articletypeService.save(pd);
 		mv.addObject("msg","success");
 		mv.setViewName("save_result");
@@ -95,6 +96,7 @@ public class ArticleTypeController extends BaseController {
 		pd = this.getPageData();
 		pd.put("UPDATEDATETIME", Tools.date2Str(new Date()));	//修改时间
 		pd.put("UPDATEUSER",  this.getUserName());	//修改人
+		pd.put("SEQ", 0);
 		articletypeService.edit(pd);
 		mv.addObject("msg","success");
 		mv.setViewName("save_result");
@@ -259,5 +261,25 @@ public class ArticleTypeController extends BaseController {
 	public void initBinder(WebDataBinder binder){
 		DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
 		binder.registerCustomEditor(Date.class, new CustomDateEditor(format,true));
+	}
+	
+	/**
+	 * 文章类型列表
+	 */
+	@RequestMapping(value="/newsList")
+	@ResponseBody
+	public Object newsList() throws Exception{
+		PageData pd = new PageData();		
+		Map<String,Object> map = new HashMap<String,Object>();
+		try {
+			pd = this.getPageData();
+			List<PageData>	varList = articletypeService.listAll(pd);	//列出VmType列表
+			map.put("list", varList);
+		} catch (Exception e) {
+			logger.error(e.toString(), e);
+		} finally {
+			logAfter(logger);
+		}
+		return AppUtil.returnObject(pd, map);
 	}
 }

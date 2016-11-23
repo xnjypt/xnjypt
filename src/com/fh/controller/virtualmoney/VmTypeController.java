@@ -101,6 +101,94 @@ public class VmTypeController extends BaseController {
 		return mv;
 	}
 	
+	
+	/**
+	 * 停盘
+	 */
+	@RequestMapping(value="/stop")
+	@ResponseBody
+	public Object stop() {
+		logBefore(logger, "停盘VmType");
+		if(!Jurisdiction.buttonJurisdiction(menuUrl, "edit")){return null;} //校验权限
+		PageData pd = new PageData();		
+		Map<String,Object> map = new HashMap<String,Object>();
+		try {
+			pd = this.getPageData();
+			List<PageData> pdList = new ArrayList<PageData>();
+			
+			pd.put("UPDATEDATETIME", Tools.date2Str(new Date()));	//修改时间
+			pd.put("UPDATEUSER", this.getUserName());	//修改人
+			pd.put("ISUSPENDED", "true");	//停盘
+			vmtypeService.editIsuspended(pd);
+			pd.put("msg", "ok");
+			pdList.add(pd);
+			map.put("list", pdList);
+		} catch (Exception e) {
+			logger.error(e.toString(), e);
+		} finally {
+			logAfter(logger);
+		}
+		return AppUtil.returnObject(pd, map);
+	}
+	
+	/**
+	 * 开盘
+	 */
+	@RequestMapping(value="/start")
+	@ResponseBody
+	public Object start() {
+		logBefore(logger, "开盘VmType");
+		if(!Jurisdiction.buttonJurisdiction(menuUrl, "edit")){return null;} //校验权限
+		PageData pd = new PageData();		
+		Map<String,Object> map = new HashMap<String,Object>();
+		try {
+			pd = this.getPageData();
+			List<PageData> pdList = new ArrayList<PageData>();
+			
+			pd.put("UPDATEDATETIME", Tools.date2Str(new Date()));	//修改时间
+			pd.put("UPDATEUSER", this.getUserName());	//修改人
+			pd.put("ISUSPENDED", "false");	//开盘
+			vmtypeService.editIsuspended(pd);
+			pd.put("msg", "ok");
+			pdList.add(pd);
+			map.put("list", pdList);
+		} catch (Exception e) {
+			logger.error(e.toString(), e);
+		} finally {
+			logAfter(logger);
+		}
+		return AppUtil.returnObject(pd, map);
+	}
+	
+	/**
+	 * 禁用
+	 */
+	@RequestMapping(value="/disable")
+	@ResponseBody
+	public Object disable() {
+		logBefore(logger, "禁用VmType");
+		if(!Jurisdiction.buttonJurisdiction(menuUrl, "edit")){return null;} //校验权限
+		PageData pd = new PageData();		
+		Map<String,Object> map = new HashMap<String,Object>();
+		try {
+			pd = this.getPageData();
+			List<PageData> pdList = new ArrayList<PageData>();
+			
+			pd.put("UPDATEDATETIME", Tools.date2Str(new Date()));	//修改时间
+			pd.put("UPDATEUSER", this.getUserName());	//修改人
+			pd.put("STATUS", "禁用");	//禁用
+			vmtypeService.editDisable(pd);
+			pd.put("msg", "ok");
+			pdList.add(pd);
+			map.put("list", pdList);
+		} catch (Exception e) {
+			logger.error(e.toString(), e);
+		} finally {
+			logAfter(logger);
+		}
+		return AppUtil.returnObject(pd, map);
+	}
+	
 	/**
 	 * 列表
 	 */

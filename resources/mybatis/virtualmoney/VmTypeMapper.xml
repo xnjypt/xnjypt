@@ -33,7 +33,8 @@
 			ACCESSKEY,	
 			SECRTKEY,	
 			LOGO,	
-			KEYWORD,	
+			KEYWORD,
+			NAME,	
 			VMTYPE_ID
 		) values (
 			#{CREATEDATETIME},	
@@ -64,6 +65,7 @@
 			#{SECRTKEY},	
 			#{LOGO},	
 			#{KEYWORD},	
+			#{NAME},	
 			#{VMTYPE_ID}
 		)
 	</insert>
@@ -105,6 +107,7 @@
 				SECRTKEY = #{SECRTKEY},
 				LOGO = #{LOGO},
 				KEYWORD = #{KEYWORD},
+				NAME = #{NAME},
 			VMTYPE_ID = VMTYPE_ID
 			where 
 				VMTYPE_ID = #{VMTYPE_ID}
@@ -142,6 +145,7 @@
 			SECRTKEY,	
 			LOGO,	
 			KEYWORD,	
+			NAME,	
 			VMTYPE_ID
 		from 
 			XNHB_VM_VMTYPE
@@ -181,9 +185,16 @@
 				a.SECRTKEY,	
 				a.LOGO,	
 				a.KEYWORD,	
+				a.NAME,	
 				a.VMTYPE_ID
 		from 
 				XNHB_VM_VMTYPE a
+		where   1=1			
+		<if test="pd.KEYWORD != null and pd.KEYWORD != ''">
+             and (a.JTTYPENAME LIKE CONCAT(CONCAT('%', #{pd.KEYWORD}),'%')
+             or a.ENTYPENAME LIKE CONCAT(CONCAT('%', #{pd.KEYWORD}),'%')
+             or a.INTRODUCTION LIKE CONCAT(CONCAT('%', #{pd.KEYWORD}),'%'))
+        </if>		
 	</select>
 	
 	<!-- 列表(全部) -->
@@ -217,6 +228,7 @@
 				a.SECRTKEY,	
 				a.LOGO,	
 				a.KEYWORD,	
+				a.NAME,	
 				a.VMTYPE_ID
 		from 
 				XNHB_VM_VMTYPE a
@@ -232,4 +244,25 @@
 		</foreach>
 	</delete>
 	
+	<!-- 停盘，开盘 -->
+	<update id="editIsuspended" parameterType="pd">
+		update  XNHB_VM_VMTYPE
+			set 
+			ISUSPENDED = #{ISUSPENDED},
+			UPDATEDATETIME =  #{UPDATEDATETIME},
+			UPDATEUSER = #{UPDATEUSER}
+			where 
+				VMTYPE_ID = #{VMTYPE_ID}
+	</update>
+	
+	<!-- 禁用 -->
+	<update id="editDisable" parameterType="pd">
+		update  XNHB_VM_VMTYPE
+			set 
+			STATUS = #{STATUS},
+			UPDATEDATETIME =  #{UPDATEDATETIME},
+			UPDATEUSER = #{UPDATEUSER}
+			where 
+				VMTYPE_ID = #{VMTYPE_ID}
+	</update>
 </mapper>

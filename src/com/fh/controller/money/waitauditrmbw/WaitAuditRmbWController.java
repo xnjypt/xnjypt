@@ -137,10 +137,7 @@ public class WaitAuditRmbWController extends BaseController {
 			
 			if("正在处理".equals(pageData.getString("STATUS"))){
 				pd.put("UPDATEDATETIME", Tools.date2Str(new Date()));	//修改时间
-				Subject currentUser = SecurityUtils.getSubject(); 
-				Session session = currentUser.getSession();
-				String USERNAME = session.getAttribute(Const.SESSION_USERNAME).toString();	//获取当前登录者loginname
-				pd.put("UPDATEUSER", USERNAME);	//修改人
+				pd.put("UPDATEUSER", this.getUserName());	//修改人
 				pd.put("STATUS", "提现成功");	//状态
 				waitauditrmbwService.editStatus(pd);
 				//更新人民币操作列表
@@ -180,10 +177,7 @@ public class WaitAuditRmbWController extends BaseController {
 			
 			if("等待提现".equals(pageData.getString("STATUS"))){
 				pd.put("UPDATEDATETIME", Tools.date2Str(new Date()));	//修改时间
-				Subject currentUser = SecurityUtils.getSubject(); 
-				Session session = currentUser.getSession();
-				String USERNAME = session.getAttribute(Const.SESSION_USERNAME).toString();	//获取当前登录者loginname
-				pd.put("UPDATEUSER", USERNAME);	//修改人
+				pd.put("UPDATEUSER", this.getUserName());	//修改人
 				pd.put("STATUS", "正在处理");	//状态
 				waitauditrmbwService.editStatus(pd);
 				//更新人民币操作列表
@@ -221,10 +215,7 @@ public class WaitAuditRmbWController extends BaseController {
 			
 			if("正在处理".equals(pageData.getString("STATUS"))){
 				pd.put("UPDATEDATETIME", Tools.date2Str(new Date()));	//修改时间
-				Subject currentUser = SecurityUtils.getSubject(); 
-				Session session = currentUser.getSession();
-				String USERNAME = session.getAttribute(Const.SESSION_USERNAME).toString();	//获取当前登录者loginname
-				pd.put("UPDATEUSER", USERNAME);	//修改人
+				pd.put("UPDATEUSER", this.getUserName());	//修改人
 				pd.put("STATUS", "等待提现");	//状态
 				waitauditrmbwService.editStatus(pd);
 				//更新人民币操作列表
@@ -260,10 +251,7 @@ public class WaitAuditRmbWController extends BaseController {
 			List<PageData> pdList = new ArrayList<PageData>();
 			
 			pd.put("UPDATEDATETIME", Tools.date2Str(new Date()));	//修改时间
-			Subject currentUser = SecurityUtils.getSubject(); 
-			Session session = currentUser.getSession();
-			String USERNAME = session.getAttribute(Const.SESSION_USERNAME).toString();	//获取当前登录者loginname
-			pd.put("UPDATEUSER", USERNAME);	//修改人
+			pd.put("UPDATEUSER", this.getUserName());	//修改人
 			pd.put("STATUS", "取消提现");	//状态
 			waitauditrmbwService.editStatus(pd);
 			//更新虚拟币操作列表
@@ -345,13 +333,13 @@ public class WaitAuditRmbWController extends BaseController {
 	}	
 	
 	/**
-	 * 批量删除
+	 * 批量锁定
 	 */
-	@RequestMapping(value="/deleteAll")
+	@RequestMapping(value="/lockAll")
 	@ResponseBody
-	public Object deleteAll() {
-		logBefore(logger, "批量删除WaitAuditRmbW");
-		if(!Jurisdiction.buttonJurisdiction(menuUrl, "dell")){return null;} //校验权限
+	public Object lockAll() {
+		logBefore(logger, "批量锁定WaitAuditRmbW");
+		if(!Jurisdiction.buttonJurisdiction(menuUrl, "edit")){return null;} //校验权限
 		PageData pd = new PageData();		
 		Map<String,Object> map = new HashMap<String,Object>();
 		try {
@@ -359,14 +347,20 @@ public class WaitAuditRmbWController extends BaseController {
 			List<PageData> pdList = new ArrayList<PageData>();
 			String DATA_IDS = pd.getString("DATA_IDS");
 			if(null != DATA_IDS && !"".equals(DATA_IDS)){
-				String ArrayDATA_IDS[] = DATA_IDS.split(",");
-				waitauditrmbwService.deleteAll(ArrayDATA_IDS);
+				
+				pd.put("UPDATEDATETIME", Tools.date2Str(new Date()));	//修改时间
+				pd.put("UPDATEUSER", this.getUserName());	//修改人
+				pd.put("STATUS", "正在处理");	//状态
+				waitauditrmbwService.lockAll(pd);
+				//更新虚拟币操作列表
+				rmboperationrecordService.lockAll(pd);
 				pd.put("msg", "ok");
 			}else{
 				pd.put("msg", "no");
 			}
 			pdList.add(pd);
 			map.put("list", pdList);
+			
 		} catch (Exception e) {
 			logger.error(e.toString(), e);
 		} finally {

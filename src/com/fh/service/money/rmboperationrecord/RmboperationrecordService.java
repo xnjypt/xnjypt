@@ -67,6 +67,13 @@ public class RmboperationrecordService {
 	}
 	
 	/*
+	 * 批量锁定
+	 */
+	public void lockAll(PageData pd)throws Exception{
+		dao.update("RmboperationrecordMapper.lockAll", pd);
+	}
+	
+	/*
 	* 修改
 	*/
 	public void editStatus(PageData pd)throws Exception{

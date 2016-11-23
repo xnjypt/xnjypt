@@ -104,14 +104,11 @@ public class XnbManualController extends BaseController {
 		try{
 			pd = this.getPageData();
 			pd.put("UPDATEDATETIME", Tools.date2Str(new Date()));
-			Subject currentUser = SecurityUtils.getSubject();  
-			Session session = currentUser.getSession();
-			String USERNAME = session.getAttribute(Const.SESSION_USERNAME).toString();	//获取当前登录者loginname
-			pd.put("AUDITPEOPLE", USERNAME);
+			pd.put("AUDITPEOPLE", this.getUserName());
 			pd.put("STATUS", "冻结");	//状态
 			xnbmanualService.audit(pd);
 			PageData pageData = xnbmanualService.findById(pd);
-			pageData.put("UPDATEUSER", USERNAME);
+			pageData.put("UPDATEUSER", this.getUserName());
 			userxnbService.editFreezeNum(pageData);
 			out.write("success");
 			out.close();
@@ -131,14 +128,11 @@ public class XnbManualController extends BaseController {
 		try{
 			pd = this.getPageData();
 			pd.put("UPDATEDATETIME", Tools.date2Str(new Date()));
-			Subject currentUser = SecurityUtils.getSubject();  
-			Session session = currentUser.getSession();
-			String USERNAME = session.getAttribute(Const.SESSION_USERNAME).toString();	//获取当前登录者loginname
-			pd.put("AUDITPEOPLE", USERNAME);
+			pd.put("AUDITPEOPLE", this.getUserName());
 			pd.put("STATUS", "已审核");	//状态
 			xnbmanualService.audit(pd);
 			PageData pageData = xnbmanualService.findById(pd);
-			pageData.put("UPDATEUSER", USERNAME);
+			pageData.put("UPDATEUSER", this.getUserName());
 			userxnbService.edit(pageData);
 			
 			out.write("success");

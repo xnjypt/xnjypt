@@ -81,9 +81,15 @@
 				a.DESCRIPTION,	
 				a.VMTYPENAME,	
 				a.ADDRESSNUM,	
-				a.VMTYPEADDRESS_ID
+				a.VMTYPEADDRESS_ID,
+				b.JTTYPENAME
 		from 
-				XNHB_VM_VMTYPEADDRESS a
+				XNHB_VM_VMTYPEADDRESS a,
+				XNHB_VM_VMTYPE b
+		where a.VMTYPENAME = b.VMTYPE_ID 		
+		<if test="pd.VMTYPENAME != null and pd.VMTYPENAME != ''">
+             and a.VMTYPENAME LIKE CONCAT(CONCAT('%', #{pd.VMTYPENAME}),'%')
+        </if>		
 	</select>
 	
 	<!-- 列表(全部) -->

@@ -156,6 +156,18 @@
                  #{item}
 		</foreach>
 	</delete>
+	    
+	<!-- 批量锁定 -->                
+	<update id="lockAll" parameterType="pd">
+		update  XNHB_MONEY_WAITAUDITRMBW
+			set 
+			STATUS = #{STATUS},
+			UPDATEDATETIME =  #{UPDATEDATETIME},
+			UPDATEUSER = #{UPDATEUSER}
+			where 
+				STATUS = '等待银行到账',
+				WAITAUDITRMBW_ID in #{DATA_IDS}
+	</update>
 	
 	<!-- 锁定,取消锁定,取消提现 -->
 	<update id="editStatus" parameterType="pd">

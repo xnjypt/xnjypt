@@ -71,7 +71,6 @@
 			return false;
 		}
 
-
 		$("#Form").submit();
 		$("#zhongxin").hide();
 		$("#zhongxin2").show();
@@ -94,11 +93,10 @@ var ue = UE.getEditor('editor');
 				
 				<td>
 				<select name="TYPEID" id="TYPEID"  placeholder="这里输入文章类型" title="文章类型">
-								<c:forEach items="${typeList}" var="item">
-								
-									<option value="${item.ARTICLETYPE_ID}">${item.TYPENAME}</option>
-								</c:forEach>
-							</select>
+					<c:forEach items="${typeList}" var="item">
+						<option value="${item.ARTICLETYPE_ID}">${item.TYPENAME}</option>
+					</c:forEach>
+				</select>
 				</td>
 			</tr>
 			<tr>

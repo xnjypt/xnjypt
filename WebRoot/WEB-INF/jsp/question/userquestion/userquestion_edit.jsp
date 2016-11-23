@@ -32,46 +32,6 @@
 	
 	//保存
 	function save(){
-			if($("#SEQ").val()==""){
-			$("#SEQ").tips({
-				side:3,
-	            msg:'请输入排序',
-	            bg:'#AE81FF',
-	            time:2
-	        });
-			$("#SEQ").focus();
-			return false;
-		}
-		if($("#QUESTIONUSER").val()==""){
-			$("#QUESTIONUSER").tips({
-				side:3,
-	            msg:'请输入提问人',
-	            bg:'#AE81FF',
-	            time:2
-	        });
-			$("#QUESTIONUSER").focus();
-			return false;
-		}
-		if($("#STATUS").val()==""){
-			$("#STATUS").tips({
-				side:3,
-	            msg:'请输入状态',
-	            bg:'#AE81FF',
-	            time:2
-	        });
-			$("#STATUS").focus();
-			return false;
-		}
-		if($("#QUESTIONTYPE").val()==""){
-			$("#QUESTIONTYPE").tips({
-				side:3,
-	            msg:'请输入问题类型',
-	            bg:'#AE81FF',
-	            time:2
-	        });
-			$("#QUESTIONTYPE").focus();
-			return false;
-		}
 		if($("#REPLYCENTENT").val()==""){
 			$("#REPLYCENTENT").tips({
 				side:3,
@@ -80,16 +40,6 @@
 	            time:2
 	        });
 			$("#REPLYCENTENT").focus();
-			return false;
-		}
-		if($("#QUESTIONCENTENT").val()==""){
-			$("#QUESTIONCENTENT").tips({
-				side:3,
-	            msg:'请输入提问内容',
-	            bg:'#AE81FF',
-	            time:2
-	        });
-			$("#QUESTIONCENTENT").focus();
 			return false;
 		}
 		$("#Form").submit();
@@ -105,32 +55,24 @@
 		<div id="zhongxin">
 		<table id="table_report" class="table table-striped table-bordered table-hover">
 			<tr>
-				<td style="width:70px;text-align: right;padding-top: 13px;">排序:</td>
-				<td><input type="number" name="SEQ" id="SEQ" value="${pd.SEQ}" maxlength="32" placeholder="这里输入排序" title="排序"/></td>
-			</tr>
-			<tr>
 				<td style="width:70px;text-align: right;padding-top: 13px;">提问人:</td>
-				<td><input type="text" name="QUESTIONUSER" id="QUESTIONUSER" value="${pd.QUESTIONUSER}" maxlength="32" placeholder="这里输入提问人" title="提问人"/></td>
-			</tr>
-			<tr>
-				<td style="width:70px;text-align: right;padding-top: 13px;">状态:</td>
-				<td><input type="text" name="STATUS" id="STATUS" value="${pd.STATUS}" maxlength="32" placeholder="这里输入状态" title="状态"/></td>
+				<td><input disabled="true" type="text" name="QUESTIONUSER" id="QUESTIONUSER" value="${pd.QUESTIONUSER}" maxlength="32" placeholder="这里输入提问人" title="提问人"/></td>
 			</tr>
 			<tr>
 				<td style="width:70px;text-align: right;padding-top: 13px;">问题类型:</td>
-				<td><input type="text" name="QUESTIONTYPE" id="QUESTIONTYPE" value="${pd.QUESTIONTYPE}" maxlength="32" placeholder="这里输入问题类型" title="问题类型"/></td>
-			</tr>
-			<tr>
-				<td style="width:70px;text-align: right;padding-top: 13px;">回复内容:</td>
-				<td><input type="text" name="REPLYCENTENT" id="REPLYCENTENT" value="${pd.REPLYCENTENT}" maxlength="32" placeholder="这里输入回复内容" title="回复内容"/></td>
+				<td><input disabled="true" type="text" name="QUESTIONTYPE" id="QUESTIONTYPE" value="${pd.QUESTIONTYPE}" maxlength="32" placeholder="这里输入问题类型" title="问题类型"/></td>
 			</tr>
 			<tr>
 				<td style="width:70px;text-align: right;padding-top: 13px;">提问内容:</td>
-				<td><input type="text" name="QUESTIONCENTENT" id="QUESTIONCENTENT" value="${pd.QUESTIONCENTENT}" maxlength="32" placeholder="这里输入提问内容" title="提问内容"/></td>
+				<td><textarea style="width:300px;" rows="3" cols="25" disabled="true" type="text" name="QUESTIONCENTENT" id="QUESTIONCENTENT" placeholder="这里输入提问内容" title="提问内容">${pd.QUESTIONCENTENT}</textarea></td>
+			</tr>
+			<tr>
+				<td style="width:70px;text-align: right;padding-top: 13px;">回复内容:</td>
+				<td><textarea style="width:300px;" rows="3" cols="30" name="REPLYCENTENT" id="REPLYCENTENT" placeholder="这里输入回复内容" title="回复内容">${pd.REPLYCENTENT}</textarea></td>
 			</tr>
 			<tr>
 				<td style="text-align: center;" colspan="10">
-					<a class="btn btn-mini btn-primary" onclick="save();">保存</a>
+					<a class="btn btn-mini btn-primary" onclick="save();">回复</a>
 					<a class="btn btn-mini btn-danger" onclick="top.Dialog.close();">取消</a>
 				</td>
 			</tr>

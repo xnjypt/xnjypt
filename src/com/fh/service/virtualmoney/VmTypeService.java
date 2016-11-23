@@ -66,5 +66,18 @@ public class VmTypeService {
 		dao.delete("VmTypeMapper.deleteAll", ArrayDATA_IDS);
 	}
 	
+	/*
+	* 开盘，停盘
+	*/
+	public void editIsuspended(PageData pd)throws Exception{
+		dao.update("VmTypeMapper.editIsuspended", pd);
+	}
+	
+	/*
+	* 禁用
+	*/
+	public void editDisable(PageData pd)throws Exception{
+		dao.update("VmTypeMapper.editDisable", pd);
+	}
 }
 

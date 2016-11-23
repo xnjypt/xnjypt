@@ -116,18 +116,15 @@ public class WaitAuditRmbTController extends BaseController {
 		try{
 			pd = this.getPageData();
 			pd.put("UPDATEDATETIME", Tools.date2Str(new Date()));
-			Subject currentUser = SecurityUtils.getSubject();  
-			Session session = currentUser.getSession();
-			String USERNAME = session.getAttribute(Const.SESSION_USERNAME).toString();	//获取当前登录者loginname
-			pd.put("UPDATEUSER", USERNAME);
+			pd.put("UPDATEUSER", this.getUserName());
 			pd.put("STATUS", "已经到账");	//状态
 			waitauditrmbtService.audit(pd);
 			PageData pageData = waitauditrmbtService.findById(pd);
-			pageData.put("UPDATEUSER", USERNAME);
+			pageData.put("UPDATEUSER", this.getUserName());
 			pageData.put("RMBOPERATIONRECORD_ID", pageData.getString("WAITAUDITRMBT_ID"));
 			rmboperationrecordService.edit(pageData);
 			
-			pageData.put("UPDATEUSER", USERNAME);
+			pageData.put("UPDATEUSER", this.getUserName());
 			membermomeyService.edit(pageData);
 			
 			out.write("success");
@@ -148,14 +145,11 @@ public class WaitAuditRmbTController extends BaseController {
 		try{
 			pd = this.getPageData();
 			pd.put("UPDATEDATETIME", Tools.date2Str(new Date()));
-			Subject currentUser = SecurityUtils.getSubject();  
-			Session session = currentUser.getSession();
-			String USERNAME = session.getAttribute(Const.SESSION_USERNAME).toString();	//获取当前登录者loginname
-			pd.put("UPDATEUSER", USERNAME);
+			pd.put("UPDATEUSER", this.getUserName());
 			pd.put("STATUS", "取消充值");	//状态
 			waitauditrmbtService.audit(pd);
 			PageData pageData = waitauditrmbtService.findById(pd);
-			pageData.put("UPDATEUSER", USERNAME);
+			pageData.put("UPDATEUSER", this.getUserName());
 			pageData.put("RMBOPERATIONRECORD_ID", pageData.getString("WAITAUDITRMBT_ID"));
 			rmboperationrecordService.edit(pageData);
 			

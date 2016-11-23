@@ -47,6 +47,7 @@
 						</th>
 						<th class="center">序号</th>
 						<th class="center">名称</th>
+						<th class="center">简称</th>
 						<th class="center">简体类型名称</th>
 						<th class="center">繁体类型名称</th>
 						<th class="center">英语类型名称</th>
@@ -63,7 +64,7 @@
 						<th class="center">介绍</th>
 						<th class="center">描述</th>
 						<th class="center">logo</th>
-						<th class="center">操作</th>
+						<!-- <th class="center">操作</th> -->
 					</tr>
 				</thead>
 										
@@ -80,6 +81,7 @@
 								</td>
 								<td class='center' style="width: 30px;">${vs.index+1}</td>
 										
+										<td>${var.NAME}</td>
 										<td>${var.SHORTNAME}</td>
 										<td>${var.JTTYPENAME}</td>
 										<td>${var.FTTYPENAME}</td>
@@ -98,7 +100,7 @@
 										<td>${var.INTRODUCTION}</td>
 										<td>${var.DESCRIPTION}</td>
 										<td>${var.LOGO}</td>
-								<td style="width: 30px;" class="center">
+								<%-- <td style="width: 30px;" class="center">
 									<div class='hidden-phone visible-desktop btn-group'>
 									
 										<c:if test="${QX.edit != 1 && QX.del != 1 }">
@@ -110,13 +112,10 @@
 											<c:if test="${QX.edit == 1 }">
 											<li><a style="cursor:pointer;" title="编辑" onclick="edit('${var.VMTYPE_ID}');" class="tooltip-success" data-rel="tooltip" title="" data-placement="left"><span class="green"><i class="icon-edit"></i></span></a></li>
 											</c:if>
-											<c:if test="${QX.del == 1 }">
-											<li><a style="cursor:pointer;" title="删除" onclick="del('${var.VMTYPE_ID}');" class="tooltip-error" data-rel="tooltip" title="" data-placement="left"><span class="red"><i class="icon-trash"></i></span> </a></li>
-											</c:if>
 										</ul>
 										</div>
 									</div>
-								</td>
+								</td> --%>
 							</tr>
 						
 						</c:forEach>
@@ -205,7 +204,7 @@
 			 diag.Drag=true;
 			 diag.Title ="新增";
 			 diag.URL = '<%=basePath%>vmtype/goAdd.do';
-			 diag.Width = 450;
+			 diag.Width = 570;
 			 diag.Height = 355;
 			 diag.CancelEvent = function(){ //关闭事件
 				 if(diag.innerFrame.contentWindow.document.getElementById('zhongxin').style.display == 'none'){
@@ -229,7 +228,7 @@
 			 diag.Drag=true;
 			 diag.Title ="编辑";
 			 diag.URL = '<%=basePath%>vmtype/goEdit.do?VMTYPE_ID='+Id;
-			 diag.Width = 450;
+			 diag.Width = 570;
 			 diag.Height = 355;
 			 diag.CancelEvent = function(){ //关闭事件
 				 if(diag.innerFrame.contentWindow.document.getElementById('zhongxin').style.display == 'none'){
@@ -238,6 +237,138 @@
 				diag.close();
 			 };
 			 diag.show();
+		}
+		
+		
+		//修改
+		function edit(msg){
+			var str = '';
+			for(var i=0;i < document.getElementsByName('ids').length;i++)
+			{
+				  if(document.getElementsByName('ids')[i].checked){
+				  	if(str=='') str += document.getElementsByName('ids')[i].value;
+				  	else{
+				  		bootbox.dialog("请选择一条记录进行操作!", 
+								[
+								  {
+									"label" : "关闭",
+									"class" : "btn-small btn-success",
+									"callback": function() {
+										
+										}
+									}
+								 ]
+							);
+				  		return;
+				  	}
+				  }
+			}
+			if(str==''){
+				bootbox.dialog("您没有选择任何内容!", 
+					[
+					  {
+						"label" : "关闭",
+						"class" : "btn-small btn-success",
+						"callback": function() {
+							//Example.show("great success");
+							}
+						}
+					 ]
+				);
+				
+				return;
+			}else{
+			
+				if(msg == '确定要停盘吗?'){
+					top.jzts();
+					$.ajax({
+						type: "POST",
+						url: '<%=basePath%>vmtype/stop.do?tm='+new Date().getTime(),
+				    	data: {VMTYPE_ID:str},
+						dataType:'json',
+						cache: false,
+						success: function(data){
+							$.each(data.list, function(i, list){
+								nextPage(${page.currentPage});
+						 	});
+							if(data.list[0].msg == "no" ){
+								alert(data.list[0].result);
+							}else {
+								alert("停盘成功");
+							}
+						}
+					});
+				}else if(msg == '确定要开盘吗?'){
+					
+					top.jzts();
+					$.ajax({
+						type: "POST",
+						url: '<%=basePath%>vmtype/start.do?tm='+new Date().getTime(),
+				    	data: {VMTYPE_ID:str},
+						dataType:'json',
+						cache: false,
+						success: function(data){
+							$.each(data.list, function(i, list){
+								nextPage(${page.currentPage});
+						 	});
+							if(data.list[0].msg == "no" ){
+								alert(data.list[0].result);
+							}else {
+								alert("开盘成功");
+							}
+						}
+					});
+				}else if(msg == '确定要禁用吗?'){
+					top.jzts();
+					$.ajax({
+						type: "POST",
+						url: '<%=basePath%>vmtype/disable.do?tm='+new Date().getTime(),
+				    	data: {VMTYPE_ID:str},
+						dataType:'json',
+						cache: false,
+						success: function(data){
+							$.each(data.list, function(i, list){
+								nextPage(${page.currentPage});
+						 	});
+							if(data.list[0].msg == "no" ){
+								alert(data.list[0].result);
+							}else {
+								alert("取消提现成功");
+							}
+						}
+					});
+				}else if(msg == '确定要审核吗?'){
+					top.jzts();
+					 var diag = new top.Dialog();
+					 diag.Drag=true;
+					 diag.Title ="审核人民币提现<font style='color:red'>(此过程不可逆,请谨慎操作)</font>";
+					 diag.URL = '<%=basePath%>vmtype/goEdit.do?VMTYPE_ID='+str;
+					 diag.Width = 450;
+					 diag.Height = 355;
+					 diag.CancelEvent = function(){ //关闭事件
+						 if(diag.innerFrame.contentWindow.document.getElementById('zhongxin').style.display == 'none'){
+							 nextPage(${page.currentPage});
+						}
+						diag.close();
+					 };
+					 diag.show();
+				}else if(msg == '确定要修改吗?'){
+					 top.jzts();
+					 var diag = new top.Dialog();
+					 diag.Drag=true;
+					 diag.Title ="编辑";
+					 diag.URL = '<%=basePath%>vmtype/goEdit.do?VMTYPE_ID='+str;
+					 diag.Width = 570;
+					 diag.Height = 355;
+					 diag.CancelEvent = function(){ //关闭事件
+						 if(diag.innerFrame.contentWindow.document.getElementById('zhongxin').style.display == 'none'){
+							 nextPage(${page.currentPage});
+						}
+						diag.close();
+					 };
+					 diag.show();
+				}
+			}
 		}
 		</script>
 		

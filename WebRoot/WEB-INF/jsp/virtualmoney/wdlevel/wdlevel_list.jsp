@@ -28,7 +28,7 @@
 				<tr>
 					<td>
 						<span class="input-icon">
-							<input autocomplete="off" id="nav-search-input" type="text" name="field1" value="" placeholder="会员等级" />
+							<input autocomplete="off" id="nav-search-input" type="text" name="WDLEVEL" value="" placeholder="会员等级" />
 							<i id="nav-search-icon" class="icon-search"></i>
 						</span>
 					</td>
@@ -76,7 +76,7 @@
 										<button class="btn btn-mini btn-info" data-toggle="dropdown"><i class="icon-cog icon-only"></i></button>
 										<ul class="dropdown-menu dropdown-icon-only dropdown-light pull-right dropdown-caret dropdown-close">
 											<c:if test="${QX.edit == 1 }">
-												<li><a style="cursor:pointer;" title="修改" onclick="edit'${var.ID}');" class="tooltip-success" data-rel="tooltip" title="" data-placement="left"><span class="green"><i class="icon-edit"></i></span></a></li>
+												<li><a style="cursor:pointer;" title="修改" onclick="edit('${var.ID}');" class="tooltip-success" data-rel="tooltip" title="" data-placement="left"><span class="green"><i class="icon-edit"></i></span></a></li>
 											</c:if>
 										</ul>
 										</div>
@@ -158,7 +158,7 @@
 			 diag.Title ="修改CNY提现手续费信息";
 			 diag.URL = '<%=basePath%>wdlevel/goEdit.do?ID='+Id;
 			 diag.Width = 450;
-			 diag.Height = 355;
+			 diag.Height = 200;
 			 diag.CancelEvent = function(){ //关闭事件
 				 if(diag.innerFrame.contentWindow.document.getElementById('zhongxin').style.display == 'none'){
 					 nextPage(${page.currentPage});

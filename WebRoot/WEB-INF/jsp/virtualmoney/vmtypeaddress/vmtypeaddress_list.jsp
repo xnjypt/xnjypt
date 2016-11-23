@@ -27,7 +27,7 @@
 			<table>
 				<tr>
 					<td style="vertical-align:top;"> 
-					 	<select name="XNBTYPE" id="XNBTYPE" data-placeholder="虚拟币类型" style="vertical-align:top;width: 150px;">
+					 	<select name="VMTYPENAME" id="XNBTYPE" data-placeholder="虚拟币类型" style="vertical-align:top;width: 150px;">
 					  		<option value="">全部</option>
 					  	</select>	
 					</td>
@@ -62,7 +62,7 @@
 									<label><input type='checkbox' name='ids' value="${var.VMTYPEADDRESS_ID}" /><span class="lbl"></span></label>
 								</td>
 								<td class='center' style="width: 30px;">${vs.index+1}</td>
-										<td>${var.VMTYPENAME}</td>
+										<td>${var.JTTYPENAME}</td>
 										<td>${var.ADDRESSNUM}</td>
 							</tr>
 						

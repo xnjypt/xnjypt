@@ -94,6 +94,12 @@
 				a.ARTICLETYPE_ID
 		from 
 				XNHB_NEWS_ARTICLETYPE a
+		where   1=1		
+		<if test="pd.KEYWORD != null and pd.KEYWORD != ''">
+             and (a.KEYWORD LIKE CONCAT(CONCAT('%', #{pd.KEYWORD}),'%')
+             or a.TYPENAME LIKE CONCAT(CONCAT('%', #{pd.KEYWORD}),'%')
+             or a.DESCRIPTION LIKE CONCAT(CONCAT('%', #{pd.KEYWORD}),'%'))
+        </if>			
 	</select>
 	
 	<!-- 列表(全部) -->

@@ -32,36 +32,13 @@
 							<tr>
 								<td><span class="input-icon"> <input
 										autocomplete="off" id="nav-search-input" type="text"
-										name="field1" value="" placeholder="这里输入关键词" /> <i
+										name="KEYWORD" value="" placeholder="名称、关键词、描述" style="width:200px"/> <i
 										id="nav-search-icon" class="icon-search"></i>
 								</span></td>
-								<td><input class="span10 date-picker" name="lastLoginStart"
-									id="lastLoginStart" value="${pd.lastLoginStart}" type="text"
-									data-date-format="yyyy-mm-dd" readonly="readonly"
-									style="width: 88px;" placeholder="开始日期" /></td>
-								<td><input class="span10 date-picker" name="lastLoginEnd"
-									id="lastLoginEnd" value="${pd.lastLoginEnd}" type="text"
-									data-date-format="yyyy-mm-dd" readonly="readonly"
-									style="width: 88px;" placeholder="结束日期" /></td>
-								<td style="vertical-align: top;"><select
-									class="chzn-select" name="field2" id="field2"
-									data-placeholder="请选择"
-									style="vertical-align: top; width: 120px;">
-										<option value=""></option>
-										<option value="">全部</option>
-										<option value="">1</option>
-										<option value="">2</option>
-								</select></td>
 								<td style="vertical-align: top;"><button
 										class="btn btn-mini btn-light" onclick="search();" title="检索">
 										<i id="nav-search-icon" class="icon-search"></i>
 									</button></td>
-								<c:if test="${QX.cha == 1 }">
-									<td style="vertical-align: top;"><a
-										class="btn btn-mini btn-light" onclick="toExcel();"
-										title="导出到EXCEL"><i id="nav-search-icon"
-											class="icon-download-alt"></i></a></td>
-								</c:if>
 							</tr>
 						</table>
 						<!-- 检索  -->
@@ -77,7 +54,7 @@
 									<th class="center">序号</th>
 									<th class="center">类型名称</th>
 									<th class="center">类型编码</th>
-									<th class="center">关键字</th>
+									<th class="center">关键词</th>
 									<th class="center">描述</th>
 									<th class="center">语言</th>
 									<th class="center">创建时间</th>
@@ -165,10 +142,6 @@
 									<td style="vertical-align: top;"><c:if
 											test="${QX.add == 1 }">
 											<a class="btn btn-small btn-success" onclick="add();">新增</a>
-										</c:if> <c:if test="${QX.del == 1 }">
-											<a class="btn btn-small btn-danger"
-												onclick="makeAll('确定要删除选中的数据吗?');" title="批量删除"><i
-												class='icon-trash'></i></a>
 										</c:if></td>
 									<td style="vertical-align: top;"><div class="pagination"
 											style="float: right; padding-top: 0px; margin-top: 0px;">${page.pageStr}</div></td>
@@ -226,7 +199,7 @@
 			 top.jzts();
 			 var diag = new top.Dialog();
 			 diag.Drag=true;
-			 diag.Title ="新增";
+			 diag.Title ="添加文章类型信息";
 			 diag.URL = '<%=basePath%>articletype/goAdd.do';
 			 diag.Width = 450;
 			 diag.Height = 355;
@@ -262,7 +235,7 @@
 			 top.jzts();
 			 var diag = new top.Dialog();
 			 diag.Drag=true;
-			 diag.Title ="编辑";
+			 diag.Title ="修改文章类型信息";
 			 diag.URL = '<%=basePath%>articletype/goEdit.do?ARTICLETYPE_ID='+Id;
 			 diag.Width = 450;
 			 diag.Height = 355;
@@ -299,67 +272,7 @@
 			});
 			
 		});
-		
-		
-		//批量操作
-		function makeAll(msg){
-			bootbox.confirm(msg, function(result) {
-				if(result) {
-					var str = '';
-					for(var i=0;i < document.getElementsByName('ids').length;i++)
-					{
-						  if(document.getElementsByName('ids')[i].checked){
-						  	if(str=='') str += document.getElementsByName('ids')[i].value;
-						  	else str += ',' + document.getElementsByName('ids')[i].value;
-						  }
-					}
-					if(str==''){
-						bootbox.dialog("您没有选择任何内容!", 
-							[
-							  {
-								"label" : "关闭",
-								"class" : "btn-small btn-success",
-								"callback": function() {
-									//Example.show("great success");
-									}
-								}
-							 ]
-						);
-						
-						$("#zcheckbox").tips({
-							side:3,
-				            msg:'点这里全选',
-				            bg:'#AE81FF',
-				            time:8
-				        });
-						
-						return;
-					}else{
-						if(msg == '确定要删除选中的数据吗?'){
-							top.jzts();
-							$.ajax({
-								type: "POST",
-								url: '<%=basePath%>articletype/deleteAll.do?tm='+new Date().getTime(),
-						    	data: {DATA_IDS:str},
-								dataType:'json',
-								//beforeSend: validateData,
-								cache: false,
-								success: function(data){
-									 $.each(data.list, function(i, list){
-											nextPage(${page.currentPage});
-									 });
-								}
-							});
-						}
-					}
-				}
-			});
-		}
-		
-		//导出excel
-		function toExcel(){
-			window.location.href='<%=basePath%>articletype/excel.do';
-		}
+	
 		</script>
 
 </body>

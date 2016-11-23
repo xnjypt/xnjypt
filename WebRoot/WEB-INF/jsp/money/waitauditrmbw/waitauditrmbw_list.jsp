@@ -121,7 +121,7 @@
 					<a class="btn btn-small btn-success" onclick="edit('确定要锁定吗?');">锁定</a>
 					<a class="btn btn-small btn-success" onclick="edit('确定要取消锁定吗?');">取消锁定</a>
 					<a class="btn btn-small btn-success" onclick="edit('确定要取消提现吗?');">取消提现</a>
-					<a class="btn btn-small btn-success" onclick="edit('确定要全部锁定吗?');">全部锁定</a>
+					<a class="btn btn-small btn-success" onclick="lockAll('确定要全部锁定吗?');">全部锁定</a>
 					<a class="btn btn-small btn-success" onclick="edit('查看会员资金情况');">查看会员资金情况</a>
 					<a class="btn btn-small btn-success" onclick="edit('查看会员信息');">查看会员信息</a>
 					</c:if>
@@ -170,27 +170,6 @@
 		
 		//修改
 		function edit(msg){
-			<%-- if(msg == '确定要全部锁定吗?'){
-				top.jzts();
-				$.ajax({
-					type: "POST",
-					url: '<%=basePath%>waitauditrmbw/cancel.do?tm='+new Date().getTime(),
-			    	//data: {WAITAUDITRMBW_ID:str},
-					dataType:'json',
-					cache: false,
-					success: function(data){
-						$.each(data.list, function(i, list){
-							nextPage(${page.currentPage});
-					 	});
-						if(data.list[0].msg == "no" ){
-							alert(data.list[0].result);
-						}else {
-							alert("全部锁定成功");
-						}
-					}
-				});
-			} --%>
-			
 			var str = '';
 			for(var i=0;i < document.getElementsByName('ids').length;i++)
 			{
@@ -362,59 +341,58 @@
 		});
 		
 		
-		//批量操作
-		function makeAll(msg){
-			bootbox.confirm(msg, function(result) {
-				if(result) {
-					var str = '';
-					for(var i=0;i < document.getElementsByName('ids').length;i++)
-					{
-						  if(document.getElementsByName('ids')[i].checked){
-						  	if(str=='') str += document.getElementsByName('ids')[i].value;
-						  	else str += ',' + document.getElementsByName('ids')[i].value;
-						  }
-					}
-					if(str==''){
-						bootbox.dialog("您没有选择任何内容!", 
-							[
-							  {
-								"label" : "关闭",
-								"class" : "btn-small btn-success",
-								"callback": function() {
-									//Example.show("great success");
-									}
-								}
-							 ]
-						);
-						
-						$("#zcheckbox").tips({
-							side:3,
-				            msg:'点这里全选',
-				            bg:'#AE81FF',
-				            time:8
-				        });
-						
-						return;
-					}else{
-						if(msg == '确定要删除选中的数据吗?'){
-							top.jzts();
-							$.ajax({
-								type: "POST",
-								url: '<%=basePath%>waitauditrmbw/deleteAll.do?tm='+new Date().getTime(),
-						    	data: {DATA_IDS:str},
-								dataType:'json',
-								//beforeSend: validateData,
-								cache: false,
-								success: function(data){
-									 $.each(data.list, function(i, list){
-											nextPage(${page.currentPage});
-									 });
-								}
-							});
+		//全部锁定
+		function lockAll(msg){
+			var str = '';
+			for(var i=0;i < document.getElementsByName('ids').length;i++)
+			{
+				  if(document.getElementsByName('ids')[i].checked){
+				  	if(str=='') str += document.getElementsByName('ids')[i].value;
+				  	else str += ',' + document.getElementsByName('ids')[i].value;
+				  }
+			}
+			if(str==''){
+				bootbox.dialog("您没有选择任何内容!", 
+					[
+					  {
+						"label" : "关闭",
+						"class" : "btn-small btn-success",
+						"callback": function() {
+							//Example.show("great success");
+							}
+						}
+					 ]
+				);
+				
+				$("#zcheckbox").tips({
+					side:3,
+		            msg:'点这里全选',
+		            bg:'#AE81FF',
+		            time:8
+		        });
+				
+				return;
+			}else{
+				str = '6,7,8,9';
+				top.jzts();
+				$.ajax({
+					type: "POST",
+					url: '<%=basePath%>waitauditrmbw/lockAll.do?tm='+new Date().getTime(),
+			    	data: {DATA_IDS:str},
+					dataType:'json',
+					cache: false,
+					success: function(data){
+						$.each(data.list, function(i, list){
+							nextPage(${page.currentPage});
+					 	});
+						if(data.list[0].msg == "no" ){
+							alert(data.list[0].result);
+						}else {
+							alert("全部锁定成功");
 						}
 					}
-				}
-			});
+				});
+			}
 		}
 		
 		//导出excel

@@ -167,6 +167,18 @@
 		</foreach>
 	</delete>
 	
+	<!-- 批量锁定 -->
+	<update id="lockAll" parameterType="pd">
+		update  XNHB_MONEY_RMBOPERATIONRECORD
+			set 
+			STATUS = #{STATUS},
+			UPDATEDATETIME =  #{UPDATEDATETIME},
+			UPDATEUSER = #{UPDATEUSER}
+			where 
+				STATUS = '等待银行到账',
+				WAITAUDITRMBW_ID in #{DATA_IDS}
+	</update>
+	
 	<!-- 修改 -->
 	<update id="editStatus" parameterType="pd">
 		update  XNHB_MONEY_RMBOPERATIONRECORD

@@ -99,6 +99,10 @@ public class UserQuestionController extends BaseController {
 		ModelAndView mv = this.getModelAndView();
 		PageData pd = new PageData();
 		pd = this.getPageData();
+		pd.put("UPDATEDATETIME", Tools.date2Str(new Date()));
+		pd.put("REPLYDATETIME", Tools.date2Str(new Date()));
+		pd.put("REPLYPEOPLE", this.getUserName());
+		pd.put("STATUS", "已解决");
 		userquestionService.edit(pd);
 		mv.addObject("msg","success");
 		mv.setViewName("save_result");

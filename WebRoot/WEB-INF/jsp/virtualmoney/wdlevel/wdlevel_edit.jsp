@@ -28,7 +28,7 @@
 		<script type="text/javascript" src="static/js/jquery.tips.js"></script>
 		
 <script type="text/javascript">
-	
+	var checkMoney = /^(([0-9]+\.[0-9]*[1-9][0-9]*)|([0-9]*[1-9][0-9]*\.[0-9]+)|([0-9]*[1-9][0-9]*))$/;
 	
 	//保存
 	function save(){
@@ -52,6 +52,17 @@
 			$("#WDRATECNY").focus();
 			return false;
 		}
+		if(!checkMoney.test($("#WDRATECNY").val())){
+			$("#WDRATECNY").tips({
+				side:3,
+	            msg:'请输入正确格式的人民币提现汇率',
+	            bg:'#AE81FF',
+	            time:2
+	        });
+			$("#WDRATECNY").focus();
+			return false;
+		}
+		
 		$("#Form").submit();
 		$("#zhongxin").hide();
 		$("#zhongxin2").show();

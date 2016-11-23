@@ -13,6 +13,8 @@
 			CONTENT,	
 			KEYWORD,	
 			TYPENAME,
+			SEQ,
+			CLICK,
 			ARTICLE_ID
 		) values (
 			#{CREATEDATETIME},	
@@ -22,6 +24,8 @@
 			#{CONTENT},	
 			#{KEYWORD},	
 			#{TYPENAME},	
+			#{SEQ},	
+			#{CLICK},	
 			#{ARTICLE_ID}
 		)
 	</insert>
@@ -95,6 +99,14 @@
 				a.ARTICLE_ID
 		from 
 				XNHB_NEWS_ARTICLE a
+		where   1=1		
+		<if test="pd.KEYWORD != null and pd.KEYWORD != ''">
+             and (a.KEYWORD LIKE CONCAT(CONCAT('%', #{pd.KEYWORD}),'%')
+             or a.TITLE LIKE CONCAT(CONCAT('%', #{pd.KEYWORD}),'%'))
+        </if>		
+		<if test="pd.TYPEID != null and pd.TYPEID != ''">
+             and a.TYPEID = #{pd.TYPEID}
+        </if>		
 	</select>
 	
 	<!-- 列表(全部) -->

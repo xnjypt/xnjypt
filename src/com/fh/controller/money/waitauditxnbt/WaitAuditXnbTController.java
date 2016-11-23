@@ -137,10 +137,7 @@ public class WaitAuditXnbTController extends BaseController {
 			
 			if("正在处理".equals(pageData.getString("STATUS"))){
 				pd.put("UPDATEDATETIME", Tools.date2Str(new Date()));	//修改时间
-				Subject currentUser = SecurityUtils.getSubject(); 
-				Session session = currentUser.getSession();
-				String USERNAME = session.getAttribute(Const.SESSION_USERNAME).toString();	//获取当前登录者loginname
-				pd.put("UPDATEUSER", USERNAME);	//修改人
+				pd.put("UPDATEUSER", this.getUserName());	//修改人
 				pd.put("STATUS", "提现成功");	//状态
 				waitauditxnbtService.editStatus(pd);
 				//更新虚拟币操作列表
@@ -180,10 +177,7 @@ public class WaitAuditXnbTController extends BaseController {
 			
 			if("等待提现".equals(pageData.getString("STATUS"))){
 				pd.put("UPDATEDATETIME", Tools.date2Str(new Date()));	//修改时间
-				Subject currentUser = SecurityUtils.getSubject(); 
-				Session session = currentUser.getSession();
-				String USERNAME = session.getAttribute(Const.SESSION_USERNAME).toString();	//获取当前登录者loginname
-				pd.put("UPDATEUSER", USERNAME);	//修改人
+				pd.put("UPDATEUSER", this.getUserName());	//修改人
 				pd.put("STATUS", "正在处理");	//状态
 				waitauditxnbtService.editStatus(pd);
 				//更新虚拟币操作列表
@@ -221,10 +215,7 @@ public class WaitAuditXnbTController extends BaseController {
 			
 			if("正在处理".equals(pageData.getString("STATUS"))){
 				pd.put("UPDATEDATETIME", Tools.date2Str(new Date()));	//修改时间
-				Subject currentUser = SecurityUtils.getSubject(); 
-				Session session = currentUser.getSession();
-				String USERNAME = session.getAttribute(Const.SESSION_USERNAME).toString();	//获取当前登录者loginname
-				pd.put("UPDATEUSER", USERNAME);	//修改人
+				pd.put("UPDATEUSER", this.getUserName());	//修改人
 				pd.put("STATUS", "等待提现");	//状态
 				waitauditxnbtService.editStatus(pd);
 				//更新虚拟币操作列表
@@ -260,10 +251,7 @@ public class WaitAuditXnbTController extends BaseController {
 			List<PageData> pdList = new ArrayList<PageData>();
 			
 			pd.put("UPDATEDATETIME", Tools.date2Str(new Date()));	//修改时间
-			Subject currentUser = SecurityUtils.getSubject(); 
-			Session session = currentUser.getSession();
-			String USERNAME = session.getAttribute(Const.SESSION_USERNAME).toString();	//获取当前登录者loginname
-			pd.put("UPDATEUSER", USERNAME);	//修改人
+			pd.put("UPDATEUSER", this.getUserName());	//修改人
 			pd.put("STATUS", "取消提现");	//状态
 			waitauditxnbtService.editStatus(pd);
 			//更新虚拟币操作列表

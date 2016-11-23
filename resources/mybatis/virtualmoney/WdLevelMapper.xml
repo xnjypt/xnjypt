@@ -86,6 +86,10 @@
 				a.ID
 		from 
 				XNHB_VM_WDLEVEL a
+		where 1=1 		
+		<if test="pd.WDLEVEL != null and pd.WDLEVEL != ''">
+             and a.WDLEVEL LIKE CONCAT(CONCAT('%', #{pd.WDLEVEL}),'%')
+        </if>		
 	</select>
 	
 	<!-- 列表(全部) -->

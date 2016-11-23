@@ -32,7 +32,7 @@
 	
 	//保存
 	function save(){
-			if($("#SEQ").val()==""){
+		if($("#SEQ").val()==""){
 			$("#SEQ").tips({
 				side:3,
 	            msg:'请输入排序',
@@ -42,16 +42,17 @@
 			$("#SEQ").focus();
 			return false;
 		}
-		if($("#DESCRIPTION").val()==""){
-			$("#DESCRIPTION").tips({
+		if($("#NAME").val()==""){
+			$("#NAME").tips({
 				side:3,
-	            msg:'请输入描述',
+	            msg:'请输入父ID',
 	            bg:'#AE81FF',
 	            time:2
 	        });
-			$("#DESCRIPTION").focus();
+			$("#NAME").focus();
 			return false;
 		}
+		
 		if($("#JTTYPENAME").val()==""){
 			$("#JTTYPENAME").tips({
 				side:3,
@@ -92,7 +93,7 @@
 			$("#VMNUMBER").focus();
 			return false;
 		}
-		if($("#PID").val()==""){
+		/* if($("#PID").val()==""){
 			$("#PID").tips({
 				side:3,
 	            msg:'请输入父ID',
@@ -101,7 +102,7 @@
 	        });
 			$("#PID").focus();
 			return false;
-		}
+		} */
 		if($("#LANGUAGE").val()==""){
 			$("#LANGUAGE").tips({
 				side:3,
@@ -140,6 +141,16 @@
 	            time:2
 	        });
 			$("#SYMBOL").focus();
+			return false;
+		}
+		if($("#LOGO").val()==""){
+			$("#LOGO").tips({
+				side:3,
+	            msg:'请输入logo',
+	            bg:'#AE81FF',
+	            time:2
+	        });
+			$("#LOGO").focus();
 			return false;
 		}
 		if($("#IP").val()==""){
@@ -252,17 +263,8 @@
 			$("#SECRTKEY").focus();
 			return false;
 		}
-		if($("#LOGO").val()==""){
-			$("#LOGO").tips({
-				side:3,
-	            msg:'请输入logo',
-	            bg:'#AE81FF',
-	            time:2
-	        });
-			$("#LOGO").focus();
-			return false;
-		}
-		if($("#KEYWORD").val()==""){
+		
+		/* if($("#KEYWORD").val()==""){
 			$("#KEYWORD").tips({
 				side:3,
 	            msg:'请输入关键字',
@@ -270,6 +272,16 @@
 	            time:2
 	        });
 			$("#KEYWORD").focus();
+			return false;
+		} */
+		if($("#DESCRIPTION").val()==""){
+			$("#DESCRIPTION").tips({
+				side:3,
+	            msg:'请输入描述',
+	            bg:'#AE81FF',
+	            time:2
+	        });
+			$("#DESCRIPTION").focus();
 			return false;
 		}
 		$("#Form").submit();
@@ -284,101 +296,105 @@
 		<input type="hidden" name="VMTYPE_ID" id="VMTYPE_ID" value="${pd.VMTYPE_ID}"/>
 		<div id="zhongxin">
 		<table id="table_report" class="table table-striped table-bordered table-hover">
-			<tr>
+			<tr id="SEQ_tr">
 				<td style="width:70px;text-align: right;padding-top: 13px;">排序:</td>
-				<td><input type="number" name="SEQ" id="SEQ" value="${pd.SEQ}" maxlength="32" placeholder="这里输入排序" title="排序"/></td>
+				<td><input type="number" style="width:430px;" name="SEQ" id="SEQ" value="${pd.SEQ}" maxlength="32" placeholder="这里输入排序" title="排序"/></td>
 			</tr>
 			<tr>
-				<td style="width:70px;text-align: right;padding-top: 13px;">描述:</td>
-				<td><input type="text" name="DESCRIPTION" id="DESCRIPTION" value="${pd.DESCRIPTION}" maxlength="32" placeholder="这里输入描述" title="描述"/></td>
-			</tr>
-			<tr>
-				<td style="width:70px;text-align: right;padding-top: 13px;">简体类型名称:</td>
-				<td><input type="text" name="JTTYPENAME" id="JTTYPENAME" value="${pd.JTTYPENAME}" maxlength="32" placeholder="这里输入简体类型名称" title="简体类型名称"/></td>
-			</tr>
-			<tr>
-				<td style="width:70px;text-align: right;padding-top: 13px;">繁体类型名称:</td>
-				<td><input type="text" name="FTTYPENAME" id="FTTYPENAME" value="${pd.FTTYPENAME}" maxlength="32" placeholder="这里输入繁体类型名称" title="繁体类型名称"/></td>
-			</tr>
-			<tr>
-				<td style="width:70px;text-align: right;padding-top: 13px;">英语类型名称:</td>
-				<td><input type="text" name="ENTYPENAME" id="ENTYPENAME" value="${pd.ENTYPENAME}" maxlength="32" placeholder="这里输入英语类型名称" title="英语类型名称"/></td>
-			</tr>
-			<tr>
-				<td style="width:70px;text-align: right;padding-top: 13px;">货币编码:</td>
-				<td><input type="text" name="VMNUMBER" id="VMNUMBER" value="${pd.VMNUMBER}" maxlength="32" placeholder="这里输入货币编码" title="货币编码"/></td>
-			</tr>
-			<tr>
-				<td style="width:70px;text-align: right;padding-top: 13px;">父ID:</td>
-				<td><input type="text" name="PID" id="PID" value="${pd.PID}" maxlength="32" placeholder="这里输入父ID" title="父ID"/></td>
-			</tr>
-			<tr>
-				<td style="width:70px;text-align: right;padding-top: 13px;">语言:</td>
-				<td><input type="text" name="LANGUAGE" id="LANGUAGE" value="${pd.LANGUAGE}" maxlength="32" placeholder="这里输入语言" title="语言"/></td>
-			</tr>
-			<tr>
-				<td style="width:70px;text-align: right;padding-top: 13px;">状态:</td>
-				<td><input type="text" name="STATUS" id="STATUS" value="${pd.STATUS}" maxlength="32" placeholder="这里输入状态" title="状态"/></td>
+				<td style="width:70px;text-align: right;padding-top: 13px;">名称:</td>
+				<td><input type="text" style="width:430px;" name="NAME" id="NAME" value="${pd.NAME}" maxlength="32" placeholder="这里输入名称" title="名称"/></td>
 			</tr>
 			<tr>
 				<td style="width:70px;text-align: right;padding-top: 13px;">简称:</td>
-				<td><input type="text" name="SHORTNAME" id="SHORTNAME" value="${pd.SHORTNAME}" maxlength="32" placeholder="这里输入简称" title="简称"/></td>
+				<td><input type="text" style="width:430px;" name="SHORTNAME" id="SHORTNAME" value="${pd.SHORTNAME}" maxlength="32" placeholder="这里输入简称" title="简称"/></td>
 			</tr>
+			<tr>
+				<td style="width:70px;text-align: right;padding-top: 13px;">简体类型名称:</td>
+				<td><input type="text" style="width:430px;" name="JTTYPENAME" id="JTTYPENAME" value="${pd.JTTYPENAME}" maxlength="32" placeholder="这里输入简体类型名称" title="简体类型名称"/></td>
+			</tr>
+			<tr>
+				<td style="width:70px;text-align: right;padding-top: 13px;">繁体类型名称:</td>
+				<td><input type="text" style="width:430px;" name="FTTYPENAME" id="FTTYPENAME" value="${pd.FTTYPENAME}" maxlength="32" placeholder="这里输入繁体类型名称" title="繁体类型名称"/></td>
+			</tr>
+			<tr>
+				<td style="width:70px;text-align: right;padding-top: 13px;">英语类型名称:</td>
+				<td><input type="text" style="width:430px;" name="ENTYPENAME" id="ENTYPENAME" value="${pd.ENTYPENAME}" maxlength="32" placeholder="这里输入英语类型名称" title="英语类型名称"/></td>
+			</tr>
+			<tr>
+				<td style="width:70px;text-align: right;padding-top: 13px;">货币编码:</td>
+				<td><input type="text" style="width:430px;" name="VMNUMBER" id="VMNUMBER" value="${pd.VMNUMBER}" maxlength="32" placeholder="这里输入货币编码" title="货币编码"/></td>
+			</tr>
+			<%-- <tr>
+				<td style="width:70px;text-align: right;padding-top: 13px;">父ID:</td>
+				<td><input type="text" style="width:430px;" name="PID" id="PID" value="${pd.PID}" maxlength="32" placeholder="这里输入父ID" title="父ID"/></td>
+			</tr> --%>
+			<%-- <tr>
+				<td style="width:70px;text-align: right;padding-top: 13px;">语言:</td>
+				<td><input type="text" style="width:430px;" name="LANGUAGE" id="LANGUAGE" value="${pd.LANGUAGE}" maxlength="32" placeholder="这里输入语言" title="语言"/></td>
+			</tr>
+			<tr>
+				<td style="width:70px;text-align: right;padding-top: 13px;">状态:</td>
+				<td><input type="text" style="width:430px;" name="STATUS" id="STATUS" value="${pd.STATUS}" maxlength="32" placeholder="这里输入状态" title="状态"/></td>
+			</tr> --%>
 			<tr>
 				<td style="width:70px;text-align: right;padding-top: 13px;">符号:</td>
-				<td><input type="text" name="SYMBOL" id="SYMBOL" value="${pd.SYMBOL}" maxlength="32" placeholder="这里输入符号" title="符号"/></td>
-			</tr>
-			<tr>
-				<td style="width:70px;text-align: right;padding-top: 13px;">ip:</td>
-				<td><input type="text" name="IP" id="IP" value="${pd.IP}" maxlength="32" placeholder="这里输入ip" title="ip"/></td>
-			</tr>
-			<tr>
-				<td style="width:70px;text-align: right;padding-top: 13px;">url:</td>
-				<td><input type="text" name="URL" id="URL" value="${pd.URL}" maxlength="32" placeholder="这里输入url" title="url"/></td>
-			</tr>
-			<tr>
-				<td style="width:70px;text-align: right;padding-top: 13px;">端口:</td>
-				<td><input type="text" name="PORT" id="PORT" value="${pd.PORT}" maxlength="32" placeholder="这里输入端口" title="端口"/></td>
-			</tr>
-			<tr>
-				<td style="width:70px;text-align: right;padding-top: 13px;">是否可以交易:</td>
-				<td><input type="text" name="ISTRADING" id="ISTRADING" value="${pd.ISTRADING}" maxlength="32" placeholder="这里输入是否可以交易" title="是否可以交易"/></td>
-			</tr>
-			<tr>
-				<td style="width:70px;text-align: right;padding-top: 13px;">是否可以提现:</td>
-				<td><input type="text" name="ISWITHDRAWAL" id="ISWITHDRAWAL" value="${pd.ISWITHDRAWAL}" maxlength="32" placeholder="这里输入是否可以提现" title="是否可以提现"/></td>
-			</tr>
-			<tr>
-				<td style="width:70px;text-align: right;padding-top: 13px;">是否停盘:</td>
-				<td><input type="text" name="ISUSPENDED" id="ISUSPENDED" value="${pd.ISUSPENDED}" maxlength="32" placeholder="这里输入是否停盘" title="是否停盘"/></td>
-			</tr>
-			<tr>
-				<td style="width:70px;text-align: right;padding-top: 13px;">开盘时间:</td>
-				<td><input class="span10 date-picker" name="OPENDATETIME" id="OPENDATETIME" value="${pd.OPENDATETIME}" type="text" data-date-format="yyyy-mm-dd" readonly="readonly" placeholder="开盘时间" title="开盘时间"/></td>
-			</tr>
-			<tr>
-				<td style="width:70px;text-align: right;padding-top: 13px;">停盘时间:</td>
-				<td><input class="span10 date-picker" name="CLOSEDATETIME" id="CLOSEDATETIME" value="${pd.CLOSEDATETIME}" type="text" data-date-format="yyyy-mm-dd" readonly="readonly" placeholder="停盘时间" title="停盘时间"/></td>
-			</tr>
-			<tr>
-				<td style="width:70px;text-align: right;padding-top: 13px;">介绍:</td>
-				<td><input type="text" name="INTRODUCTION" id="INTRODUCTION" value="${pd.INTRODUCTION}" maxlength="32" placeholder="这里输入介绍" title="介绍"/></td>
-			</tr>
-			<tr>
-				<td style="width:70px;text-align: right;padding-top: 13px;">accessKey:</td>
-				<td><input type="text" name="ACCESSKEY" id="ACCESSKEY" value="${pd.ACCESSKEY}" maxlength="32" placeholder="这里输入accessKey" title="accessKey"/></td>
-			</tr>
-			<tr>
-				<td style="width:70px;text-align: right;padding-top: 13px;">secrtKey:</td>
-				<td><input type="text" name="SECRTKEY" id="SECRTKEY" value="${pd.SECRTKEY}" maxlength="32" placeholder="这里输入secrtKey" title="secrtKey"/></td>
+				<td><input type="text" style="width:430px;" name="SYMBOL" id="SYMBOL" value="${pd.SYMBOL}" maxlength="32" placeholder="这里输入符号" title="符号"/></td>
 			</tr>
 			<tr>
 				<td style="width:70px;text-align: right;padding-top: 13px;">logo:</td>
-				<td><input type="text" name="LOGO" id="LOGO" value="${pd.LOGO}" maxlength="32" placeholder="这里输入logo" title="logo"/></td>
+				<td><input type="text" style="width:430px;" name="LOGO" id="LOGO" value="${pd.LOGO}" maxlength="32" placeholder="这里输入logo" title="logo"/></td>
+			</tr>
+			<tr>
+				<td style="width:70px;text-align: right;padding-top: 13px;">accessKey:</td>
+				<td><input type="text" style="width:430px;" name="ACCESSKEY" id="ACCESSKEY" value="${pd.ACCESSKEY}" maxlength="32" placeholder="这里输入accessKey" title="accessKey"/></td>
+			</tr>
+			<tr>
+				<td style="width:70px;text-align: right;padding-top: 13px;">secrtKey:</td>
+				<td><input type="text" style="width:430px;" name="SECRTKEY" id="SECRTKEY" value="${pd.SECRTKEY}" maxlength="32" placeholder="这里输入secrtKey" title="secrtKey"/></td>
+			</tr>
+			<tr>
+				<td style="width:70px;text-align: right;padding-top: 13px;">ip:</td>
+				<td><input type="text" style="width:430px;" name="IP" id="IP" value="${pd.IP}" maxlength="32" placeholder="这里输入ip" title="ip"/></td>
+			</tr>
+			<tr>
+				<td style="width:70px;text-align: right;padding-top: 13px;">url:</td>
+				<td><input type="text" style="width:430px;" name="URL" id="URL" value="${pd.URL}" maxlength="32" placeholder="这里输入url" title="url"/></td>
+			</tr>
+			<tr>
+				<td style="width:70px;text-align: right;padding-top: 13px;">端口:</td>
+				<td><input type="text" style="width:430px;" name="PORT" id="PORT" value="${pd.PORT}" maxlength="32" placeholder="这里输入端口" title="端口"/></td>
+			</tr>
+			<tr>
+				<td style="width:70px;text-align: right;padding-top: 13px;">是否可以交易:</td>
+				<td><input type="text" style="width:430px;" name="ISTRADING" id="ISTRADING" value="${pd.ISTRADING}" maxlength="32" placeholder="这里输入是否可以交易" title="是否可以交易"/></td>
+			</tr>
+			<tr>
+				<td style="width:70px;text-align: right;padding-top: 13px;">是否可以提现:</td>
+				<td><input type="text" style="width:430px;" name="ISWITHDRAWAL" id="ISWITHDRAWAL" value="${pd.ISWITHDRAWAL}" maxlength="32" placeholder="这里输入是否可以提现" title="是否可以提现"/></td>
+			</tr>
+			<tr>
+				<td style="width:70px;text-align: right;padding-top: 13px;">开盘时间:</td>
+				<td><input class="span10 date-picker" style="width:430px;" name="OPENDATETIME" id="OPENDATETIME" value="${pd.OPENDATETIME}" type="text" data-date-format="yyyy-mm-dd" readonly="readonly" placeholder="开盘时间" title="开盘时间"/></td>
+			</tr>
+			<tr>
+				<td style="width:70px;text-align: right;padding-top: 13px;">停盘时间:</td>
+				<td><input class="span10 date-picker" style="width:430px;" name="CLOSEDATETIME" id="CLOSEDATETIME" value="${pd.CLOSEDATETIME}" type="text" data-date-format="yyyy-mm-dd" readonly="readonly" placeholder="停盘时间" title="停盘时间"/></td>
+			</tr>
+			<%-- <tr>
+				<td style="width:70px;text-align: right;padding-top: 13px;">是否停盘:</td>
+				<td><input type="text" style="width:430px;" name="ISUSPENDED" id="ISUSPENDED" value="${pd.ISUSPENDED}" maxlength="32" placeholder="这里输入是否停盘" title="是否停盘"/></td>
 			</tr>
 			<tr>
 				<td style="width:70px;text-align: right;padding-top: 13px;">关键字:</td>
-				<td><input type="text" name="KEYWORD" id="KEYWORD" value="${pd.KEYWORD}" maxlength="32" placeholder="这里输入关键字" title="关键字"/></td>
+				<td><input type="text" style="width:430px;" name="KEYWORD" id="KEYWORD" value="${pd.KEYWORD}" maxlength="32" placeholder="这里输入关键字" title="关键字"/></td>
+			</tr> --%>
+			<tr>
+				<td style="width:70px;text-align: right;padding-top: 13px;">介绍:</td>
+				<td><input type="text" style="width:430px;" name="INTRODUCTION" id="INTRODUCTION" value="${pd.INTRODUCTION}" maxlength="32" placeholder="这里输入介绍" title="介绍"/></td>
+			</tr>
+			<tr>
+				<td style="width:70px;text-align: right;padding-top: 13px;">描述:</td>
+				<td><input type="text" style="width:430px;" name="DESCRIPTION" id="DESCRIPTION" value="${pd.DESCRIPTION}" maxlength="32" placeholder="这里输入描述" title="描述"/></td>
 			</tr>
 			<tr>
 				<td style="text-align: center;" colspan="10">
@@ -412,6 +428,10 @@
 			//日期框
 			$('.date-picker').datepicker();
 			
+			var seq = '${pd.SEQ}';
+			if(seq == null){
+				$('#SEQ_tr').hide();
+			}  
 		});
 		
 		</script>

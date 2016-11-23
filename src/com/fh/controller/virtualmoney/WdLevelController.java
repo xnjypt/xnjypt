@@ -93,6 +93,7 @@ public class WdLevelController extends BaseController {
 		ModelAndView mv = this.getModelAndView();
 		PageData pd = new PageData();
 		pd = this.getPageData();
+		pd.put("SEQ", 0);
 		wdlevelService.edit(pd);
 		mv.addObject("msg","success");
 		mv.setViewName("save_result");
