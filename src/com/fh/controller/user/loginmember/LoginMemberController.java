@@ -28,6 +28,7 @@ import com.fh.service.user.loginmember.LoginMemberService;
 import com.fh.util.AppUtil;
 import com.fh.util.Const;
 import com.fh.util.Jurisdiction;
+import com.fh.util.MD5;
 import com.fh.util.ObjectExcelView;
 import com.fh.util.PageData;
 import com.fh.util.Tools;
@@ -162,6 +163,35 @@ public class LoginMemberController extends BaseController {
 		}						
 		return mv;
 	}	
+	
+	/**
+	 * 重设登陆密码
+	 */
+	@RequestMapping(value="/resetLoginPassword")
+	@ResponseBody
+	public Object resetLoginPassword() {
+		logBefore(logger, "重设登陆密码UserInfo");
+		if(!Jurisdiction.buttonJurisdiction(menuUrl, "edit")){return null;} //校验权限
+		PageData pd = new PageData();		
+		
+		Map<String,Object> map = new HashMap<String,Object>();
+		try {
+			pd = this.getPageData();
+			List<PageData> pdList = new ArrayList<PageData>();
+			pd.put("UPDATEDATETIME", Tools.date2Str(new Date()));	//修改时间
+			pd.put("UPDATEUSER", this.getUserName());	//修改人
+			pd.put("PASSWORD", MD5.md5("888888"));	//修改人
+			loginmemberService.resetLoginPassword(pd);
+			pd.put("msg", "ok");
+			pdList.add(pd);
+			map.put("list", pdList);
+		} catch (Exception e) {
+			logger.error(e.toString(), e);
+		} finally {
+			logAfter(logger);
+		}
+		return AppUtil.returnObject(pd, map);
+	}
 	
 	/**
 	 * 批量删除

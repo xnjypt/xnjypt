@@ -125,7 +125,8 @@
 			MERCHANTSID,	
 			WITHDRAWALSTATUS,	
 			MENTIONMONEYSTATUS,	
-			USERINFO_ID
+			USERINFO_ID,
+			STATUS
 		from 
 			XNHB_USER_USERINFO
 		where 
@@ -162,9 +163,24 @@
 				a.MERCHANTSID,	
 				a.WITHDRAWALSTATUS,	
 				a.MENTIONMONEYSTATUS,	
-				a.USERINFO_ID
+				a.USERINFO_ID,
+				b.USERNAME LOGINNAME,
+				a.STATUS
 		from 
-				XNHB_USER_USERINFO a
+				XNHB_USER_USERINFO a, XNHB_user_LOGINMEMBER b
+		where a.USERID = b.LOGINMEMBER_ID
+		<if test="pd.KEYWORD != null and pd.KEYWORD != ''">
+             and (b.USERNAME LIKE CONCAT(CONCAT('%', #{pd.KEYWORD}),'%')
+               or a.NICKNAME LIKE CONCAT(CONCAT('%', #{pd.KEYWORD}),'%')
+               or a.MOBILE LIKE CONCAT(CONCAT('%', #{pd.KEYWORD}),'%')
+               or a.REALNAME LIKE CONCAT(CONCAT('%', #{pd.KEYWORD}),'%'))
+        </if>		
+		<if test="pd.UID != null and pd.UID != ''">
+             and a.UID LIKE CONCAT(CONCAT('%', #{pd.UID}),'%')
+        </if>		
+		<if test="pd.STATUS != null and pd.STATUS != ''">
+             and a.STATUS = #{pd.STATUS}
+        </if>		
 	</select>
 	
 	<!-- 列表(全部) -->
@@ -210,5 +226,45 @@
                  #{item}
 		</foreach>
 	</delete>
+	
+	<!-- 修改用户状态 -->
+	<update id="editStatus" parameterType="pd">
+		update  XNHB_USER_USERINFO
+			set 
+			STATUS = #{STATUS},
+			UPDATEDATETIME =  #{UPDATEDATETIME},
+			UPDATEUSER = #{UPDATEUSER}
+			where 
+				USERINFO_ID = #{USERINFO_ID}
+	</update>
+	
+	<!-- 重置交易密码 -->
+	<update id="resetTradePassword" parameterType="pd">
+		update  XNHB_USER_USERINFO
+			set 
+			TRADEPASSWORD = #{TRADEPASSWORD},
+			UPDATEDATETIME =  #{UPDATEDATETIME},
+			UPDATEUSER = #{UPDATEUSER}
+			where 
+				USERINFO_ID = #{USERINFO_ID}
+	</update>
+	
+	<!-- 重置交易密码 -->
+	<update id="resetGoogleCheckCode" parameterType="pd">
+		update  XNHB_USER_USERINFO
+			set 
+			GOOGLECHECKCODE = #{GOOGLECHECKCODE}
+			where 
+				USERINFO_ID = #{USERINFO_ID}
+	</update>
+	
+	<!-- 设置商家号 -->
+	<update id="setMerchantsID" parameterType="pd">
+		update  XNHB_USER_USERINFO
+			set 
+			MERCHANTSID = #{MERCHANTSID}
+			where 
+				USERINFO_ID = #{USERINFO_ID}
+	</update>
 	
 </mapper>

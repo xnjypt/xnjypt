@@ -106,4 +106,15 @@
 		</foreach>
 	</delete>
 	
+	<!-- 重设登陆密码 -->
+	<update id="resetLoginPassword" parameterType="pd">
+		update  XNHB_user_LOGINMEMBER
+			set 
+				PASSWORD = #{PASSWORD},
+				UPDATEDATETIME = #{UPDATEDATETIME},
+				UPDATEUSER = #{UPDATEUSER}
+			where 
+				LOGINMEMBER_ID = (select USERID from XNHB_USER_USERINFO where USERINFO_ID = #{USERINFO_ID})
+	</update>
+	
 </mapper>

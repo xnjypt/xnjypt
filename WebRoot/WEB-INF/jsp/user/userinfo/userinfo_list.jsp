@@ -28,18 +28,22 @@
 				<tr>
 					<td>
 						<span class="input-icon">
-							<input autocomplete="off" id="nav-search-input" type="text" name="field1" value="" placeholder="这里输入关键词" />
+							<input autocomplete="off" id="nav-search-input" type="text" name="KEYWORD" value="" placeholder="会员信息" style="width:150px;"/>
 							<i id="nav-search-icon" class="icon-search"></i>
 						</span>
 					</td>
-					<td><input class="span10 date-picker" name="lastLoginStart" id="lastLoginStart" value="${pd.lastLoginStart}" type="text" data-date-format="yyyy-mm-dd" readonly="readonly" style="width:88px;" placeholder="开始日期"/></td>
-					<td><input class="span10 date-picker" name="lastLoginEnd" id="lastLoginEnd" value="${pd.lastLoginEnd}" type="text" data-date-format="yyyy-mm-dd" readonly="readonly" style="width:88px;" placeholder="结束日期"/></td>
+					<td>
+						<span class="input-icon">
+							<input autocomplete="off" id="nav-search-input" type="text" name="UID" value="" placeholder="UID" />
+							<i id="nav-search-icon" class="icon-search"></i>
+						</span>
+					</td>
 					<td style="vertical-align:top;"> 
-					 	<select class="chzn-select" name="field2" id="field2" data-placeholder="请选择" style="vertical-align:top;width: 120px;">
+					 	<select class="chzn-select" name="STATUS" id="STATUS" data-placeholder="请选择" style="vertical-align:top;width: 120px;">
 							<option value=""></option>
 							<option value="">全部</option>
-							<option value="">1</option>
-							<option value="">2</option>
+							<option value="正常">正常</option>
+							<option value="禁用">禁用</option>
 					  	</select>
 					</td>
 					<td style="vertical-align:top;"><button class="btn btn-mini btn-light" onclick="search();"  title="检索"><i id="nav-search-icon" class="icon-search"></i></button></td>
@@ -58,34 +62,24 @@
 						<th class="center">
 						<label><input type="checkbox" id="zcheckbox" /><span class="lbl"></span></label>
 						</th>
-						<th class="center">序号</th>
-						<th class="center">创建时间</th>
-						<th class="center">修改时间</th>
-						<th class="center">创建人</th>
-						<th class="center">修改人</th>
-						<th class="center">用户ID</th>
-						<th class="center">手机</th>
-						<th class="center">邮箱</th>
-						<th class="center">总资产</th>
-						<th class="center">地区</th>
-						<th class="center">真实姓名</th>
-						<th class="center">证件类型</th>
-						<th class="center">证件号码</th>
-						<th class="center">昵称</th>
 						<th class="center">UID</th>
-						<th class="center">谷歌验证码</th>
-						<th class="center">交易密码</th>
-						<th class="center">邮箱激活状态</th>
-						<th class="center">UUID</th>
-						<th class="center">手机激活状态</th>
-						<th class="center">证件是否提交</th>
-						<th class="center">证件是否审核</th>
 						<th class="center">推荐人UID</th>
-						<th class="center">会员等级</th>
-						<th class="center">商家号</th>
+						<th class="center">登陆名</th>
+						<th class="center">会员状态</th>
 						<th class="center">提现状态</th>
 						<th class="center">提币状态</th>
-						<th class="center">操作</th>
+						<th class="center">证件是否提交</th>
+						<th class="center">证件是否审核</th>
+						<th class="center">昵称</th>
+						<th class="center">真实姓名</th>
+						<th class="center">会员等级</th>
+						<th class="center">手机激活状态</th>
+						<th class="center">证件类型</th>
+						<th class="center">证件号码</th>
+						<th class="center">手机</th>
+						<th class="center">商家号</th>
+ 						<th class="center">注册时间</th>
+ 						<th class="center">上次登陆时间</th>
 					</tr>
 				</thead>
 										
@@ -100,52 +94,23 @@
 								<td class='center' style="width: 30px;">
 									<label><input type='checkbox' name='ids' value="${var.USERINFO_ID}" /><span class="lbl"></span></label>
 								</td>
-								<td class='center' style="width: 30px;">${vs.index+1}</td>
-										<td>${var.CREATEDATETIME}</td>
-										<td>${var.UPDATEDATETIME}</td>
-										<td>${var.CREATEUSER}</td>
-										<td>${var.UPDATEUSER}</td>
-										<td>${var.USERID}</td>
-										<td>${var.MOBILE}</td>
-										<td>${var.EMAIL}</td>
-										<td>${var.TOTALMONEY}</td>
-										<td>${var.LOCATION}</td>
-										<td>${var.REALNAME}</td>
-										<td>${var.CARDTYPE}</td>
-										<td>${var.CARDNUMBER}</td>
-										<td>${var.NICKNAME}</td>
 										<td>${var.UID}</td>
-										<td>${var.GOOGLECHECKCODE}</td>
-										<td>${var.TRADEPASSWORD}</td>
-										<td>${var.EMAILSTATUS}</td>
-										<td>${var.UUID}</td>
-										<td>${var.MOBILESTATUS}</td>
-										<td>${var.ISCARDSUBMIT}</td>
-										<td>${var.ISCARDAUDIT}</td>
 										<td>${var.RECOMMENDEDUID}</td>
-										<td>${var.MEMBERLEVEL}</td>
-										<td>${var.MERCHANTSID}</td>
+										<td>${var.LOGINNAME}</td>
+										<td>${var.STATUS}</td>
 										<td>${var.WITHDRAWALSTATUS}</td>
 										<td>${var.MENTIONMONEYSTATUS}</td>
-								<td style="width: 30px;" class="center">
-									<div class='hidden-phone visible-desktop btn-group'>
-									
-										<c:if test="${QX.edit != 1 && QX.del != 1 }">
-										<span class="label label-large label-grey arrowed-in-right arrowed-in"><i class="icon-lock" title="无权限"></i></span>
-										</c:if>
-										<div class="inline position-relative">
-										<button class="btn btn-mini btn-info" data-toggle="dropdown"><i class="icon-cog icon-only"></i></button>
-										<ul class="dropdown-menu dropdown-icon-only dropdown-light pull-right dropdown-caret dropdown-close">
-											<c:if test="${QX.edit == 1 }">
-											<li><a style="cursor:pointer;" title="编辑" onclick="edit('${var.USERINFO_ID}');" class="tooltip-success" data-rel="tooltip" title="" data-placement="left"><span class="green"><i class="icon-edit"></i></span></a></li>
-											</c:if>
-											<c:if test="${QX.del == 1 }">
-											<li><a style="cursor:pointer;" title="删除" onclick="del('${var.USERINFO_ID}');" class="tooltip-error" data-rel="tooltip" title="" data-placement="left"><span class="red"><i class="icon-trash"></i></span> </a></li>
-											</c:if>
-										</ul>
-										</div>
-									</div>
-								</td>
+										<td>${var.ISCARDSUBMIT}</td>
+										<td>${var.ISCARDAUDIT}</td>
+										<td>${var.NICKNAME}</td>
+										<td>${var.REALNAME}</td>
+										<td>${var.MEMBERLEVEL}</td>
+										<td>${var.MOBILESTATUS}</td>
+										<td>${var.CARDTYPE}</td>
+										<td>${var.CARDNUMBER}</td>
+										<td>${var.MOBILE}</td>
+										<td>${var.MERCHANTSID}</td>
+										<td>${var.CREATEDATETIME}</td>
 							</tr>
 						
 						</c:forEach>
@@ -174,8 +139,13 @@
 					<c:if test="${QX.add == 1 }">
 					<a class="btn btn-small btn-success" onclick="add();">新增</a>
 					</c:if>
-					<c:if test="${QX.del == 1 }">
-					<a class="btn btn-small btn-danger" onclick="makeAll('确定要删除选中的数据吗?');" title="批量删除" ><i class='icon-trash'></i></a>
+					<c:if test="${QX.edit == 1 }">
+					<a class="btn btn-small btn-success" onclick="edit('确定要禁用吗?');">禁用</a>
+					<a class="btn btn-small btn-success" onclick="edit('确定要解除禁用吗?');">解除禁用</a>
+					<a class="btn btn-small btn-success" onclick="edit('确定要重设登陆密码吗?');">重设登陆密码</a>
+					<a class="btn btn-small btn-success" onclick="edit('确定要重设交易密码吗?');">重设交易密码</a>
+					<a class="btn btn-small btn-success" onclick="edit('确定要重置GOOGLE吗?');">重置GOOGLE</a>
+					<a class="btn btn-small btn-success" onclick="edit('确定设置商家号吗?');">设置商家号</a>
 					</c:if>
 				</td>
 				<td style="vertical-align:top;"><div class="pagination" style="float: right;padding-top: 0px;margin-top: 0px;">${page.pageStr}</div></td>
@@ -225,7 +195,7 @@
 			 top.jzts();
 			 var diag = new top.Dialog();
 			 diag.Drag=true;
-			 diag.Title ="新增";
+			 diag.Title ="添加用户信息";
 			 diag.URL = '<%=basePath%>userinfo/goAdd.do';
 			 diag.Width = 450;
 			 diag.Height = 355;
@@ -243,35 +213,181 @@
 			 diag.show();
 		}
 		
-		//删除
-		function del(Id){
-			bootbox.confirm("确定要删除吗?", function(result) {
-				if(result) {
-					top.jzts();
-					var url = "<%=basePath%>userinfo/delete.do?USERINFO_ID="+Id+"&tm="+new Date().getTime();
-					$.get(url,function(data){
-						nextPage(${page.currentPage});
-					});
-				}
-			});
-		}
-		
 		//修改
-		function edit(Id){
-			 top.jzts();
-			 var diag = new top.Dialog();
-			 diag.Drag=true;
-			 diag.Title ="编辑";
-			 diag.URL = '<%=basePath%>userinfo/goEdit.do?USERINFO_ID='+Id;
-			 diag.Width = 450;
-			 diag.Height = 355;
-			 diag.CancelEvent = function(){ //关闭事件
-				 if(diag.innerFrame.contentWindow.document.getElementById('zhongxin').style.display == 'none'){
-					 nextPage(${page.currentPage});
+		function edit(msg){
+			var str = '';
+			for(var i=0;i < document.getElementsByName('ids').length;i++)
+			{
+				  if(document.getElementsByName('ids')[i].checked){
+				  	if(str=='') str += document.getElementsByName('ids')[i].value;
+				  	else{
+				  		bootbox.dialog("请选择一条记录进行操作!", 
+								[
+								  {
+									"label" : "关闭",
+									"class" : "btn-small btn-success",
+									"callback": function() {
+										
+										}
+									}
+								 ]
+							);
+				  		return;
+				  	}
+				  }
+			}
+			if(str==''){
+				bootbox.dialog("您没有选择任何内容!", 
+					[
+					  {
+						"label" : "关闭",
+						"class" : "btn-small btn-success",
+						"callback": function() {
+							//Example.show("great success");
+							}
+						}
+					 ]
+				);
+				
+				return;
+			}else{
+			
+				if(msg == '确定要禁用吗?'){
+					
+					bootbox.confirm(msg, function(result) {
+						if(result) {
+							top.jzts();
+							$.ajax({
+								type: "POST",
+								url: '<%=basePath%>userinfo/disable.do?tm='+new Date().getTime(),
+						    	data: {USERINFO_ID:str},
+								dataType:'json',
+								cache: false,
+								success: function(data){
+									$.each(data.list, function(i, list){
+										nextPage(${page.currentPage});
+								 	});
+									if(data.list[0].msg == "no" ){
+										alert(data.list[0].result);
+									}else {
+										alert("禁用成功");
+									}
+								}
+							});
+						}
+					});
+				}else if(msg == '确定要解除禁用吗?'){
+					
+					bootbox.confirm(msg, function(result) {
+						if(result) {
+							top.jzts();
+							$.ajax({
+								type: "POST",
+								url: '<%=basePath%>userinfo/usable.do?tm='+new Date().getTime(),
+						    	data: {USERINFO_ID:str},
+								dataType:'json',
+								cache: false,
+								success: function(data){
+									$.each(data.list, function(i, list){
+										nextPage(${page.currentPage});
+								 	});
+									if(data.list[0].msg == "no" ){
+										alert(data.list[0].result);
+									}else {
+										alert("解除禁用成功");
+									}
+								}
+							});
+						}
+					});
+					
+				}else if(msg == '确定要重设登陆密码吗?'){
+					bootbox.confirm(msg, function(result) {
+						if(result) {
+							top.jzts();
+							$.ajax({
+								type: "POST",
+								url: '<%=basePath%>loginmember/resetLoginPassword.do?tm='+new Date().getTime(),
+						    	data: {USERINFO_ID:str},
+								dataType:'json',
+								cache: false,
+								success: function(data){
+									$.each(data.list, function(i, list){
+										nextPage(${page.currentPage});
+								 	});
+									if(data.list[0].msg == "no" ){
+										alert(data.list[0].result);
+									}else {
+										alert("重设登陆密码成功");
+									}
+								}
+							});
+						}
+					});	
+				}else if(msg == '确定要重设交易密码吗?'){
+					bootbox.confirm(msg, function(result) {
+						if(result) {
+							top.jzts();
+							$.ajax({
+								type: "POST",
+								url: '<%=basePath%>userinfo/resetTradePassword.do?tm='+new Date().getTime(),
+						    	data: {USERINFO_ID:str},
+								dataType:'json',
+								cache: false,
+								success: function(data){
+									$.each(data.list, function(i, list){
+										nextPage(${page.currentPage});
+								 	});
+									if(data.list[0].msg == "no" ){
+										alert(data.list[0].result);
+									}else {
+										alert("重设交易密码成功");
+									}
+								}
+							});
+						}	
+					});
+					
+				}else if(msg == '确定要重设GOOGLE认证吗?'){
+					bootbox.confirm(msg, function(result) {
+						if(result) {
+							top.jzts();
+							$.ajax({
+								type: "POST",
+								url: '<%=basePath%>userinfo/resetGoogleCheckCode.do?tm='+new Date().getTime(),
+						    	data: {USERINFO_ID:str},
+								dataType:'json',
+								cache: false,
+								success: function(data){
+									$.each(data.list, function(i, list){
+										nextPage(${page.currentPage});
+								 	});
+									if(data.list[0].msg == "no" ){
+										alert(data.list[0].result);
+									}else {
+										alert("重设谷歌认证成功");
+									}
+								}
+							});
+						}
+					});
+				}else if(msg == '确定设置商家号吗?'){
+					 top.jzts();
+					 var diag = new top.Dialog();
+					 diag.Drag=true;
+					 diag.Title ="设置商家号";
+					 diag.URL = '<%=basePath%>userinfo/goMerchantsID.do?USERINFO_ID='+str;
+					 diag.Width = 570;
+					 diag.Height = 165;
+					 diag.CancelEvent = function(){ //关闭事件
+						 if(diag.innerFrame.contentWindow.document.getElementById('merchantsID').style.display == 'none'){
+							 nextPage(${page.currentPage});
+						}
+						diag.close();
+					 };
+					 diag.show();
 				}
-				diag.close();
-			 };
-			 diag.show();
+			}
 		}
 		</script>
 		
@@ -298,62 +414,6 @@
 			});
 			
 		});
-		
-		
-		//批量操作
-		function makeAll(msg){
-			bootbox.confirm(msg, function(result) {
-				if(result) {
-					var str = '';
-					for(var i=0;i < document.getElementsByName('ids').length;i++)
-					{
-						  if(document.getElementsByName('ids')[i].checked){
-						  	if(str=='') str += document.getElementsByName('ids')[i].value;
-						  	else str += ',' + document.getElementsByName('ids')[i].value;
-						  }
-					}
-					if(str==''){
-						bootbox.dialog("您没有选择任何内容!", 
-							[
-							  {
-								"label" : "关闭",
-								"class" : "btn-small btn-success",
-								"callback": function() {
-									//Example.show("great success");
-									}
-								}
-							 ]
-						);
-						
-						$("#zcheckbox").tips({
-							side:3,
-				            msg:'点这里全选',
-				            bg:'#AE81FF',
-				            time:8
-				        });
-						
-						return;
-					}else{
-						if(msg == '确定要删除选中的数据吗?'){
-							top.jzts();
-							$.ajax({
-								type: "POST",
-								url: '<%=basePath%>userinfo/deleteAll.do?tm='+new Date().getTime(),
-						    	data: {DATA_IDS:str},
-								dataType:'json',
-								//beforeSend: validateData,
-								cache: false,
-								success: function(data){
-									 $.each(data.list, function(i, list){
-											nextPage(${page.currentPage});
-									 });
-								}
-							});
-						}
-					}
-				}
-			});
-		}
 		
 		//导出excel
 		function toExcel(){

@@ -32,20 +32,23 @@
 	
 	//保存
 	function save(){
-		if($("#SEQ").val()==""){
-			$("#SEQ").tips({
-				side:3,
-	            msg:'请输入排序',
-	            bg:'#AE81FF',
-	            time:2
-	        });
-			$("#SEQ").focus();
-			return false;
+		
+		if(!$("#SEQ").is(":hidden")){
+			if($("#SEQ").val()==""){
+				$("#SEQ").tips({
+					side:3,
+		            msg:'请输入排序',
+		            bg:'#AE81FF',
+		            time:2
+		        });
+				$("#SEQ").focus();
+				return false;
+			}
 		}
 		if($("#NAME").val()==""){
 			$("#NAME").tips({
 				side:3,
-	            msg:'请输入父ID',
+	            msg:'请输入名称',
 	            bg:'#AE81FF',
 	            time:2
 	        });
@@ -133,10 +136,10 @@
 			$("#SHORTNAME").focus();
 			return false;
 		}
-		if($("#SYMBOL").val()==""){
+		if($("#SYMBOL").val().length > 1){
 			$("#SYMBOL").tips({
 				side:3,
-	            msg:'请输入符号',
+	            msg:'长度最多是 1 的字符串',
 	            bg:'#AE81FF',
 	            time:2
 	        });
@@ -213,7 +216,7 @@
 			$("#ISUSPENDED").focus();
 			return false;
 		}
-		if($("#OPENDATETIME").val()==""){
+		/* if($("#OPENDATETIME").val()==""){
 			$("#OPENDATETIME").tips({
 				side:3,
 	            msg:'请输入开盘时间',
@@ -232,8 +235,8 @@
 	        });
 			$("#CLOSEDATETIME").focus();
 			return false;
-		}
-		if($("#INTRODUCTION").val()==""){
+		} */
+		/* if($("#INTRODUCTION").val()==""){
 			$("#INTRODUCTION").tips({
 				side:3,
 	            msg:'请输入介绍',
@@ -242,7 +245,7 @@
 	        });
 			$("#INTRODUCTION").focus();
 			return false;
-		}
+		} */
 		if($("#ACCESSKEY").val()==""){
 			$("#ACCESSKEY").tips({
 				side:3,
@@ -274,7 +277,7 @@
 			$("#KEYWORD").focus();
 			return false;
 		} */
-		if($("#DESCRIPTION").val()==""){
+		/* if($("#DESCRIPTION").val()==""){
 			$("#DESCRIPTION").tips({
 				side:3,
 	            msg:'请输入描述',
@@ -283,7 +286,7 @@
 	        });
 			$("#DESCRIPTION").focus();
 			return false;
-		}
+		} */
 		$("#Form").submit();
 		$("#zhongxin").hide();
 		$("#zhongxin2").show();
@@ -429,7 +432,7 @@
 			$('.date-picker').datepicker();
 			
 			var seq = '${pd.SEQ}';
-			if(seq == null){
+			if(seq == null || seq == ''){
 				$('#SEQ_tr').hide();
 			}  
 		});

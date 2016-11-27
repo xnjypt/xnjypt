@@ -66,5 +66,33 @@ public class UserInfoService {
 		dao.delete("UserInfoMapper.deleteAll", ArrayDATA_IDS);
 	}
 	
+	/*
+	* 修改状态
+	*/
+	public void editStatus(PageData pd)throws Exception{
+		dao.update("UserInfoMapper.editStatus", pd);
+	}
+	
+	/*
+	 * 重置交易密码
+	 */
+	public void resetTradePassword(PageData pd)throws Exception{
+		dao.update("UserInfoMapper.resetTradePassword", pd);
+	}
+	
+	/*
+	 * 重置GOOGLE
+	 */
+	public void resetGoogleCheckCode(PageData pd)throws Exception{
+		dao.update("UserInfoMapper.resetGoogleCheckCode", pd);
+	}
+	
+	/*
+	 * 重置GOOGLE
+	 */
+	public void setMerchantsID(PageData pd)throws Exception{
+		dao.update("UserInfoMapper.setMerchantsID", pd);
+	}
+	
 }
 

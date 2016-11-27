@@ -57,10 +57,25 @@ public class VmTypeController extends BaseController {
 		pd = this.getPageData();
 		pd.put("VMTYPE_ID", this.get32UUID());	//主键
 		pd.put("CREATEDATETIME", Tools.date2Str(new Date()));	//创建时间
-		pd.put("CREATEUSER", "");	//创建人
+		pd.put("CREATEUSER", this.getUserName());	//创建人
 		pd.put("UPDATEDATETIME", Tools.date2Str(new Date()));	//修改时间
 		pd.put("UPDATEUSER", "");	//修改人
 		vmtypeService.save(pd);
+		
+		pd.put("LEVEL1C", 0);
+		pd.put("LEVEL1T", 0);
+		pd.put("LEVEL2C", 0);
+		pd.put("LEVEL2T", 0);
+		pd.put("LEVEL3C", 0);
+		pd.put("LEVEL3T", 0);
+		pd.put("LEVEL4C", 0);
+		pd.put("LEVEL4T", 0);
+		pd.put("LEVEL5C", 0);
+		pd.put("LEVEL5T", 0);
+		pd.put("LEVEL6C", 0);
+		pd.put("LEVEL6T", 0);
+		vmtypeService.saveChargeFee(pd);
+		
 		mv.addObject("msg","success");
 		mv.setViewName("save_result");
 		return mv;
@@ -273,6 +288,44 @@ public class VmTypeController extends BaseController {
 		}						
 		return mv;
 	}	
+	
+	/**
+	 * 去修改手续费页面
+	 */
+	@RequestMapping(value="/goChargeFee")
+	public ModelAndView goChargeFee(){
+		logBefore(logger, "去修改VmType手续费页面");
+		ModelAndView mv = this.getModelAndView();
+		PageData pd = new PageData();
+		pd = this.getPageData();
+		try {
+			pd = vmtypeService.findChargeFeeById(pd);	//根据ID读取
+			mv.setViewName("virtualmoney/vmtype/vmtype_editChargeFee");
+			mv.addObject("msg", "editChargeFee");
+			mv.addObject("pd", pd);
+		} catch (Exception e) {
+			logger.error(e.toString(), e);
+		}						
+		return mv;
+	}	
+	
+	/**
+	 * 修改手续费信息
+	 */
+	@RequestMapping(value="/editChargeFee")
+	public ModelAndView editChargeFee() throws Exception{
+		logBefore(logger, "修改editChargeFee");
+		if(!Jurisdiction.buttonJurisdiction(menuUrl, "edit")){return null;} //校验权限
+		ModelAndView mv = this.getModelAndView();
+		PageData pd = new PageData();
+		pd = this.getPageData();
+		pd.put("UPDATEUSER", this.getUserName());
+		pd.put("UPDATEDATETIME", Tools.date2Str(new Date()));	//修改时间
+		vmtypeService.editChargeFee(pd);
+		mv.addObject("msg","success");
+		mv.setViewName("save_result");
+		return mv;
+	}
 	
 	/**
 	 * 批量删除

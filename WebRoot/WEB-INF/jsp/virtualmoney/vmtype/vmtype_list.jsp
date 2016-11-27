@@ -79,8 +79,9 @@
 								<td class='center' style="width: 30px;">
 									<label><input type='checkbox' name='ids' value="${var.VMTYPE_ID}" /><span class="lbl"></span></label>
 								</td>
-								<td class='center' style="width: 30px;">${vs.index+1}</td>
+								<%-- <td class='center' style="width: 30px;">${vs.index+1}</td> --%>
 										
+										<td>${var.SEQ}</td>
 										<td>${var.NAME}</td>
 										<td>${var.SHORTNAME}</td>
 										<td>${var.JTTYPENAME}</td>
@@ -367,6 +368,21 @@
 						diag.close();
 					 };
 					 diag.show();
+				}else if(msg == '确定要修改手续费吗?'){
+					 top.jzts();
+					 var diag2 = new top.Dialog();
+					 diag2.Drag=true;
+					 diag2.Title ="修改手续费信息";
+					 diag2.URL = '<%=basePath%>vmtype/goChargeFee.do?VMTYPE_ID='+str;
+					 diag2.Width = 570;
+					 diag2.Height = 355;
+					 diag2.CancelEvent = function(){ //关闭事件
+						 if(diag2.innerFrame.contentWindow.document.getElementById('chargeFee').style.display == 'none'){
+							 nextPage(${page.currentPage});
+						}
+						diag2.close();
+					 };
+					 diag2.show();
 				}
 			}
 		}

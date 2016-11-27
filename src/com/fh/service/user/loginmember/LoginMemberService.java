@@ -65,6 +65,13 @@ public class LoginMemberService {
 	public void deleteAll(String[] ArrayDATA_IDS)throws Exception{
 		dao.delete("LoginMemberMapper.deleteAll", ArrayDATA_IDS);
 	}
+
+	/*
+	* 重设登陆密码
+	*/
+	public void resetLoginPassword(PageData pd)throws Exception{
+		dao.update("LoginMemberMapper.resetLoginPassword", pd);
+	}
 	
 }
 

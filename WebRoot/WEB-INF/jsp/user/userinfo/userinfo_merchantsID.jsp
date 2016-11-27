@@ -32,50 +32,49 @@
 	
 	//保存
 	function save(){
-		if($("#MOBILE").val()==""){
-			$("#MOBILE").tips({
+		if($("#MERCHANTSID").val()==""){
+			$("#MERCHANTSID").tips({
 				side:3,
-	            msg:'请输入手机',
+	            msg:'请输入商家号',
 	            bg:'#AE81FF',
 	            time:2
 	        });
-			$("#MOBILE").focus();
+			$("#MERCHANTSID").focus();
 			return false;
 		}
-		
-		$("#Form").submit();
-		$("#zhongxin").hide();
-		$("#zhongxin2").show();
-	}
 	
+		$.ajax({
+			type: "POST",
+			url: '<%=basePath%>userinfo/${msg }.do?tm='+new Date().getTime(),
+	    	data: $("#Form").serialize(),
+			dataType:'json',
+			cache: false,
+			success: function(data){
+				if(data.list[0].msg == "no" ){
+					alert(data.list[0].result);
+				}else {
+					$("#merchantsID").hide();
+					top.Dialog.close();
+					alert("商家号设置成功");
+				}
+			}
+		});
+	}
 </script>
 	</head>
 <body>
 	<form action="userinfo/${msg }.do" name="Form" id="Form" method="post">
 		<input type="hidden" name="USERINFO_ID" id="USERINFO_ID" value="${pd.USERINFO_ID}"/>
-		<div id="zhongxin">
+		<div id="merchantsID">
 		<table id="table_report" class="table table-striped table-bordered table-hover">
 			<tr>
-				<td style="width:100px;text-align: right;padding-top: 13px;">登录名选择:</td>
-				<td>手机<input type="radio" name="TYPE" value="mobile" />
-  					邮箱<input type="radio" name="TYPE" value="email" /><font style='color:red'>*选择信息必填</font></td>
+				<td style="width:70px;text-align: right;padding-top: 13px;">会员</td>
+				<td style="text-align: left;padding-top: 13px;">${pd.NICKNAME}，增加商家号</td>
 			</tr>
 			<tr>
-				<td style="width:100px;text-align: right;padding-top: 13px;">手机:</td>
-				<td><input type="text" name="MOBILE" id="MOBILE" value="${pd.MOBILE}" maxlength="32" placeholder="这里输入手机" title="手机"/></td>
+				<td style="width:70px;text-align: right;padding-top: 13px;">商家号:</td>
+				<td><input style="width:300px" type="text" name="MERCHANTSID" id="MERCHANTSID" value="" maxlength="32" placeholder="这里输入商家号" title="商家号"/></td>
 			</tr>
-			<tr>
-				<td style="width:100px;text-align: right;padding-top: 13px;">邮箱:</td>
-				<td><input type="text" name="EMAIL" id="EMAIL" value="${pd.EMAIL}" maxlength="32" placeholder="这里输入邮箱" title="邮箱"/></td>
-			</tr>
-			<tr>
-				<td style="width:100px;text-align: right;padding-top: 13px;">密码:</td>
-				<td><input type="password" name="PASSWORD" id="PASSWORD" value="${pd.PASSWORD}" maxlength="32" placeholder="这里输入密码" title="密码"/></td>
-			</tr>
-<%-- 			<tr>
-				<td style="width:100px;text-align: right;padding-top: 13px;">地区:</td>
-				<td><input type="text" name="LOCATION" id="LOCATION" value="${pd.LOCATION}" maxlength="32" placeholder="这里输入地区" title="地区"/></td>
-			</tr> --%>
 			<tr>
 				<td style="text-align: center;" colspan="10">
 					<a class="btn btn-mini btn-primary" onclick="save();">保存</a>
@@ -85,7 +84,7 @@
 		</table>
 		</div>
 		
-		<div id="zhongxin2" class="center" style="display:none"><br/><br/><br/><br/><br/><img src="static/images/jiazai.gif" /><br/><h4 class="lighter block green">提交中...</h4></div>
+		<div id="merchantsID2" class="center" style="display:none"><br/><br/><br/><br/><br/><img src="static/images/jiazai.gif" /><br/><h4 class="lighter block green">提交中...</h4></div>
 		
 	</form>
 	

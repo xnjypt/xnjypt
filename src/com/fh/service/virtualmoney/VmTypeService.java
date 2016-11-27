@@ -79,5 +79,26 @@ public class VmTypeService {
 	public void editDisable(PageData pd)throws Exception{
 		dao.update("VmTypeMapper.editDisable", pd);
 	}
+	
+	/*
+	* 新增手续费信息
+	*/
+	public void saveChargeFee(PageData pd)throws Exception{
+		dao.save("VmTypeMapper.saveChargeFee", pd);
+	}
+	
+	/*
+	* 通过id获取手续费数据
+	*/
+	public PageData findChargeFeeById(PageData pd)throws Exception{
+		return (PageData)dao.findForObject("VmTypeMapper.findChargeFeeById", pd);
+	}
+	
+	/*
+	* 修改手续费信息
+	*/
+	public void editChargeFee(PageData pd)throws Exception{
+		dao.update("VmTypeMapper.editChargeFee", pd);
+	}
 }
 

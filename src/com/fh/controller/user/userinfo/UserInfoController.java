@@ -31,6 +31,7 @@ import com.fh.util.Const;
 import com.fh.util.PageData;
 import com.fh.util.Tools;
 import com.fh.util.Jurisdiction;
+import com.fh.util.MD5;
 import com.fh.service.user.userinfo.UserInfoService;
 
 /** 
@@ -108,6 +109,190 @@ public class UserInfoController extends BaseController {
 		userinfoService.edit(pd);
 		mv.addObject("msg","success");
 		mv.setViewName("save_result");
+		return mv;
+	}
+	
+	/**
+	 * 禁用
+	 */
+	@RequestMapping(value="/disable")
+	@ResponseBody
+	public Object disable() {
+		logBefore(logger, "禁用UserInfo");
+		if(!Jurisdiction.buttonJurisdiction(menuUrl, "edit")){return null;} //校验权限
+		PageData pd = new PageData();		
+		
+		Map<String,Object> map = new HashMap<String,Object>();
+		try {
+			pd = this.getPageData();
+			List<PageData> pdList = new ArrayList<PageData>();
+			PageData pageData = userinfoService.findById(pd);	//根据ID读取
+			
+			if("禁用".equals(pageData.get("STATUS"))){
+				pd.put("msg", "no");
+				pd.put("result", "会员已禁用，无需做此操作");
+				
+			}else {
+				pd.put("UPDATEDATETIME", Tools.date2Str(new Date()));	//修改时间
+				pd.put("UPDATEUSER", this.getUserName());	//修改人
+				pd.put("STATUS", "禁用");	//禁用
+				userinfoService.editStatus(pd);
+				pd.put("msg", "ok");
+			}
+			pdList.add(pd);
+			map.put("list", pdList);
+		} catch (Exception e) {
+			logger.error(e.toString(), e);
+		} finally {
+			logAfter(logger);
+		}
+		return AppUtil.returnObject(pd, map);
+	}
+	
+	/**
+	 * 解除禁用
+	 */
+	@RequestMapping(value="/usable")
+	@ResponseBody
+	public Object usable() {
+		logBefore(logger, "解除禁用UserInfo");
+		if(!Jurisdiction.buttonJurisdiction(menuUrl, "edit")){return null;} //校验权限
+		PageData pd = new PageData();		
+		
+		Map<String,Object> map = new HashMap<String,Object>();
+		try {
+			pd = this.getPageData();
+			List<PageData> pdList = new ArrayList<PageData>();
+			PageData pageData = userinfoService.findById(pd);	//根据ID读取
+			
+			if("正常".equals(pageData.get("STATUS"))){
+				pd.put("msg", "no");
+				pd.put("result", "会员状态为正常，无需做此操作");
+				
+			}else {
+				pd.put("UPDATEDATETIME", Tools.date2Str(new Date()));	//修改时间
+				pd.put("UPDATEUSER", this.getUserName());	//修改人
+				pd.put("STATUS", "正常");	//禁用
+				userinfoService.editStatus(pd);
+				pd.put("msg", "ok");
+			}
+			pdList.add(pd);
+			map.put("list", pdList);
+		} catch (Exception e) {
+			logger.error(e.toString(), e);
+		} finally {
+			logAfter(logger);
+		}
+		return AppUtil.returnObject(pd, map);
+	}
+	
+	/**
+	 * 重设交易密码
+	 */
+	@RequestMapping(value="/resetTradePassword")
+	@ResponseBody
+	public Object resetTradePassword() {
+		logBefore(logger, "重设交易密码UserInfo");
+		if(!Jurisdiction.buttonJurisdiction(menuUrl, "edit")){return null;} //校验权限
+		PageData pd = new PageData();		
+		
+		Map<String,Object> map = new HashMap<String,Object>();
+		try {
+			pd = this.getPageData();
+			List<PageData> pdList = new ArrayList<PageData>();
+			pd.put("UPDATEDATETIME", Tools.date2Str(new Date()));	//修改时间
+			pd.put("UPDATEUSER", this.getUserName());	//修改人
+			pd.put("TRADEPASSWORD", MD5.md5("888888"));	//修改人
+			userinfoService.resetTradePassword(pd);
+			pd.put("msg", "ok");
+			pdList.add(pd);
+			map.put("list", pdList);
+		} catch (Exception e) {
+			logger.error(e.toString(), e);
+		} finally {
+			logAfter(logger);
+		}
+		return AppUtil.returnObject(pd, map);
+	}
+	
+	/**
+	 * 重设交易密码
+	 */
+	@RequestMapping(value="/resetGoogleCheckCode")
+	@ResponseBody
+	public Object resetGoogleCheckCode() {
+		logBefore(logger, "重设交易密码UserInfo");
+		if(!Jurisdiction.buttonJurisdiction(menuUrl, "edit")){return null;} //校验权限
+		PageData pd = new PageData();		
+		
+		Map<String,Object> map = new HashMap<String,Object>();
+		try {
+			pd = this.getPageData();
+			List<PageData> pdList = new ArrayList<PageData>();
+			pd.put("GOOGLECHECKCODE", null);	//修改人
+			userinfoService.resetGoogleCheckCode(pd);
+			pd.put("msg", "ok");
+			pdList.add(pd);
+			map.put("list", pdList);
+		} catch (Exception e) {
+			logger.error(e.toString(), e);
+		} finally {
+			logAfter(logger);
+		}
+		return AppUtil.returnObject(pd, map);
+	}
+
+	/**
+	 * 设置商家号
+	 */
+	@RequestMapping(value="/setMerchantsID")
+	@ResponseBody
+	public Object setMerchantsID() {
+		logBefore(logger, "设置商家号UserInfo");
+		if(!Jurisdiction.buttonJurisdiction(menuUrl, "edit")){return null;} //校验权限
+		PageData pd = new PageData();		
+		
+		Map<String,Object> map = new HashMap<String,Object>();
+		try {
+			pd = this.getPageData();
+			List<PageData> pdList = new ArrayList<PageData>();
+			PageData pageData = userinfoService.findById(pd);
+			if(pageData.get("MERCHANTSID") != null && pageData.get("MERCHANTSID") != ""){
+				pd.put("msg", "no");
+				pd.put("result", "该用户已存在商家号，不允许修改！");
+			}else {
+				pd.put("UPDATEDATETIME", Tools.date2Str(new Date()));	//修改时间
+				pd.put("UPDATEUSER", this.getUserName());	//修改人
+				userinfoService.setMerchantsID(pd);
+				pd.put("msg", "ok");
+			}
+			pdList.add(pd);
+			map.put("list", pdList);
+		} catch (Exception e) {
+			logger.error(e.toString(), e);
+		} finally {
+			logAfter(logger);
+		}
+		return AppUtil.returnObject(pd, map);
+	}
+	
+	/**
+	 * 去设置商家号页面
+	 */
+	@RequestMapping(value="/goMerchantsID")
+	public ModelAndView goMerchantsID(){
+		logBefore(logger, "去设置UserInfo商家号页面");
+		ModelAndView mv = this.getModelAndView();
+		PageData pd = new PageData();
+		pd = this.getPageData();
+		try {
+			pd = userinfoService.findById(pd);	//根据ID读取
+			mv.setViewName("user/userinfo/userinfo_merchantsID");
+			mv.addObject("msg", "setMerchantsID");
+			mv.addObject("pd", pd);
+		} catch (Exception e) {
+			logger.error(e.toString(), e);
+		}						
 		return mv;
 	}
 	

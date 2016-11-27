@@ -28,24 +28,11 @@
 				<tr>
 					<td>
 						<span class="input-icon">
-							<input autocomplete="off" id="nav-search-input" type="text" name="field1" value="" placeholder="这里输入关键词" />
+							<input autocomplete="off" id="nav-search-input" type="text" name="KEYWORD" value="" placeholder="会员信息" style="width:150px"/>
 							<i id="nav-search-icon" class="icon-search"></i>
 						</span>
 					</td>
-					<td><input class="span10 date-picker" name="lastLoginStart" id="lastLoginStart" value="${pd.lastLoginStart}" type="text" data-date-format="yyyy-mm-dd" readonly="readonly" style="width:88px;" placeholder="开始日期"/></td>
-					<td><input class="span10 date-picker" name="lastLoginEnd" id="lastLoginEnd" value="${pd.lastLoginEnd}" type="text" data-date-format="yyyy-mm-dd" readonly="readonly" style="width:88px;" placeholder="结束日期"/></td>
-					<td style="vertical-align:top;"> 
-					 	<select class="chzn-select" name="field2" id="field2" data-placeholder="请选择" style="vertical-align:top;width: 120px;">
-							<option value=""></option>
-							<option value="">全部</option>
-							<option value="">1</option>
-							<option value="">2</option>
-					  	</select>
-					</td>
 					<td style="vertical-align:top;"><button class="btn btn-mini btn-light" onclick="search();"  title="检索"><i id="nav-search-icon" class="icon-search"></i></button></td>
-					<c:if test="${QX.cha == 1 }">
-					<td style="vertical-align:top;"><a class="btn btn-mini btn-light" onclick="toExcel();" title="导出到EXCEL"><i id="nav-search-icon" class="icon-download-alt"></i></a></td>
-					</c:if>
 				</tr>
 			</table>
 			<!-- 检索  -->
@@ -58,18 +45,14 @@
 						<th class="center">
 						<label><input type="checkbox" id="zcheckbox" /><span class="lbl"></span></label>
 						</th>
-						<th class="center">序号</th>
-						<th class="center">创建时间</th>
-						<th class="center">修改时间</th>
-						<th class="center">创建人</th>
-						<th class="center">修改人</th>
 						<th class="center">登录名</th>
+						<th class="center">会员状态</th>
 						<th class="center">昵称</th>
 						<th class="center">真实姓名</th>
-						<th class="center">会员状态</th>
 						<th class="center">证件类型</th>
 						<th class="center">证件号码</th>
-						<th class="center">操作</th>
+						<th class="center">创建时间</th>
+						<th class="center">上次登录时间</th>
 					</tr>
 				</thead>
 										
@@ -84,36 +67,13 @@
 								<td class='center' style="width: 30px;">
 									<label><input type='checkbox' name='ids' value="${var.WAITAUDITMEMBER_ID}" /><span class="lbl"></span></label>
 								</td>
-								<td class='center' style="width: 30px;">${vs.index+1}</td>
-										<td>${var.CREATEDATETIME}</td>
-										<td>${var.UPDATEDATETIME}</td>
-										<td>${var.CREATEUSER}</td>
-										<td>${var.UPDATEUSER}</td>
 										<td>${var.LOGINNAME}</td>
+										<td>${var.MEMBERSTATUS}</td>
 										<td>${var.NICKNAME}</td>
 										<td>${var.REALNAME}</td>
-										<td>${var.MEMBERSTATUS}</td>
 										<td>${var.CARDTYPE}</td>
 										<td>${var.CARDNUMBER}</td>
-								<td style="width: 30px;" class="center">
-									<div class='hidden-phone visible-desktop btn-group'>
-									
-										<c:if test="${QX.edit != 1 && QX.del != 1 }">
-										<span class="label label-large label-grey arrowed-in-right arrowed-in"><i class="icon-lock" title="无权限"></i></span>
-										</c:if>
-										<div class="inline position-relative">
-										<button class="btn btn-mini btn-info" data-toggle="dropdown"><i class="icon-cog icon-only"></i></button>
-										<ul class="dropdown-menu dropdown-icon-only dropdown-light pull-right dropdown-caret dropdown-close">
-											<c:if test="${QX.edit == 1 }">
-											<li><a style="cursor:pointer;" title="编辑" onclick="edit('${var.WAITAUDITMEMBER_ID}');" class="tooltip-success" data-rel="tooltip" title="" data-placement="left"><span class="green"><i class="icon-edit"></i></span></a></li>
-											</c:if>
-											<c:if test="${QX.del == 1 }">
-											<li><a style="cursor:pointer;" title="删除" onclick="del('${var.WAITAUDITMEMBER_ID}');" class="tooltip-error" data-rel="tooltip" title="" data-placement="left"><span class="red"><i class="icon-trash"></i></span> </a></li>
-											</c:if>
-										</ul>
-										</div>
-									</div>
-								</td>
+										<td>${var.CREATEDATETIME}</td>
 							</tr>
 						
 						</c:forEach>
@@ -139,11 +99,10 @@
 		<table style="width:100%;">
 			<tr>
 				<td style="vertical-align:top;">
-					<c:if test="${QX.add == 1 }">
-					<a class="btn btn-small btn-success" onclick="add();">新增</a>
-					</c:if>
-					<c:if test="${QX.del == 1 }">
-					<a class="btn btn-small btn-danger" onclick="makeAll('确定要删除选中的数据吗?');" title="批量删除" ><i class='icon-trash'></i></a>
+					<c:if test="${QX.edit == 1 }">
+					<a class="btn btn-small btn-success" onclick="edit('审核');">审核</a>
+					<a class="btn btn-small btn-success" onclick="edit('全部审核通过');">全部审核通过</a>
+					<a class="btn btn-small btn-success" onclick="edit('全部审核不通过');">全部审核不通过</a>
 					</c:if>
 				</td>
 				<td style="vertical-align:top;"><div class="pagination" style="float: right;padding-top: 0px;margin-top: 0px;">${page.pageStr}</div></td>
@@ -240,6 +199,97 @@
 				diag.close();
 			 };
 			 diag.show();
+		}
+		
+		//修改
+		function edit(msg){
+			var str = '';
+			for(var i=0;i < document.getElementsByName('ids').length;i++)
+			{
+				  if(document.getElementsByName('ids')[i].checked){
+				  	if(str=='') str += document.getElementsByName('ids')[i].value;
+				  	else{
+				  		bootbox.dialog("请选择一条记录进行操作!", 
+								[
+								  {
+									"label" : "关闭",
+									"class" : "btn-small btn-success",
+									"callback": function() {
+										
+										}
+									}
+								 ]
+							);
+				  		return;
+				  	}
+				  }
+			}
+			if(str==''){
+				bootbox.dialog("您没有选择任何内容!", 
+					[
+					  {
+						"label" : "关闭",
+						"class" : "btn-small btn-success",
+						"callback": function() {
+							//Example.show("great success");
+							}
+						}
+					 ]
+				);
+				
+				return;
+			}else{
+			
+				if(msg == '确定要审核吗?'){
+					
+					bootbox.confirm(msg, function(result) {
+						if(result) {
+							top.jzts();
+							$.ajax({
+								type: "POST",
+								url: '<%=basePath%>userinfo/aduit.do?tm='+new Date().getTime(),
+						    	data: {USERINFO_ID:str},
+								dataType:'json',
+								cache: false,
+								success: function(data){
+									$.each(data.list, function(i, list){
+										nextPage(${page.currentPage});
+								 	});
+									if(data.list[0].msg == "no" ){
+										alert(data.list[0].result);
+									}else {
+										alert("审核成功");
+									}
+								}
+							});
+						}
+					});
+				}else if(msg == '确定要全部审核通过吗?'){
+					
+					bootbox.confirm(msg, function(result) {
+						if(result) {
+							top.jzts();
+							$.ajax({
+								type: "POST",
+								url: '<%=basePath%>userinfo/aduitAll.do?tm='+new Date().getTime(),
+						    	data: {USERINFO_ID:str},
+								dataType:'json',
+								cache: false,
+								success: function(data){
+									$.each(data.list, function(i, list){
+										nextPage(${page.currentPage});
+								 	});
+									if(data.list[0].msg == "no" ){
+										alert(data.list[0].result);
+									}else {
+										alert("全部审核通过成功");
+									}
+								}
+							});
+						}
+					});
+				}
+			}
 		}
 		</script>
 		
