@@ -32,7 +32,8 @@
 			MERCHANTSID,	
 			WITHDRAWALSTATUS,	
 			MENTIONMONEYSTATUS,	
-			USERINFO_ID
+			USERINFO_ID,
+			STATUS
 		) values (
 			#{CREATEDATETIME},	
 			#{UPDATEDATETIME},	
@@ -60,7 +61,8 @@
 			#{MERCHANTSID},	
 			#{WITHDRAWALSTATUS},	
 			#{MENTIONMONEYSTATUS},	
-			#{USERINFO_ID}
+			#{USERINFO_ID},
+			#{STATUS}
 		)
 	</insert>
 	
@@ -178,6 +180,9 @@
 		<if test="pd.UID != null and pd.UID != ''">
              and a.UID LIKE CONCAT(CONCAT('%', #{pd.UID}),'%')
         </if>		
+		<if test="pd.USERNAME != null and pd.USERNAME != ''">
+             and b.USERNAME = #{pd.USERNAME}
+        </if>		
 		<if test="pd.STATUS != null and pd.STATUS != ''">
              and a.STATUS = #{pd.STATUS}
         </if>		
@@ -267,4 +272,26 @@
 				USERINFO_ID = #{USERINFO_ID}
 	</update>
 	
+	<!-- 通过绑定手机/邮箱获取数据 -->
+	<select id="findByBoundMobileEmail" parameterType="pd" resultType="pd">
+		select 
+			COUNT(a.USERINFO_ID) count
+		from 
+			XNHB_USER_USERINFO a
+		where 1=1 
+		<if test="BOUNDMOBILE != null and BOUNDMOBILE != ''">
+             and a.MOBILE = #{BOUNDMOBILE}
+        </if>
+		<if test="BOUNDEMAIL != null and BOUNDEMAIL != ''">
+             and a.EMAIL = #{BOUNDEMAIL}
+        </if>
+	</select>
+	
+	<!-- 获取最大值的uid -->
+	<select id="getMaxUID" parameterType="pd" resultType="pd">
+		select 
+			max(UID) UID 
+		from 
+			XNHB_USER_USERINFO
+	</select>
 </mapper>

@@ -73,5 +73,11 @@ public class LoginMemberService {
 		dao.update("LoginMemberMapper.resetLoginPassword", pd);
 	}
 	
+	/*
+	* 通过id获取数据
+	*/
+	public PageData findByUserName(PageData pd)throws Exception{
+		return (PageData)dao.findForObject("LoginMemberMapper.findByUserName", pd);
+	}
 }
 

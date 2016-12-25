@@ -334,7 +334,7 @@
 							if(data.list[0].msg == "no" ){
 								alert(data.list[0].result);
 							}else {
-								alert("取消提现成功");
+								alert("禁用成功");
 							}
 						}
 					});

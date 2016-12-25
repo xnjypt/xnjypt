@@ -282,17 +282,14 @@
 					 };
 					 diag.show();
 				}else if(msg == '查看会员资金情况'){
-					top.jzts();
+					 top.jzts();
 					 var diag = new top.Dialog();
 					 diag.Drag=true;
 					 diag.Title ="查看会员资金情况";
-					 diag.URL = '<%=basePath%>waitauditrmbw/goEdit.do?WAITAUDITRMBW_ID='+str;
-					 diag.Width = 450;
+					 diag.URL = '<%=basePath%>waitauditrmbw/goMemberMoney.do?WAITAUDITRMBW_ID='+str;
+					 diag.Width = 900;
 					 diag.Height = 355;
 					 diag.CancelEvent = function(){ //关闭事件
-						 if(diag.innerFrame.contentWindow.document.getElementById('zhongxin').style.display == 'none'){
-							 nextPage(${page.currentPage});
-						}
 						diag.close();
 					 };
 					 diag.show();
@@ -301,13 +298,10 @@
 					 var diag = new top.Dialog();
 					 diag.Drag=true;
 					 diag.Title ="查看会员信息";
-					 diag.URL = '<%=basePath%>waitauditrmbw/goEdit.do?WAITAUDITRMBW_ID='+str;
-					 diag.Width = 450;
+					 diag.URL = '<%=basePath%>waitauditrmbw/goUserInfo.do?WAITAUDITRMBW_ID='+str;
+					 diag.Width = 1100;
 					 diag.Height = 355;
 					 diag.CancelEvent = function(){ //关闭事件
-						 if(diag.innerFrame.contentWindow.document.getElementById('zhongxin').style.display == 'none'){
-							 nextPage(${page.currentPage});
-						}
 						diag.close();
 					 };
 					 diag.show();

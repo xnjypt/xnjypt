@@ -94,5 +94,20 @@ public class UserInfoService {
 		dao.update("UserInfoMapper.setMerchantsID", pd);
 	}
 	
+	/*
+	* 通过绑定邮箱/手机获取数据
+	*/
+	public PageData findByBoundMobileEmail(PageData pd)throws Exception{
+		return (PageData)dao.findForObject("UserInfoMapper.findByBoundMobileEmail", pd);
+	}
+	
+	/*
+	 * 获取最大值的uid
+	 */
+	public PageData getMaxUID(PageData pd)throws Exception{
+		return (PageData)dao.findForObject("UserInfoMapper.getMaxUID", pd);
+	}
+	
+	
 }
 

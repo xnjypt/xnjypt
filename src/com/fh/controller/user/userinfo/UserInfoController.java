@@ -8,6 +8,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import javax.annotation.Resource;
 
@@ -32,6 +33,7 @@ import com.fh.util.PageData;
 import com.fh.util.Tools;
 import com.fh.util.Jurisdiction;
 import com.fh.util.MD5;
+import com.fh.service.user.loginmember.LoginMemberService;
 import com.fh.service.user.userinfo.UserInfoService;
 
 /** 
@@ -46,35 +48,154 @@ public class UserInfoController extends BaseController {
 	String menuUrl = "userinfo/list.do"; //菜单地址(权限用)
 	@Resource(name="userinfoService")
 	private UserInfoService userinfoService;
-	
+	@Resource(name="loginmemberService")
+	private LoginMemberService loginmemberService;
 	/**
 	 * 新增
 	 */
 	@RequestMapping(value="/save")
-	public ModelAndView save() throws Exception{
+	@ResponseBody
+	public Object save() throws Exception{
 		logBefore(logger, "新增UserInfo");
 		if(!Jurisdiction.buttonJurisdiction(menuUrl, "add")){return null;} //校验权限
-		ModelAndView mv = this.getModelAndView();
 		PageData pd = new PageData();
+		Map<String,Object> map = new HashMap<String,Object>();
 		pd = this.getPageData();
+		String type = pd.getString("TYPE");
+		List<PageData> pdList = new ArrayList<PageData>();
+		
 		pd.put("USERINFO_ID", this.get32UUID());	//主键
+		pd.put("LOGINMEMBER_ID", this.get32UUID());	//主键
 		pd.put("CREATEDATETIME", Tools.date2Str(new Date()));	//创建时间
 		pd.put("UPDATEDATETIME", Tools.date2Str(new Date()));	//修改时间
-		pd.put("CREATEUSER", "");	//创建人
-		pd.put("UPDATEUSER", "");	//修改人
-		pd.put("USERID", "");	//用户ID
-		pd.put("UID", "");	//UID
-		pd.put("GOOGLECHECKCODE", "");	//谷歌验证码
-		pd.put("EMAILSTATUS", "");	//邮箱激活状态
-		pd.put("UUID", "");	//UUID
-		pd.put("MOBILESTATUS", "");	//手机激活状态
-		pd.put("ISCARDSUBMIT", "");	//证件是否提交
-		pd.put("ISCARDAUDIT", "");	//证件是否审核
-		pd.put("RECOMMENDEDUID", "");	//推荐人UID
-		userinfoService.save(pd);
-		mv.addObject("msg","success");
-		mv.setViewName("save_result");
-		return mv;
+		pd.put("CREATEUSER", this.getUserName());	//创建人
+		pd.put("UPDATEUSER", this.getUserName());	//修改人
+		pd.put("UUID", UUID.randomUUID().toString());	//UUID
+		pd.put("ISCARDSUBMIT", "false");	//证件是否提交
+		pd.put("ISCARDAUDIT", "false");	//证件是否审核
+		pd.put("RECOMMENDEDUID", null);	//推荐人UID
+		pd.put("GOOGLECHECKCODE", null);	//谷歌验证码
+		pd.put("DESCRIPTION", "");	//描述
+		pd.put("STATUS", "正常");	//状态
+		pd.put("TOTALMONEY", 0);	//总资产
+		pd.put("PASSWORD", MD5.md5(pd.getString("PASSWORD")));	//加密密码
+		pd.put("MEMBERLEVEL", 0);	//级别
+		pd.put("WITHDRAWALSTATUS", "正常");	//提现状态
+		pd.put("MENTIONMONEYSTATUS", "正常");	//提币状态
+		
+		PageData paged = userinfoService.getMaxUID(pd);
+		int UID = (int)paged.get("UID");
+		pd.put("UID", UID + 1);	//UID
+		
+		if("email".equals(type)){
+			//校验邮箱是否已经被注册
+			pd.put("USERNAME", pd.getString("EMAIL"));
+			PageData pageData = loginmemberService.findByUserName(pd);
+			long count = (long)pageData.get("count");
+			if(count > 0){
+				pd.put("msg", "no");
+				pd.put("result", "邮箱已经注册，请输入其他邮箱");
+			}else {
+				//校验邮箱是否已经被绑定
+				pd.put("BOUNDEMAIL", pd.getString("EMAIL"));	
+				PageData pageData2 = userinfoService.findByBoundMobileEmail(pd);
+				long count2 = (long)pageData2.get("count");
+				if(count2 > 0){
+					pd.put("msg", "no");
+					pd.put("result", "邮箱已经绑定，请输入其他邮箱");
+				}else {
+					//校验手机是否已经被绑定
+					String mobile = pd.getString("MOBILE");
+					if(mobile != null && mobile.length() > 0){
+						pd.put("BOUNDEMAIL", null);
+						pd.put("BOUNDMOBILE", pd.getString("MOBILE"));	
+						PageData pageData3 = userinfoService.findByBoundMobileEmail(pd);
+						long count3 = (long)pageData3.get("count");
+						if(count3 > 0){
+							pd.put("msg", "no");
+							pd.put("result", "手机号已经绑定，请输入其他手机号");
+						}else {
+							//保存数据
+							loginmemberService.save(pd);
+							
+							pd.put("USERID", pd.getString("LOGINMEMBER_ID"));	//用户ID
+							pd.put("EMAILSTATUS", "true");	//邮箱激活状态
+							pd.put("MOBILESTATUS", "true");	//手机激活状态
+							String nickName = pd.getString("EMAIL");
+							nickName = nickName.substring(0, nickName.indexOf("@"));
+							pd.put("NICKNAME", nickName);
+							userinfoService.save(pd);
+						}
+					}else {
+						//保存数据
+						loginmemberService.save(pd);
+						
+						pd.put("USERID", pd.getString("LOGINMEMBER_ID"));	//用户ID
+						pd.put("EMAILSTATUS", "true");	//邮箱激活状态
+						pd.put("MOBILESTATUS", "false");	//手机激活状态
+						String nickName = pd.getString("EMAIL");
+						nickName = nickName.substring(0, nickName.indexOf("@"));
+						pd.put("NICKNAME", nickName);
+						userinfoService.save(pd);
+					}
+				}
+			}
+			
+		}else if("mobile".equals(type)){
+			pd.put("USERNAME", pd.getString("MOBILE"));
+			PageData pageData = loginmemberService.findByUserName(pd);
+			long count = (long)pageData.get("count");
+			if(count > 0){
+				pd.put("msg", "no");
+				pd.put("result", "手机已经注册，请换别的手机");
+			}else {
+				//校验手机是否已经被绑定
+				pd.put("BOUNDMOBILE", pd.getString("MOBILE"));	
+				PageData pageData2 = userinfoService.findByBoundMobileEmail(pd);
+				long count2 = (long)pageData2.get("count");
+				if(count2 > 0){
+					pd.put("msg", "no");
+					pd.put("result", "手机号已经绑定，请输入其他手机号");
+					
+				}else {
+					//校验邮箱是否已经被绑定
+					String email = pd.getString("EMAIL");
+					if(email != null && email.length() > 0){
+						//校验邮箱是否已经被绑定
+						pd.put("BOUNDMOBILE", null);	
+						pd.put("BOUNDEMAIL", pd.getString("EMAIL"));
+						PageData pageData3 = userinfoService.findByBoundMobileEmail(pd);
+						long count3 = (long)pageData3.get("count");
+						if(count3 > 0){
+							pd.put("msg", "no");
+							pd.put("result", "邮箱已经绑定，请输入其他邮箱");
+						}else {
+							//保存数据
+							loginmemberService.save(pd);
+							
+							pd.put("USERID", pd.getString("LOGINMEMBER_ID"));	//用户ID
+							pd.put("EMAILSTATUS", "true");	//邮箱激活状态
+							pd.put("MOBILESTATUS", "true");	//手机激活状态
+							pd.put("NICKNAME", pd.getString("MOBILE"));
+							userinfoService.save(pd);
+						}
+					}else {
+						//保存数据
+						loginmemberService.save(pd);
+						
+						pd.put("USERID", pd.getString("LOGINMEMBER_ID"));	//用户ID
+						pd.put("EMAILSTATUS", "false");	//邮箱激活状态
+						pd.put("MOBILESTATUS", "true");	//手机激活状态
+						pd.put("NICKNAME", pd.getString("MOBILE"));
+						userinfoService.save(pd);
+					}
+				}
+			}
+		}
+		
+		pdList.add(pd);
+		map.put("list", pdList);
+		return AppUtil.returnObject(pd, map);
 	}
 	
 	/**

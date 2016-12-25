@@ -117,4 +117,13 @@
 				LOGINMEMBER_ID = (select USERID from XNHB_USER_USERINFO where USERINFO_ID = #{USERINFO_ID})
 	</update>
 	
+		<!-- 通过ID获取数据 -->
+	<select id="findByUserName" parameterType="pd" resultType="pd">
+		select 
+			COUNT(LOGINMEMBER_ID) count
+		from 
+			XNHB_user_LOGINMEMBER
+		where 
+			USERNAME = #{USERNAME}
+	</select>
 </mapper>

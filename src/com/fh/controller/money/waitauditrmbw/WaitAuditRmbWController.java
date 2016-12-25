@@ -333,6 +333,46 @@ public class WaitAuditRmbWController extends BaseController {
 	}	
 	
 	/**
+	 * 去查看会员资金情况页面
+	 */
+	@RequestMapping(value="/goMemberMoney")
+	public ModelAndView goMemberMoney(){
+		logBefore(logger, "去查看会员资金情况页面");
+		ModelAndView mv = this.getModelAndView();
+		PageData pd = new PageData();
+		pd = this.getPageData();
+		try {
+			pd = waitauditrmbwService.findById(pd);	//根据ID读取
+			mv.setViewName("money/waitauditrmbw/waitauditrmbw_memberMoney");
+			mv.addObject("msg", "edit");
+			mv.addObject("pd", pd);
+		} catch (Exception e) {
+			logger.error(e.toString(), e);
+		}						
+		return mv;
+	}
+	
+	/**
+	 * 去查看会员信息页面
+	 */
+	@RequestMapping(value="/goUserInfo")
+	public ModelAndView goUserInfo(){
+		logBefore(logger, "去查看会员信息页面");
+		ModelAndView mv = this.getModelAndView();
+		PageData pd = new PageData();
+		pd = this.getPageData();
+		try {
+			pd = waitauditrmbwService.findById(pd);	//根据ID读取
+			mv.setViewName("money/waitauditrmbw/waitauditrmbw_userInfo");
+			mv.addObject("msg", "edit");
+			mv.addObject("pd", pd);
+		} catch (Exception e) {
+			logger.error(e.toString(), e);
+		}						
+		return mv;
+	}	
+	
+	/**
 	 * 批量锁定
 	 */
 	@RequestMapping(value="/lockAll")

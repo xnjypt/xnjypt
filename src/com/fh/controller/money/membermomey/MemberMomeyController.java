@@ -121,10 +121,6 @@ public class MemberMomeyController extends BaseController {
 		PageData pd = new PageData();
 		try{
 			pd = this.getPageData();
-			/*String LOGINNAME = pd.getString("LOGINNAME");
-			if(null != LOGINNAME && !"".equals(LOGINNAME)){
-				pd.put("LOGINNAME", LOGINNAME.trim());
-			}*/
 			page.setPd(pd);
 			List<PageData>	varList = membermomeyService.list(page);	//列出MemberMomey列表
 			mv.setViewName("money/membermomey/membermomey_list");
